@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Word Search Puzzle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776e6;
+            --success: #2ecc71;
+            --electric: #00f2fe;
+            --text: #2c3e50;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --grid-bg: rgba(255, 255, 255, 0.9);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(15, 32, 39, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #4776e6, #8e54e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        a.home-link {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        a.home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .wordsearch-container {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .wordsearch {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 2px;
+            margin: 0 auto;
+            background: var(--grid-bg);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .letter {
+            width: 100%;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: white;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+            filter: blur(0.3px);
+            color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(110, 72, 170, 0.1), rgba(157, 80, 187, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .letter:hover {
+            filter: blur(0);
+            color: #000;
+            transform: scale(1.05);
+            z-index: 2;
+        }
+        
+        .letter:hover::before {
+            opacity: 1;
+        }
+        
+        .selected {
+            background: var(--primary);
+            color: white;
+            transform: scale(0.95);
+            filter: blur(0);
+            z-index: 3;
+        }
+        
+        .found {
+            background: var(--electric);
+            color: white;
+            animation: bolt 0.5s ease;
+            filter: blur(0);
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            z-index: 3;
+        }
+        
+        @keyframes bolt {
+            0% { 
+                transform: scale(1);
+                background: white;
+            }
+            20% {
+                transform: scale(1.2);
+                background: var(--electric);
+                box-shadow: 0 0 20px var(--electric);
+            }
+            40% {
+                transform: scale(0.9);
+                background: white;
+            }
+            60% {
+                transform: scale(1.1);
+                background: var(--electric);
+                box-shadow: 0 0 15px var(--electric);
+            }
+            80% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+                background: var(--electric);
+            }
+        }
+        
+        .bolt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFFFFF'%3E%3Cpath d='M7 2v11h3v9l7-12h-4l4-8z'/%3E%3C/svg%3E") center/contain no-repeat;
+            opacity: 0.8;
+            animation: boltFlash 0.8s ease-out;
+            pointer-events: none;
+        }
+        
+        @keyframes boltFlash {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.9; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+        
+        .word-list-container {
+            flex: 1;
+            min-width: 300px;
+            background: var(--grid-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: var(--text);
+        }
+        
+        .word-list-title {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .word-list {
+            columns: 3;
+            column-gap: 2rem;
+            margin: 1rem 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .word-list li {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            break-inside: avoid;
+            position: relative;
+        }
+        
+        .word-list li:hover {
+            background: rgba(110, 72, 170, 0.1);
+        }
+        
+        .word-list li.found {
+            text-decoration: line-through;
+            color: var(--electric);
+            background: rgba(0, 242, 254, 0.1);
+            font-weight: bold;
+        }
+        
+        .word-list li.found::after {
+            content: '✓';
+            color: var(--electric);
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            margin: 1rem 0;
+            height: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .word-list {
+                columns: 2;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .word-list {
+                columns: 1;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button, a.home-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fas fa-bolt"></i> AI Word Search Puzzle
+        </h1>
+        
+        <div class="controls">
+            <button id="check-words">
+                <i class="fas fa-search"></i> Check Progress
+            </button>
+            <button id="reset-game">
+                <i class="fas fa-sync-alt"></i> Reset Game
+            </button>
+            <a href="index.html" class="home-link">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="stats">
+            <span id="found-count">0</span> of <span id="total-count">0</span> words found
+        </div>
+        
+        <div class="game-area">
+            <div class="wordsearch-container">
+                <div class="wordsearch" id="wordsearch-grid"></div>
+            </div>
+            
+            <div class="word-list-container">
+                <h2 class="word-list-title">
+                    <i class="fas fa-list-ul"></i> AI Terminology
+                </h2>
+                <ul class="word-list" id="word-list">
+                    <li>Algorithm</li>
+                    <li>Artificial</li>
+                    <li>Automation</li>
+                    <li>Backpropagation</li>
+                    <li>Bias</li>
+                    <li>BigData</li>
+                    <li>Chatbot</li>
+                    <li>Classification</li>
+                    <li>Cluster</li>
+                    <li>ComputerVision</li>
+                    <li>DataMining</li>
+                    <li>Dataset</li>
+                    <li>DeepLearning</li>
+                    <li>Ethics</li>
+                    <li>ExpertSystem</li>
+                    <li>Feature</li>
+                    <li>FuzzyLogic</li>
+                    <li>Generative</li>
+                    <li>Heuristic</li>
+                    <li>Intelligence</li>
+                    <li>Keras</li>
+                    <li>Knowledge</li>
+                    <li>Layer</li>
+                    <li>Learning</li>
+                    <li>Machine</li>
+                    <li>Model</li>
+                    <li>Neural</li>
+                    <li>Network</li>
+                    <li>Neuron</li>
+                    <li>NLP</li>
+                    <li>Overfitting</li>
+                    <li>Pattern</li>
+                    <li>Perceptron</li>
+                    <li>Prediction</li>
+                    <li>Python</li>
+                    <li>Recognition</li>
+                    <li>Regression</li>
+                    <li>Reinforcement</li>
+                    <li>Robot</li>
+                    <li>SelfDriving</li>
+                    <li>Sentiment</li>
+                    <li>Supervised</li>
+                    <li>Tensorflow</li>
+                    <li>Training</li>
+                    <li>Transfer</li>
+                    <li>Turing</li>
+                    <li>Unsupervised</li>
+                    <li>Validation</li>
+                    <li>Vector</li>
+                    <li>Vision</li>
+                    <li>Weight</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Word search grid data
+        const gridSize = 15;
+        const words = [
+            "ALGORITHM", "ARTIFICIAL", "AUTOMATION", "BACKPROPAGATION", "BIAS", 
+            "BIGDATA", "CHATBOT", "CLASSIFICATION", "CLUSTER", "COMPUTERVISION",
+            "DATAMINING", "DATASET", "DEEPLEARNING", "ETHICS", "EXPERTSYSTEM",
+            "FEATURE", "FUZZYLOGIC", "GENERATIVE", "HEURISTIC", "INTELLIGENCE",
+            "KERAS", "KNOWLEDGE", "LAYER", "LEARNING", "MACHINE", "MODEL",
+            "NEURAL", "NETWORK", "NEURON", "NLP", "OVERFITTING", "PATTERN",
+            "PERCEPTRON", "PREDICTION", "PYTHON", "RECOGNITION", "REGRESSION",
+            "REINFORCEMENT", "ROBOT", "SELFDRIVING", "SENTIMENT", "SUPERVISED",
+            "TENSORFLOW", "TRAINING", "TRANSFER", "TURING", "UNSUPERVISED",
+            "VALIDATION", "VECTOR", "VISION", "WEIGHT"
+        ];
+        
+        // Initialize grid
+        let grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+        let placedWords = [];
+        let selectedCells = [];
+        let foundWords = [];
+        
+        // Directions: [row, col]
+        const directions = [
+            [1, 0],   // Down
+            [-1, 0],   // Up
+            [0, 1],    // Right
+            [0, -1],   // Left
+            [1, 1],    // Down-Right
+            [1, -1],   // Down-Left
+            [-1, 1],  // Up-Right
+            [-1, -1]   // Up-Left
+        ];
+        
+        // DOM elements
+        const progressBar = document.getElementById('progress-bar');
+        const foundCountElement = document.getElementById('found-count');
+        const totalCountElement = document.getElementById('total-count');
+        const wordsearchGrid = document.getElementById('wordsearch-grid');
+        
+        // Initialize the game
+        function initGame() {
+            // Clear the grid
+            grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+            placedWords = [];
+            selectedCells = [];
+            foundWords = [];
+            
+            // Place words in the grid
+            words.forEach(word => {
+                placeWord(word);
+            });
+            
+            // Fill empty spaces with random letters
+            fillEmptySpaces();
+            
+            // Render the grid
+            renderGrid();
+            
+            // Reset word list styling
+            resetWordList();
+            
+            // Update progress
+            updateProgress();
+            
+            // Set total count
+            totalCountElement.textContent = words.length;
+        }
+        
+        // Place a word in the grid
+        function placeWord(word) {
+            const maxAttempts = 100;
+            let attempts = 0;
+            let placed = false;
+            
+            while (attempts < maxAttempts && !placed) {
+                attempts++;
+                
+                // Choose random direction
+                const direction = directions[Math.floor(Math.random() * directions.length)];
+                const [dr, dc] = direction;
+                
+                // Choose random starting position
+                let row = Math.floor(Math.random() * gridSize);
+                let col = Math.floor(Math.random() * gridSize);
+                
+                // Check if word fits in this position and direction
+                const endRow = row + dr * (word.length - 1);
+                const endCol = col + dc * (word.length - 1);
+                
+                if (endRow < 0 || endRow >= gridSize || endCol < 0 || endCol >= gridSize) {
+                    continue; // Word doesn't fit
+                }
+                
+                // Check if the path is clear
+                let pathClear = true;
+                for (let i = 0; i < word.length; i++) {
+                    const r = row + dr * i;
+                    const c = col + dc * i;
+                    
+                    if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+                        pathClear = false;
+                        break;
+                    }
+                }
+                
+                if (!pathClear) continue;
+                
+                // Place the word
+                for (let i = 0; i < word.length; i++) {
+                    const r = row + dr * i;
+                    const c = col + dc * i;
+                    grid[r][c] = word[i];
+                }
+                
+                // Record the placed word
+                placedWords.push({
+                    word: word,
+                    cells: Array(word.length).fill().map((_, i) => ({
+                        row: row + dr * i,
+                        col: col + dc * i
+                    }))
+                });
+                
+                placed = true;
+            }
+        }
+        
+        // Fill empty spaces with random letters
+        function fillEmptySpaces() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    if (grid[row][col] === '') {
+                        grid[row][col] = letters[Math.floor(Math.random() * letters.length)];
+                    }
+                }
+            }
+        }
+        
+        // Render the grid
+        function renderGrid() {
+            wordsearchGrid.innerHTML = '';
+            
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    const letter = grid[row][col];
+                    const letterElement = document.createElement('div');
+                    letterElement.className = 'letter';
+                    letterElement.textContent = letter;
+                    letterElement.dataset.row = row;
+                    letterElement.dataset.col = col;
+                    
+                    letterElement.addEventListener('mousedown', handleMouseDown);
+                    letterElement.addEventListener('mouseenter', handleMouseEnter);
+                    letterElement.addEventListener('mouseup', handleMouseUp);
+                    
+                    wordsearchGrid.appendChild(letterElement);
+                }
+            }
+        }
+        
+        // Handle mouse down event
+        function handleMouseDown(e) {
+            selectedCells = [];
+            const row = parseInt(e.target.dataset.row);
+            const col = parseInt(e.target.dataset.col);
+            selectedCells.push({ row, col });
+            e.target.classList.add('selected');
+        }
+        
+        // Handle mouse enter event
+        function handleMouseEnter(e) {
+            if (selectedCells.length > 0) {
+                const row = parseInt(e.target.dataset.row);
+                const col = parseInt(e.target.dataset.col);
+                
+                // Only allow selection in straight lines
+                const firstCell = selectedCells[0];
+                const lastCell = selectedCells[selectedCells.length - 1];
+                
+                // Check if the new cell is in line with the existing selection
+                let valid = false;
+                
+                // Horizontal
+                if (row === firstCell.row && (selectedCells.length === 1 || 
+                    (lastCell.row === firstCell.row && col === lastCell.col + (col > lastCell.col ? 1 : -1)))) {
+                    valid = true;
+                }
+                // Vertical
+                else if (col === firstCell.col && (selectedCells.length === 1 || 
+                    (lastCell.col === firstCell.col && row === lastCell.row + (row > lastCell.row ? 1 : -1)))) {
+                    valid = true;
+                }
+                // Diagonal
+                else if (Math.abs(row - firstCell.row) === Math.abs(col - firstCell.col) && 
+                    (selectedCells.length === 1 || 
+                    (Math.abs(lastCell.row - firstCell.row) === Math.abs(lastCell.col - firstCell.col) &&
+                    row === lastCell.row + (row > lastCell.row ? 1 : -1) &&
+                    col === lastCell.col + (col > lastCell.col ? 1 : -1)))) {
+                    valid = true;
+                }
+                
+                if (valid) {
+                    selectedCells.push({ row, col });
+                    e.target.classList.add('selected');
+                }
+            }
+        }
+        
+        // Handle mouse up event
+        function handleMouseUp() {
+            if (selectedCells.length < 2) {
+                // Clear selection if too short
+                clearSelection();
+                return;
+            }
+            
+            // Get the selected word
+            let selectedWord = '';
+            for (const cell of selectedCells) {
+                selectedWord += grid[cell.row][cell.col];
+            }
+            
+            // Check if the word is in the list (in any direction)
+            const reversedWord = selectedWord.split('').reverse().join('');
+            let foundWord = null;
+            
+            for (const placedWord of placedWords) {
+                if (placedWord.word === selectedWord || placedWord.word === reversedWord) {
+                    if (!foundWords.includes(placedWord.word)) {
+                        foundWord = placedWord;
+                        foundWords.push(placedWord.word);
+                        break;
+                    }
+                }
+            }
+            
+            if (foundWord) {
+                // Mark the word as found in the list
+                const wordElements = document.querySelectorAll('.word-list li');
+                for (const element of wordElements) {
+                    if (element.textContent.toUpperCase() === foundWord.word) {
+                        element.classList.add('found');
+                    }
+                }
+                
+                // Highlight the cells with bolt effect
+                const cellsToHighlight = foundWord.cells;
+                if (selectedWord !== foundWord.word) {
+                    cellsToHighlight.reverse();
+                }
+                
+                for (let i = 0; i < cellsToHighlight.length; i++) {
+                    const cell = cellsToHighlight[i];
+                    const cellElement = document.querySelector(`.letter[data-row="${cell.row}"][data-col="${cell.col}"]`);
+                    cellElement.classList.remove('selected');
+                    cellElement.classList.add('found');
+                    
+                    // Add bolt overlay effect
+                    const boltOverlay = document.createElement('div');
+                    boltOverlay.className = 'bolt-overlay';
+                    cellElement.appendChild(boltOverlay);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        boltOverlay.remove();
+                    }, 800);
+                }
+                
+                // Play success sound
+                playSuccessSound();
+                
+                // Update progress
+                updateProgress();
+                
+                // Check if all words are found
+                if (foundWords.length === words.length) {
+                    setTimeout(() => {
+                        showCelebration();
+                    }, 500);
+                }
+            } else {
+                clearSelection();
+            }
+        }
+        
+        // Show celebration when all words are found
+        function showCelebration() {
+            // Add celebration class to container
+            document.querySelector('.container').classList.add('celebrate');
+            
+            // Create confetti effect
+            createConfetti();
+            
+            alert('🎉 Congratulations! You found all the AI terms! 🎉');
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const container = document.querySelector('.container');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '8px';
+                confetti.style.height = '8px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.opacity = '0.8';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                // Animation
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1 },
+                    { top: '100%', opacity: 0 }
+                ], {
+                    duration: 2000 + Math.random() * 3000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
+                });
+                
+                container.appendChild(confetti);
+                
+                // Remove after animation
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+        
+        // Play success sound
+        function playSuccessSound() {
+            const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...'); // Short base64 encoded success sound
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        // Update progress bar and count
+        function updateProgress() {
+            const progress = (foundWords.length / words.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            foundCountElement.textContent = foundWords.length;
+            
+            // Add pulse animation when progress is made
+            if (foundWords.length > 0) {
+                progressBar.style.background = `linear-gradient(to right, var(--primary), var(--electric))`;
+                setTimeout(() => {
+                    progressBar.style.background = `linear-gradient(to right, var(--primary), var(--secondary))`;
+                }, 1000);
+            }
+        }
+        
+        // Clear the current selection
+        function clearSelection() {
+            const selectedElements = document.querySelectorAll('.selected');
+            for (const element of selectedElements) {
+                element.classList.remove('selected');
+            }
+            selectedCells = [];
+        }
+        
+        // Check found words
+        function checkFoundWords() {
+            const foundCount = foundWords.length;
+            const totalCount = words.length;
+            
+            if (foundCount === totalCount) {
+                alert('🎉 Amazing! You\'ve found all the AI terms! 🎉');
+            } else {
+                alert(`You've found ${foundCount} out of ${totalCount} AI terms. ${getEncouragement(foundCount, totalCount)}`);
+            }
+        }
+        
+        // Get encouraging message based on progress
+        function getEncouragement(found, total) {
+            const percentage = found / total;
+            
+            if (percentage === 0) return "Let's get started!";
+            if (percentage < 0.25) return "Keep going!";
+            if (percentage < 0.5) return "You're making progress!";
+            if (percentage < 0.75) return "You're more than halfway there!";
+            if (percentage < 1) return "Almost there!";
+            return "Perfect!";
+        }
+        
+        // Reset word list styling
+        function resetWordList() {
+            const wordElements = document.querySelectorAll('.word-list li');
+            for (const element of wordElements) {
+                element.classList.remove('found');
+            }
+        }
+        
+        // Initialize the game when the page loads
+        window.addEventListener('DOMContentLoaded', initGame);
+        
+        // Add event listeners for buttons
+        document.getElementById('check-words').addEventListener('click', checkFoundWords);
+        document.getElementById('reset-game').addEventListener('click', initGame);
+    </script>
+</body>
+</html>

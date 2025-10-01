@@ -1,0 +1,28 @@
+{
+  "faqs": [
+    {
+      "question": "What are the symptoms of COVID-19?",
+      "answer": "Common symptoms include fever, dry cough, tiredness, loss of taste or smell, sore throat, headache, and difficulty breathing."
+    },
+    {
+      "question": "How to prevent flu?",
+      "answer": "Get vaccinated annually, wash hands frequently, avoid close contact with sick people, cover your mouth when coughing, and disinfect surfaces regularly."
+    },
+    {
+      "question": "What is a healthy diet?",
+      "answer": "A healthy diet includes fruits, vegetables, whole grains, lean proteins, and low-fat dairy. Limit added sugars, saturated fats, and sodium."
+    },
+    {
+      "question": "How much exercise is recommended?",
+      "answer": "Adults should get at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity weekly, plus muscle-strengthening exercises 2 days a week."
+    },
+    {
+      "question": "What are the benefits of drinking water?",
+      "answer": "Water regulates body temperature, lubricates joints, prevents infections, delivers nutrients to cells, and keeps organs functioning properly."
+    },
+     {
+      "question": "who is virat kohli?",
+      "answer": "he is indian crickter."
+    }
+  ]
+}

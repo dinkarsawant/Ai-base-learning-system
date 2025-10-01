@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Math Challenge - Solve Math Puzzles</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e, #311b92);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00e676;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+        
+        .back-btn {
+            background: #4527a0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background: #5e35b1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn span {
+            margin-right: 8px;
+        }
+        
+        /* Game Container */
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00e676;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .problem-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .problem-text {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #bb86fc;
+        }
+        
+        .problem-equation {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .variable {
+            color: #00e676;
+            font-weight: bold;
+        }
+        
+        .answer-input {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 15px;
+            font-size: 24px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #bb86fc;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .answer-input:focus {
+            border-color: #00e676;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-submit {
+            background-color: #00e676;
+            color: #000;
+        }
+        
+        .btn-skip {
+            background-color: #bb86fc;
+            color: #000;
+        }
+        
+        .btn-hint {
+            background-color: #ffab40;
+            color: #000;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00e676, #69f0ae);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Message Display */
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: rgba(0, 230, 118, 0.2);
+            border-left: 4px solid #00e676;
+            display: block;
+        }
+        
+        .message.error {
+            background: rgba(255, 82, 82, 0.2);
+            border-left: 4px solid #ff5252;
+            display: block;
+        }
+        
+        .message.info {
+            background: rgba(187, 134, 252, 0.2);
+            border-left: 4px solid #bb86fc;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions h2 {
+            color: #00e676;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #bb86fc;
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        /* Level Complete Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+            animation: modalFade 0.3s;
+            border: 1px solid rgba(187, 134, 252, 0.3);
+        }
+        
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal h2 {
+            color: #00e676;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .modal-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .modal-stat {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            min-width: 120px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #bb86fc;
+        }
+        
+        .modal-btn {
+            background: #00e676;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn:hover {
+            background: #69f0ae;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Difficulty Indicator */
+        .difficulty {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .difficulty.easy {
+            color: #00e676;
+            border: 1px solid #00e676;
+        }
+        
+        .difficulty.medium {
+            color: #ffab40;
+            border: 1px solid #ffab40;
+        }
+        
+        .difficulty.hard {
+            color: #ff5252;
+            border: 1px solid #ff5252;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .problem-text {
+                font-size: 22px;
+            }
+            
+            .problem-equation {
+                font-size: 28px;
+            }
+            
+            .answer-input {
+                font-size: 20px;
+                padding: 12px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .problem-text {
+                font-size: 18px;
+            }
+            
+            .problem-equation {
+                font-size: 24px;
+            }
+            
+            .answer-input {
+                font-size: 18px;
+                max-width: 100%;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span>🧮</span>
+                AI Math Challenge
+            </div>
+            <a href="index.html" class="back-btn">
+                <span>←</span> Back to Home
+            </a>
+        </header>
+        
+        <div class="game-wrapper">
+            <div class="game-header">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div>Level</div>
+                        <div class="stat-value" id="level-display">1</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Score</div>
+                        <div class="stat-value" id="score-display">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Streak</div>
+                        <div class="stat-value" id="streak-display">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div>Progress: <span id="progress-text">1/10</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="game-container">
+                <div class="problem-display">
+                    <div class="difficulty easy" id="difficulty-display">Easy</div>
+                    <div class="problem-text" id="problem-text">
+                        Solve for the variable in the equation:
+                    </div>
+                    <div class="problem-equation" id="problem-equation">
+                        2x + 5 = 15
+                    </div>
+                    <input type="number" class="answer-input" id="answer-input" placeholder="Enter your answer">
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-submit" id="btn-submit">
+                        <span>✓</span> Submit Answer
+                    </button>
+                    <button class="btn btn-skip" id="btn-skip">
+                        <span>⏭</span> Skip
+                    </button>
+                    <button class="btn btn-hint" id="btn-hint">
+                        <span>💡</span> Hint
+                    </button>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h2><span>📚</span> How to Play</h2>
+                <ul>
+                    <li>Solve the math equations for the given variable</li>
+                    <li>Type your answer in the input field and click Submit</li>
+                    <li>Correct answers earn points based on difficulty</li>
+                    <li>Consecutive correct answers increase your streak multiplier</li>
+                    <li>Use hints when stuck (costs points)</li>
+                    <li>Complete all problems to finish the level</li>
+                    <li>Difficulty increases as you progress through levels</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Level Complete Modal -->
+    <div class="modal" id="level-complete-modal">
+        <div class="modal-content">
+            <h2>Level Complete!</h2>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div>Score</div>
+                    <div class="modal-stat-value" id="modal-score">0</div>
+                </div>
+                <div class="modal-stat">
+                    <div>Problems Solved</div>
+                    <div class="modal-stat-value" id="modal-problems">0</div>
+                </div>
+                <div class="modal-stat">
+                    <div>Highest Streak</div>
+                    <div class="modal-stat-value" id="modal-streak">0</div>
+                </div>
+            </div>
+            <p>Well done! Ready for the next challenge?</p>
+            <button class="modal-btn" id="next-level-btn">Next Level</button>
+        </div>
+    </div>
+    
+    <script>
+        class AIMathChallenge {
+            constructor() {
+                this.level = 1;
+                this.score = 0;
+                this.streak = 0;
+                this.maxStreak = 0;
+                this.currentProblem = 0;
+                this.totalProblems = 10;
+                this.currentEquation = null;
+                this.currentAnswer = null;
+                this.hintUsed = false;
+                
+                // DOM Elements
+                this.problemText = document.getElementById('problem-text');
+                this.problemEquation = document.getElementById('problem-equation');
+                this.answerInput = document.getElementById('answer-input');
+                this.levelDisplay = document.getElementById('level-display');
+                this.scoreDisplay = document.getElementById('score-display');
+                this.streakDisplay = document.getElementById('streak-display');
+                this.progressText = document.getElementById('progress-text');
+                this.progressFill = document.getElementById('progress-fill');
+                this.messageElement = document.getElementById('message');
+                this.difficultyDisplay = document.getElementById('difficulty-display');
+                this.modal = document.getElementById('level-complete-modal');
+                this.modalScore = document.getElementById('modal-score');
+                this.modalProblems = document.getElementById('modal-problems');
+                this.modalStreak = document.getElementById('modal-streak');
+                
+                this.initGame();
+                this.setupEventListeners();
+            }
+            
+            initGame() {
+                this.currentProblem = 0;
+                this.streak = 0;
+                this.updateDisplays();
+                this.generateProblem();
+                this.updateProgress();
+            }
+            
+            generateProblem() {
+                const difficulty = this.getDifficulty();
+                this.difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+                this.difficultyDisplay.className = `difficulty ${difficulty}`;
+                
+                this.hintUsed = false;
+                this.answerInput.value = '';
+                this.currentProblem++;
+                
+                // Generate equation based on difficulty
+                let equation, answer, variable;
+                variable = this.getRandomVariable();
+                
+                switch(difficulty) {
+                    case 'easy':
+                        // Simple linear equations: ax + b = c
+                        const a = this.getRandomInt(1, 5);
+                        const b = this.getRandomInt(1, 10);
+                        const c = a * this.getRandomInt(1, 10) + b;
+                        equation = `${a}${variable} + ${b} = ${c}`;
+                        answer = (c - b) / a;
+                        break;
+                        
+                    case 'medium':
+                        // Equations with subtraction or two operations
+                        if (Math.random() < 0.5) {
+                            // ax - b = c
+                            const a = this.getRandomInt(1, 5);
+                            const b = this.getRandomInt(1, 10);
+                            const c = a * this.getRandomInt(1, 10) - b;
+                            equation = `${a}${variable} - ${b} = ${c}`;
+                            answer = (c + b) / a;
+                        } else {
+                            // ax + b = cx + d
+                            const a = this.getRandomInt(1, 5);
+                            const b = this.getRandomInt(1, 10);
+                            const c = this.getRandomInt(1, 3);
+                            const d = this.getRandomInt(1, 10);
+                            equation = `${a}${variable} + ${b} = ${c}${variable} + ${d}`;
+                            answer = (d - b) / (a - c);
+                        }
+                        break;
+                        
+                    case 'hard':
+                        // More complex equations
+                        if (Math.random() < 0.5) {
+                            // a(x + b) = c
+                            const a = this.getRandomInt(2, 5);
+                            const b = this.getRandomInt(1, 5);
+                            const c = a * (this.getRandomInt(1, 5) + a * b;
+                            equation = `${a}(${variable} + ${b}) = ${c}`;
+                            answer = (c / a) - b;
+                        } else {
+                            // ax + b = c(x - d)
+                            const a = this.getRandomInt(1, 5);
+                            const b = this.getRandomInt(1, 10);
+                            const c = this.getRandomInt(1, 3);
+                            const d = this.getRandomInt(1, 5);
+                            equation = `${a}${variable} + ${b} = ${c}(${variable} - ${d})`;
+                            answer = (-b - (c * -d)) / (a - c);
+                        }
+                        break;
+                }
+                
+                this.currentEquation = equation;
+                this.currentAnswer = answer;
+                this.problemEquation.innerHTML = this.formatEquation(equation);
+            }
+            
+            formatEquation(equation) {
+                // Add color to variables
+                const variable = equation.match(/[a-z]/)?.[0] || 'x';
+                return equation.replace(new RegExp(variable, 'g'), `<span class="variable">${variable}</span>`);
+            }
+            
+            getRandomVariable() {
+                const variables = ['x', 'y', 'z', 'a', 'b', 'c'];
+                return variables[Math.floor(Math.random() * variables.length)];
+            }
+            
+            getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            
+            getDifficulty() {
+                const levelProgress = this.level + (this.currentProblem / this.totalProblems);
+                
+                if (levelProgress < 3) return 'easy';
+                if (levelProgress < 6) return 'medium';
+                return 'hard';
+            }
+            
+            checkAnswer() {
+                const userAnswer = parseFloat(this.answerInput.value);
+                
+                if (isNaN(userAnswer)) {
+                    this.showMessage("Please enter a valid number", 'error');
+                    return;
+                }
+                
+                // Allow for floating point precision
+                if (Math.abs(userAnswer - this.currentAnswer) < 0.001) {
+                    // Correct answer
+                    const difficulty = this.getDifficulty();
+                    let points = 0;
+                    
+                    switch(difficulty) {
+                        case 'easy': points = 10; break;
+                        case 'medium': points = 20; break;
+                        case 'hard': points = 30; break;
+                    }
+                    
+                    // Apply streak multiplier (up to 3x)
+                    const streakMultiplier = Math.min(1 + this.streak * 0.1, 3);
+                    points = Math.round(points * streakMultiplier);
+                    
+                    // Deduct points if hint was used
+                    if (this.hintUsed) {
+                        points = Math.max(1, Math.floor(points * 0.5));
+                    }
+                    
+                    this.score += points;
+                    this.streak++;
+                    this.maxStreak = Math.max(this.maxStreak, this.streak);
+                    
+                    this.showMessage(
+                        `+${points} points! (${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)})`, 
+                        'success'
+                    );
+                    
+                    // Move to next problem or complete level
+                    if (this.currentProblem < this.totalProblems) {
+                        setTimeout(() => {
+                            this.generateProblem();
+                            this.updateProgress();
+                        }, 1500);
+                    } else {
+                        this.levelComplete();
+                    }
+                } else {
+                    // Incorrect answer
+                    this.streak = 0;
+                    this.showMessage("Incorrect answer. Try again!", 'error');
+                }
+                
+                this.updateDisplays();
+            }
+            
+            skipProblem() {
+                this.streak = 0;
+                this.showMessage("Problem skipped", 'info');
+                this.updateDisplays();
+                
+                if (this.currentProblem < this.totalProblems) {
+                    setTimeout(() => {
+                        this.generateProblem();
+                        this.updateProgress();
+                    }, 1000);
+                } else {
+                    this.levelComplete();
+                }
+            }
+            
+            showHint() {
+                if (this.score < 5) {
+                    this.showMessage("You need at least 5 points for a hint", 'error');
+                    return;
+                }
+                
+                this.score -= 5;
+                this.hintUsed = true;
+                
+                const hint = this.generateHint();
+                this.showMessage(`Hint: ${hint} (Cost: 5 points)`, 'info');
+                this.updateDisplays();
+            }
+            
+            generateHint() {
+                const answer = this.currentAnswer;
+                const steps = [];
+                
+                if (this.getDifficulty() === 'easy') {
+                    steps.push(`Try isolating ${this.currentEquation.match(/[a-z]/)[0]} on one side`);
+                    steps.push(`First subtract the constant term from both sides`);
+                    steps.push(`Then divide both sides by the coefficient`);
+                } else if (this.getDifficulty() === 'medium') {
+                    if (this.currentEquation.includes('(')) {
+                        steps.push(`Start by distributing the multiplication`);
+                    } else {
+                        steps.push(`Try getting all variable terms on one side`);
+                        steps.push(`Combine like terms before solving`);
+                    }
+                } else {
+                    // Hard
+                    steps.push(`Remember to distribute multiplication over addition`);
+                    steps.push(`Combine like terms before solving for the variable`);
+                    steps.push(`The answer is between ${Math.floor(answer) - 2} and ${Math.ceil(answer) + 2}`);
+                }
+                
+                return steps[Math.floor(Math.random() * steps.length)];
+            }
+            
+            showMessage(text, type) {
+                this.messageElement.textContent = text;
+                this.messageElement.className = `message ${type}`;
+                
+                setTimeout(() => {
+                    this.messageElement.style.display = 'none';
+                }, 3000);
+            }
+            
+            updateDisplays() {
+                this.levelDisplay.textContent = this.level;
+                this.scoreDisplay.textContent = this.score;
+                this.streakDisplay.textContent = this.streak;
+            }
+            
+            updateProgress() {
+                const percent = (this.currentProblem / this.totalProblems) * 100;
+                this.progressFill.style.width = `${percent}%`;
+                this.progressText.textContent = `${this.currentProblem}/${this.totalProblems}`;
+            }
+            
+            levelComplete() {
+                this.modalScore.textContent = this.score;
+                this.modalProblems.textContent = this.totalProblems;
+                this.modalStreak.textContent = this.maxStreak;
+                this.modal.style.display = 'flex';
+            }
+            
+            nextLevel() {
+                this.level++;
+                this.maxStreak = 0;
+                this.modal.style.display = 'none';
+                this.initGame();
+            }
+            
+            setupEventListeners() {
+                // Submit answer
+                document.getElementById('btn-submit').addEventListener('click', () => this.checkAnswer());
+                this.answerInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.checkAnswer();
+                    }
+                });
+                
+                // Other buttons
+                document.getElementById('btn-skip').addEventListener('click', () => this.skipProblem());
+                document.getElementById('btn-hint').addEventListener('click', () => this.showHint());
+                document.getElementById('next-level-btn').addEventListener('click', () => this.nextLevel());
+            }
+        }
+        
+        // Initialize the game when page loads
+        window.onload = () => {
+            const game = new AIMathChallenge();
+        };
+    </script>
+</body>
+</html>

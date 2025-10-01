@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Security Courses | CyberShield</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" alt="CyberShield Logo">
+                <h1>CyberShield</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="scan.html">Scanner</a></li>
+                    <li><a href="courses.html" class="active">Courses</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                    <li><a href="mocktest.html">Mock Test</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <span id="username">John Doe</span>
+                <img src="images/user-avatar.png" alt="User Avatar" id="user-avatar">
+                <div class="dropdown-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="#">Settings</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="courses-container">
+        <div class="container">
+            <h2>Free Cybersecurity Certification Courses</h2>
+            <p class="subtitle">Enhance your skills with our free courses and earn certificates upon completion.</p>
+            
+            <div class="course-categories">
+                <button class="category-btn active" data-category="all">All Courses</button>
+                <button class="category-btn" data-category="beginner">Beginner</button>
+                <button class="category-btn" data-category="intermediate">Intermediate</button>
+                <button class="category-btn" data-category="advanced">Advanced</button>
+                <button class="category-btn" data-category="web">Web Security</button>
+                <button class="category-btn" data-category="network">Network Security</button>
+            </div>
+
+            <div class="courses-grid">
+                <div class="course-card" data-category="beginner web">
+                    <div class="course-image">
+                        <img src="images/course-web-security.jpg" alt="Web Security Fundamentals">
+                        <span class="difficulty beginner">Beginner</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>Web Security Fundamentals</h3>
+                        <p class="course-description">Learn the basics of web security, common vulnerabilities, and how to protect against them.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 8 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 4,500+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="intermediate web">
+                    <div class="course-image">
+                        <img src="images/course-owasp.jpg" alt="OWASP Top 10">
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>OWASP Top 10 Security Risks</h3>
+                        <p class="course-description">Master the OWASP Top 10 web application security risks and how to mitigate them.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 12 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 3,200+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="advanced network">
+                    <div class="course-image">
+                        <img src="images/course-penetration-testing.jpg" alt="Penetration Testing">
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>Penetration Testing Essentials</h3>
+                        <p class="course-description">Learn ethical hacking techniques to identify and exploit vulnerabilities in systems.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 20 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 1,800+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="beginner">
+                    <div class="course-image">
+                        <img src="images/course-cyber-basics.jpg" alt="Cybersecurity Basics">
+                        <span class="difficulty beginner">Beginner</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>Cybersecurity Basics</h3>
+                        <p class="course-description">Introduction to cybersecurity concepts, threats, and best practices for protection.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 6 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 7,300+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="intermediate network">
+                    <div class="course-image">
+                        <img src="images/course-network-security.jpg" alt="Network Security">
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>Network Security Fundamentals</h3>
+                        <p class="course-description">Learn to secure networks against attacks and implement robust security measures.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 10 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 2,500+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="advanced web">
+                    <div class="course-image">
+                        <img src="images/course-secure-coding.jpg" alt="Secure Coding">
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <div class="course-content">
+                        <h3>Secure Coding Practices</h3>
+                        <p class="course-description">Learn how to write secure code that resists common vulnerabilities and attacks.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 15 hours</span>
+                            <span><i class="fas fa-user-graduate"></i> 1,200+ students</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <span>0% complete</span>
+                        </div>
+                        <button class="btn btn-primary btn-block">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="certification-info">
+                <h3>Earn Recognized Certifications</h3>
+                <p>All our courses offer certificates upon successful completion. These certificates can be shared on LinkedIn and other professional networks to showcase your skills.</p>
+                <div class="certificate-sample">
+                    <img src="images/certificate-sample.jpg" alt="Certificate Sample">
+                    <div class="certificate-details">
+                        <h4>About Our Certificates</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Free with course completion</li>
+                            <li><i class="fas fa-check"></i> Verifiable online</li>
+                            <li><i class="fas fa-check"></i> Shareable on LinkedIn</li>
+                            <li><i class="fas fa-check"></i> Includes unique certificate ID</li>
+                        </ul>
+                        <button class="btn btn-outline">View Sample Certificate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>CyberShield</h4>
+                    <p>Comprehensive website security analysis and protection platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="scan.html">Website Scanner</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="analysis.html">Security Analysis</a></li>
+                        <li><a href="mocktest.html">Mock Tests</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>support@cybershield.com</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 CyberShield. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Course Enrollment Modal -->
+    <div id="enroll-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-course-title">Course Title</h3>
+            <div class="modal-course-info">
+                <p><strong>Duration:</strong> <span id="modal-course-duration">8 hours</span></p>
+                <p><strong>Difficulty:</strong> <span id="modal-course-difficulty">Beginner</span></p>
+                <p><strong>Students enrolled:</strong> <span id="modal-course-students">4,500+</span></p>
+            </div>
+            <div class="modal-course-description">
+                <p id="modal-course-description">Course description will appear here.</p>
+            </div>
+            <button id="confirm-enroll-btn" class="btn btn-primary btn-block">Confirm Enrollment</button>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/courses.js"></script>
+</body>
+</html>

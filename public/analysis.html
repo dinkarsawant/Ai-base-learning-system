@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Analysis | CyberShield</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" alt="CyberShield Logo">
+                <h1>CyberShield</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="scan.html">Scanner</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="analysis.html" class="active">Analysis</a></li>
+                    <li><a href="mocktest.html">Mock Test</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <span id="username">John Doe</span>
+                <img src="images/user-avatar.png" alt="User Avatar" id="user-avatar">
+                <div class="dropdown-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="#">Settings</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="analysis-container">
+        <div class="container">
+            <h2>Security Analysis & AI Progress Path</h2>
+            <p class="subtitle">Visualize your website's security status and get personalized recommendations.</p>
+            
+            <div class="analysis-tabs">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="vulnerabilities">Vulnerabilities</button>
+                <button class="tab-btn" data-tab="progress">Progress Path</button>
+                <button class="tab-btn" data-tab="comparison">Comparison</button>
+            </div>
+
+            <div class="tab-content active" id="overview-tab">
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <h3>Security Score</h3>
+                        <div class="score-circle">
+                            <div class="circle-progress" data-value="72">
+                                <span class="score-value">72</span>
+                                <span class="score-label">/100</span>
+                            </div>
+                        </div>
+                        <div class="score-description">
+                            <p>Your website's overall security score based on recent scans and assessments.</p>
+                            <div class="score-change positive">
+                                <i class="fas fa-arrow-up"></i> 8 points from last month
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <h3>Threat Level</h3>
+                        <div class="threat-level medium">
+                            <div class="threat-meter">
+                                <div class="threat-indicator" style="width: 60%"></div>
+                            </div>
+                            <span class="threat-label">Medium Risk</span>
+                        </div>
+                        <div class="threat-description">
+                            <p>Your website has some vulnerabilities that should be addressed to improve security.</p>
+                            <ul class="threat-list">
+                                <li><i class="fas fa-check-circle"></i> No critical vulnerabilities</li>
+                                <li><i class="fas fa-exclamation-triangle"></i> 3 high-risk issues found</li>
+                                <li><i class="fas fa-info-circle"></i> 7 medium-risk issues found</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon scan">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Full security scan completed</p>
+                                    <span class="activity-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon fix">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Fixed XSS vulnerability on contact page</p>
+                                    <span class="activity-time">1 day ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon course">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Completed "Web Security Fundamentals" course</p>
+                                    <span class="activity-time">3 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline btn-block">View All Activity</button>
+                    </div>
+                </div>
+
+                <div class="vulnerability-trends">
+                    <h3>Vulnerability Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="trends-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="vulnerabilities-tab">
+                <div class="vulnerability-analysis">
+                    <h3>Vulnerability Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="vulnerability-chart"></canvas>
+                    </div>
+                    
+                    <div class="severity-breakdown">
+                        <h4>Severity Breakdown</h4>
+                        <div class="severity-cards">
+                            <div class="severity-card critical">
+                                <h5>Critical</h5>
+                                <span class="severity-count">0</span>
+                                <p>Immediate attention required</p>
+                            </div>
+                            <div class="severity-card high">
+                                <h5>High</h5>
+                                <span class="severity-count">3</span>
+                                <p>Address as soon as possible</p>
+                            </div>
+                            <div class="severity-card medium">
+                                <h5>Medium</h5>
+                                <span class="severity-count">7</span>
+                                <p>Should be fixed in near future</p>
+                            </div>
+                            <div class="severity-card low">
+                                <h5>Low</h5>
+                                <span class="severity-count">12</span>
+                                <p>Consider fixing when possible</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="progress-tab">
+                <div class="ai-progress-path">
+                    <h3>AI-Generated Progress Path</h3>
+                    <p class="path-description">Our AI has analyzed your website and created a personalized improvement path to enhance your security.</p>
+                    
+                    <div class="path-steps">
+                        <div class="path-step active">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Fix SQL Injection Vulnerabilities</h4>
+                                <p>Address the 2 SQL injection points identified in your contact forms.</p>
+                                <div class="step-resources">
+                                    <span>Resources:</span>
+                                    <a href="#"><i class="fas fa-book"></i> Guide</a>
+                                    <a href="#"><i class="fas fa-video"></i> Tutorial</a>
+                                    <a href="courses.html"><i class="fas fa-graduation-cap"></i> Course</a>
+                                </div>
+                            </div>
+                            <div class="step-status">
+                                <span class="status-badge pending">Pending</span>
+                                <button class="btn btn-outline btn-sm">Mark as Complete</button>
+                            </div>
+                        </div>
+                        <div class="path-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Implement HTTPS Across Entire Site</h4>
+                                <p>Ensure all pages are served over HTTPS to prevent man-in-the-middle attacks.</p>
+                                <div class="step-resources">
+                                    <span>Resources:</span>
+                                    <a href="#"><i class="fas fa-book"></i> Guide</a>
+                                    <a href="#"><i class="fas fa-video"></i> Tutorial</a>
+                                </div>
+                            </div>
+                            <div class="step-status">
+                                <span class="status-badge pending">Pending</span>
+                                <button class="btn btn-outline btn-sm">Mark as Complete</button>
+                            </div>
+                        </div>
+                        <div class="path-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Add Security Headers</h4>
+                                <p>Implement CSP, X-XSS-Protection, X-Frame-Options, and other security headers.</p>
+                                <div class="step-resources">
+                                    <span>Resources:</span>
+                                    <a href="#"><i class="fas fa-book"></i> Guide</a>
+                                    <a href="courses.html"><i class="fas fa-graduation-cap"></i> Course</a>
+                                </div>
+                            </div>
+                            <div class="step-status">
+                                <span class="status-badge pending">Pending</span>
+                                <button class="btn btn-outline btn-sm">Mark as Complete</button>
+                            </div>
+                        </div>
+                        <div class="path-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Complete Web Security Course</h4>
+                                <p>Enhance your knowledge with our "Web Security Fundamentals" course.</p>
+                                <div class="step-resources">
+                                    <span>Resources:</span>
+                                    <a href="courses.html"><i class="fas fa-graduation-cap"></i> Course</a>
+                                </div>
+                            </div>
+                            <div class="step-status">
+                                <span class="status-badge pending">Pending</span>
+                                <button class="btn btn-outline btn-sm">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="comparison-tab">
+                <div class="comparison-analysis">
+                    <h3>Industry Comparison</h3>
+                    <p>See how your website's security compares to industry benchmarks and similar websites.</p>
+                    
+                    <div class="comparison-charts">
+                        <div class="chart-container">
+                            <h4>Your Security Score vs Industry Average</h4>
+                            <canvas id="industry-chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Vulnerability Comparison</h4>
+                            <canvas id="comparison-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="benchmark-info">
+                        <h4>Key Takeaways</h4>
+                        <div class="benchmark-cards">
+                            <div class="benchmark-card positive">
+                                <i class="fas fa-check-circle"></i>
+                                <p>Your SSL/TLS configuration is better than 85% of similar websites</p>
+                            </div>
+                            <div class="benchmark-card negative">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Your XSS protection is worse than 65% of similar websites</p>
+                            </div>
+                            <div class="benchmark-card neutral">
+                                <i class="fas fa-info-circle"></i>
+                                <p>Your security headers implementation is average compared to peers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>CyberShield</h4>
+                    <p>Comprehensive website security analysis and protection platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="scan.html">Website Scanner</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="analysis.html">Security Analysis</a></li>
+                        <li><a href="mocktest.html">Mock Tests</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>support@cybershield.com</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 CyberShield. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

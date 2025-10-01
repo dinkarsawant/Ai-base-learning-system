@@ -1,0 +1,2046 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepLearn AI - Learn Deeper, Smarter</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Variables */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --warning: #f59e0b;
+            --header-height: 70px;
+        }
+        
+        .dark-mode {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --text: #f9fafb;
+            --text-light: #d1d5db;
+            --bg: #111827;
+            --card-bg: #1f2937;
+        }
+        
+        /* Base Styles */
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header - Fixed Position */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            background-color: var(--bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            height: var(--header-height);
+        }
+        
+        .header-scrolled {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            background-color: rgba(249, 250, 251, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .dark-mode .header-scrolled {
+            background-color: rgba(17, 24, 39, 0.95);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .logo span {
+            color: var(--text);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .auth-buttons button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login {
+            background: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text);
+        }
+        
+        .login:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .signup {
+            background: var(--primary);
+            border: 1px solid var(--primary);
+            color: white;
+        }
+        
+        .signup:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text);
+            transition: transform 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: calc(var(--header-height) + 40px) 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .cta-button.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .cta-button.secondary:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .feature-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 80px 0;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: var(--text);
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .category-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px) !important;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.2);
+        }
+        
+        .category-card:hover p {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .category-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .category-card p {
+            color: var(--text-light);
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+        
+        /* Progress Analyzer Section */
+        .progress-analyzer-section {
+            padding: 100px 0;
+            background-color: var(--card-bg);
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+        
+        .analyzer-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .analyzer-feature {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .analyzer-feature.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .analyzer-feature:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .analyzer-feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .analyzer-cta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .cta-content {
+            padding: 20px;
+        }
+        
+        .analyzer-preview-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: var(--bg);
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* Dashboard Visualization */
+        .dashboard-visualization {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .time-filter {
+            font-size: 14px;
+            color: var(--text-light);
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+        
+        .dashboard-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-container {
+            flex: 1;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .stats-panel {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: rgba(0,0,0,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .improvement .stat-value {
+            color: var(--secondary);
+        }
+        
+        .focus-area .stat-value {
+            color: var(--accent);
+        }
+        
+        /* Preview Container Styles */
+        .preview-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .preview-container:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .preview-container p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .preview-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .preview-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Puzzle Hub Styles */
+        .puzzle-hub-section {
+            padding: 100px 0;
+            background-color: var(--card-bg);
+            margin-top: 60px;
+            position: relative;
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .puzzle-card {
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .puzzle-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .puzzle-card:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .puzzle-preview {
+            height: 200px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .puzzle-info {
+            padding: 20px;
+        }
+        
+        .puzzle-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .puzzle-info p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .difficulty {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .difficulty-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .stars {
+            color: var(--warning);
+        }
+        
+        .play-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .play-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        /* Puzzle Game Previews */
+        .word-search-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            margin-right: 20px;
+        }
+        
+        .grid-row {
+            display: flex;
+        }
+        
+        .grid-cell {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .word-list {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .word-list h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .word-list ul {
+            list-style: none;
+            font-size: 12px;
+        }
+        
+        .word-list li {
+            margin-bottom: 4px;
+        }
+        
+        .path-finder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(3, 60px);
+            gap: 5px;
+        }
+        
+        .path-cell {
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .path-cell.start, .path-cell.goal {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .path-cell.wall {
+            background: #495057;
+        }
+        
+        .letter-tiles {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tile {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .tile:hover {
+            transform: scale(1.1);
+        }
+        
+        .word-builder-output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .word-builder-output h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .formed-words {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .formed-words span {
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .math-puzzle {
+            text-align: center;
+        }
+        
+        .equation {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .option {
+            padding: 8px 12px;
+            background: #e9ecef;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .captcha-test {
+            text-align: center;
+        }
+        
+        .instruction {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 5px;
+            justify-content: center;
+        }
+        
+        .captcha-image {
+            height: 80px;
+            background: #e9ecef;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .captcha-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .captcha-image.has-target {
+            background: #a5d8ff;
+            position: relative;
+        }
+        
+        .captcha-image.has-target::after {
+            content: "🚦";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+        
+        .pattern-game {
+            text-align: center;
+        }
+        
+        .pattern-sequence {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .pattern-cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .pattern-cell.red {
+            background: #ff6b6b;
+        }
+        
+        .pattern-cell.blue {
+            background: #74c0fc;
+        }
+        
+        .pattern-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .pattern-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .pattern-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .pattern-option.red {
+            background: #ff6b6b;
+        }
+        
+        .pattern-option.blue {
+            background: #74c0fc;
+        }
+        
+        .pattern-option.green {
+            background: #51cf66;
+        }
+        
+        .puzzle-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Dark mode adjustments */
+        .dark-mode .puzzle-preview {
+            background: #1f2937;
+        }
+        
+        .dark-mode .word-list,
+        .dark-mode .word-builder-output {
+            background: #374151;
+        }
+        
+        .dark-mode .word-list h4,
+        .dark-mode .instruction,
+        .dark-mode .word-builder-output h4 {
+            color: #f3f4f6;
+        }
+        
+        .dark-mode .grid-cell {
+            border-color: #374151;
+        }
+        
+        .dark-mode .option {
+            background: #374151;
+            color: #f3f4f6;
+        }
+        
+        .dark-mode .captcha-image {
+            background: #374151;
+        }
+        
+        .dark-mode .captcha-image.has-target {
+            background: #1e40af;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 60px 0 30px;
+            margin-top: 60px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .hero {
+                padding: calc(var(--header-height) + 20px) 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .analyzer-cta {
+                grid-template-columns: 1fr;
+            }
+            
+            .analyzer-preview-image {
+                order: -1;
+                height: 250px;
+            }
+            
+            .puzzle-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .puzzle-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 30px;
+            }
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+                background: var(--bg);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+            
+            nav ul.active {
+                transform: translateY(0);
+            }
+            
+            nav a {
+                display: block;
+                padding: 10px 0;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Floating animation for featured elements */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Pulse animation for CTAs */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Circles -->
+    <div class="bg-animation">
+        <div class="bg-circle" style="width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="bg-circle" style="width: 200px; height: 200px; top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="bg-circle" style="width: 250px; height: 250px; top: 30%; left: 70%; animation-delay: 4s;"></div>
+        <div class="bg-circle" style="width: 150px; height: 150px; top: 80%; left: 20%; animation-delay: 6s;"></div>
+    </div>
+    
+    <div class="container">
+        <header id="mainHeader">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                DeepLearn<span>AI</span>
+            </div>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="auth.html">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#categories">Courses</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="#puzzle-hub">Puzzle Hub</a></li>
+                    <li><a href="analyzer.html">Progress Analyzer</a></li>
+		    <li><a href="Mathematics_Mock_Test.html">Mock Test </a></li>
+		    <li><a href="study_resource.html">Study material</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </nav>
+            
+            <div class="auth-buttons">
+                <button class="login" onclick="window.location.href='index.html'">Login</button>
+                <button class="signup" onclick="window.location.href='index.html'">Sign Up</button>
+                <button class="theme-toggle" id="themeToggle">🌓</button>
+            </div>
+        </header>
+        
+        <section class="hero">
+            <h1 class="animate__animated animate__fadeInUp">Learn Deeper, Smarter</h1>
+            <p>An AI-powered learning platform with 3D visual learning, personalized analytics, and adaptive content to help you master any subject.</p>
+            <div class="cta-buttons">
+                <button class="cta-button pulse" onclick="window.location.href='free_learning.html'">Start Learning for Free</button>
+                <a href="#puzzle-hub" class="cta-button secondary">Puzzle & Game Hub</a>
+            </div>
+        </section>
+        
+        <section class="features" id="features">
+            <h2 class="section-title">How It Works</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>3D Visual Learning</h3>
+                    <p>Interactive 3D models and animations that make complex concepts easy to understand and remember.</p>
+                    <a href="#categories" class="cta-button" style="display: inline-block; margin-top: 15px; padding: 8px 16px; font-size: 14px;">Explore 3D Models</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>AI Analytics</h3>
+                    <p>Track your progress, strengths, and weaknesses with detailed analytics powered by our AI engine.</p>
+                    <a href="#progress-analyzer" class="cta-button" style="display: inline-block; margin-top: 15px; padding: 8px 16px; font-size: 14px;">View Analytics</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Personalized Path</h3>
+                    <p>Our AI adapts to your learning style and pace, recommending the perfect content for you.</p>
+                    <a href="ai-coach.html" class="cta-button" style="display: inline-block; margin-top: 15px; padding: 8px 16px; font-size: 14px;">Take Assessment</a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="categories" id="categories">
+            <h2 class="section-title">Popular Categories</h2>
+            <div class="categories-grid">
+                <a href="mathematics.html" class="category-card">
+                    <h3>Mathematics</h3>
+                    <p>20+ Courses</p>
+                </a>
+                <a href="physics.html" class="category-card">
+                    <h3>Physics</h3>
+                    <p>15+ Courses</p>
+                </a>
+                <a href="programming.html" class="category-card">
+                    <h3>Programming</h3>
+                    <p>30+ Courses</p>
+                </a>
+                <a href="biology.html" class="category-card">
+                    <h3>Biology</h3>
+                    <p>12+ Courses</p>
+                </a>
+                <a href="chemistry.html" class="category-card">
+                    <h3>Chemistry</h3>
+                    <p>18+ Courses</p>
+                </a>
+            </div>
+        </section>
+        
+        <!-- New Puzzle Hub Section -->
+        <section class="puzzle-hub-section" id="puzzle-hub">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Puzzle & Gaming Hub</h2>
+                    <p class="section-subtitle">Challenge your mind with our AI-powered puzzle games</p>
+                </div>
+                
+                <div class="puzzle-categories">
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-category="all">All Games</button>
+                        <button class="tab-btn" data-category="word">Word Puzzles</button>
+                        <button class="tab-btn" data-category="logic">Logic Games</button>
+                        <button class="tab-btn" data-category="math">Math Challenges</button>
+                        <button class="tab-btn" data-category="captcha">CAPTCHA Tests</button>
+                    </div>
+                    
+                    <div class="puzzle-grid">
+                        <!-- Word Search -->
+                        <div class="puzzle-card" data-category="word">
+                            <div class="puzzle-preview">
+                                <div class="word-search-grid">
+                                    <div class="grid-row">
+                                        <div class="grid-cell">A</div>
+                                        <div class="grid-cell">I</div>
+                                        <div class="grid-cell">M</div>
+                                        <div class="grid-cell">L</div>
+                                        <div class="grid-cell">E</div>
+                                        <div class="grid-cell">A</div>
+                                        <div class="grid-cell">R</div>
+                                        <div class="grid-cell">N</div>
+                                    </div>
+                                    <div class="grid-row">
+                                        <div class="grid-cell">L</div>
+                                        <div class="grid-cell">E</div>
+                                        <div class="grid-cell">A</div>
+                                        <div class="grid-cell">R</div>
+                                        <div class="grid-cell">N</div>
+                                        <div class="grid-cell">I</div>
+                                        <div class="grid-cell">N</div>
+                                        <div class="grid-cell">G</div>
+                                    </div>
+                                    <div class="grid-row">
+                                        <div class="grid-cell">G</div>
+                                        <div class="grid-cell">O</div>
+                                        <div class="grid-cell">R</div>
+                                        <div class="grid-cell">I</div>
+                                        <div class="grid-cell">T</div>
+                                        <div class="grid-cell">H</div>
+                                        <div class="grid-cell">M</div>
+                                        <div class="grid-cell">S</div>
+                                    </div>
+                                    <div class="grid-row">
+                                        <div class="grid-cell">N</div>
+                                        <div class="grid-cell">E</div>
+                                        <div class="grid-cell">U</div>
+                                        <div class="grid-cell">R</div>
+                                        <div class="grid-cell">A</div>
+                                        <div class="grid-cell">L</div>
+                                        <div class="grid-cell">N</div>
+                                        <div class="grid-cell">E</div>
+                                    </div>
+                                </div>
+                                <div class="word-list">
+                                    <h4>Find these words:</h4>
+                                    <ul>
+                                        <li>Algorithm</li>
+                                        <li>Neural</li>
+                                        <li>Machine</li>
+                                        <li>Learning</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI Word Search</h3>
+                                <p>Find hidden AI-related words in the grid</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★★☆
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-wordsearch.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Path Finder -->
+                        <div class="puzzle-card" data-category="logic">
+                            <div class="puzzle-preview">
+                                <div class="path-finder-grid">
+                                    <div class="path-cell start">AI</div>
+                                    <div class="path-cell"></div>
+                                    <div class="path-cell wall"></div>
+                                    <div class="path-cell"></div>
+                                    <div class="path-cell"></div>
+                                    <div class="path-cell wall"></div>
+                                    <div class="path-cell"></div>
+                                    <div class="path-cell"></div>
+                                    <div class="path-cell goal">Home</div>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI Path Finder</h3>
+                                <p>Help the AI navigate through obstacles to reach home</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★★★
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-pathfinder.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Word Builder -->
+                        <div class="puzzle-card" data-category="word">
+                            <div class="puzzle-preview">
+                                <div class="letter-tiles">
+                                    <div class="tile">A</div>
+                                    <div class="tile">I</div>
+                                    <div class="tile">L</div>
+                                    <div class="tile">E</div>
+                                    <div class="tile">R</div>
+                                    <div class="tile">N</div>
+                                </div>
+                                <div class="word-builder-output">
+                                    <h4>Formed Words:</h4>
+                                    <div class="formed-words">
+                                        <span>AI</span>
+                                        <span>LEARN</span>
+                                        <span>NEURAL</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI Word Builder</h3>
+                                <p>Create meaningful words from given letters</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★☆☆
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-word-builder.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Math Puzzle -->
+                        <div class="puzzle-card" data-category="math">
+                            <div class="puzzle-preview">
+                                <div class="math-puzzle">
+                                    <div class="equation">2 + 2 × AI = ?</div>
+                                    <div class="options">
+                                        <div class="option">6</div>
+                                        <div class="option">8</div>
+                                        <div class="option">10</div>
+                                        <div class="option">12</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI Math Challenge</h3>
+                                <p>Solve math puzzles with AI variables</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★★★☆
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-math-challenge.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- CAPTCHA Test -->
+                        <div class="puzzle-card" data-category="captcha">
+                            <div class="puzzle-preview">
+                                <div class="captcha-test">
+                                    <div class="instruction">Select all squares with traffic lights:</div>
+                                    <div class="image-grid">
+                                        <div class="captcha-image"></div>
+                                        <div class="captcha-image has-target"></div>
+                                        <div class="captcha-image"></div>
+                                        <div class="captcha-image"></div>
+                                        <div class="captcha-image has-target"></div>
+                                        <div class="captcha-image"></div>
+                                        <div class="captcha-image has-target"></div>
+                                        <div class="captcha-image"></div>
+                                        <div class="captcha-image"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI CAPTCHA Test</h3>
+                                <p>Prove you're human with these challenges</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★☆☆
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-captcha-test.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Pattern Recognition -->
+                        <div class="puzzle-card" data-category="logic">
+                            <div class="puzzle-preview">
+                                <div class="pattern-game">
+                                    <div class="pattern-sequence">
+                                        <div class="pattern-cell red"></div>
+                                        <div class="pattern-cell blue"></div>
+                                        <div class="pattern-cell red"></div>
+                                        <div class="pattern-cell blue"></div>
+                                        <div class="pattern-cell">?</div>
+                                    </div>
+                                    <div class="pattern-options">
+                                        <div class="pattern-option red"></div>
+                                        <div class="pattern-option blue"></div>
+                                        <div class="pattern-option green"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="puzzle-info">
+                                <h3>AI Pattern Recognition</h3>
+                                <p>Identify the pattern and predict the next element</p>
+                                <div class="difficulty">
+                                    <span class="difficulty-label">Difficulty:</span>
+                                    <div class="stars">
+                                        ★★☆
+                                    </div>
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='ai-pattern-recognition.html'">
+                                    Play Now →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="puzzle-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">🧩</div>
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Puzzle Games</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Daily Players</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🧠</div>
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Cognitive Improvement</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="progress-analyzer-section" id="progress-analyzer">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">AI-Powered Student Progress Analyzer</h2>
+                    <p class="section-subtitle">Get real-time insights into your learning journey</p>
+                </div>
+                
+                <div class="analyzer-preview">
+                    <div class="analyzer-features">
+                        <div class="analyzer-feature">
+                            <div class="analyzer-feature-icon">📈</div>
+                            <h3>Daily Progress Tracking</h3>
+                            <p>See your improvement day by day across all subjects</p>
+                        </div>
+                        <div class="analyzer-feature">
+                            <div class="analyzer-feature-icon">🔍</div>
+                            <h3>Weakness Identification</h3>
+                            <p>AI detects areas needing more focus</p>
+                        </div>
+                        <div class="analyzer-feature">
+                            <div class="analyzer-feature-icon">🎯</div>
+                            <h3>Personalized Recommendations</h3>
+                            <p>Get customized learning resources</p>
+                        </div>
+                    </div>
+                    
+                    <div class="analyzer-cta">
+                        <div class="cta-content">
+                            <h3>Ready to see your learning analytics?</h3>
+                            <p>Our AI system tracks your progress and adapts to your learning style for optimal results.</p>
+                          
+                            
+                            <div class="preview-container" onclick="window.location.href='analyzer.html'">
+                                <p>AI Progress Analyzer Preview</p>
+                                <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="Launch Progress Analyzer" class="preview-icon">
+                            </div>
+                        </div>
+                        <div class="analyzer-preview-image">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="#progress-analyzer">Progress Analyzer</a>
+                <a href="#puzzle-hub">Puzzle Hub</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">📱</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📸</a>
+                <a href="#" class="social-link">🔗</a>
+            </div>
+            
+            <p class=" Developed by Anish Sawant"</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Dark/Light mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            // Update chart colors when theme changes
+            updateChartColors();
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Fixed header on scroll
+        const header = document.getElementById('mainHeader');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+        
+        // Initialize Chart.js for progress analyzer
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        let progressChart;
+        
+        function createChart() {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#f9fafb' : '#1f2937';
+            
+            progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            label: 'Math',
+                            data: [65, 59, 80, 81, 76, 85, 90],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Science',
+                            data: [45, 60, 55, 70, 65, 75, 80],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Programming',
+                            data: [30, 45, 60, 65, 70, 80, 85],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: textColor
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChartColors() {
+            if (!progressChart) return;
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#f9fafb' : '#1f2937';
+            
+            progressChart.options.scales.x.grid.color = gridColor;
+            progressChart.options.scales.x.ticks.color = textColor;
+            progressChart.options.scales.y.grid.color = gridColor;
+            progressChart.options.scales.y.ticks.color = textColor;
+            progressChart.options.plugins.legend.labels.color = textColor;
+            
+            progressChart.update();
+        }
+        
+        // Intersection Observer for scroll animations
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .category-card, .analyzer-feature, .puzzle-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        };
+        
+        // Tab functionality for puzzle hub
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const puzzleCards = document.querySelectorAll('.puzzle-card');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                
+                // Filter puzzle cards
+                puzzleCards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Create background circles dynamically
+        function createBackgroundCircles() {
+            const bgAnimation = document.querySelector('.bg-animation');
+            const colors = ['#6366f1', '#a5b4fc', '#c7d2fe'];
+            
+            for (let i = 0; i < 8; i++) {
+                const circle = document.createElement('div');
+                circle.classList.add('bg-circle');
+                
+                const size = Math.random() * 200 + 100;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 8;
+                const duration = Math.random() * 10 + 10;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                circle.style.width = `${size}px`;
+                circle.style.height = `${size}px`;
+                circle.style.left = `${left}%`;
+                circle.style.top = `${top}%`;
+                circle.style.animationDelay = `${delay}s`;
+                circle.style.animationDuration = `${duration}s`;
+                circle.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+                
+                bgAnimation.appendChild(circle);
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createChart();
+            animateOnScroll();
+            createBackgroundCircles();
+            
+            // Load Font Awesome for icons
+            const faScript = document.createElement('script');
+            faScript.src = 'https://kit.fontawesome.com/a076d05399.js';
+            faScript.crossOrigin = 'anonymous';
+            document.head.appendChild(faScript);
+            
+            // Initialize activity monitor
+            window.deepLearActivityMonitor = new ActivityMonitor();
+        });
+        
+        // Activity Monitor Class
+        class ActivityMonitor {
+            constructor() {
+                this.userId = this.getUserId();
+                this.sessionStart = new Date();
+                this.events = [];
+                this.setupListeners();
+                
+                this.logEvent('page_view', {
+                    url: window.location.pathname,
+                    referrer: document.referrer,
+                    screen_width: window.screen.width,
+                    screen_height: window.screen.height
+                });
+            }
+            
+            getUserId() {
+                if (window.currentUser && window.currentUser.id) {
+                    return window.currentUser.id;
+                }
+                
+                let userId = localStorage.getItem('deeplear_anonymous_id');
+                
+                if (!userId) {
+                    userId = 'anon_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('deeplear_anonymous_id', userId);
+                }
+                
+                return userId;
+            }
+            
+            setupListeners() {
+                // Track clicks
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest('a, button, [data-track], .clickable');
+                    if (target) {
+                        const eventData = {
+                            element: target.tagName,
+                            id: target.id || null,
+                            class: target.className || null,
+                            href: target.href || null,
+                            text: target.textContent.trim().substring(0, 50) || null
+                        };
+                        this.logEvent('click', eventData);
+                    }
+                });
+                
+                // Track form interactions
+                document.querySelectorAll('input, textarea, select, [data-track-input]').forEach(el => {
+                    el.addEventListener('focus', () => this.logEvent('field_focus', {
+                        id: el.id,
+                        name: el.name,
+                        type: el.type
+                    }));
+                    
+                    el.addEventListener('blur', () => {
+                        if (el.value && el.value.trim() !== '') {
+                            this.logEvent('field_blur', {
+                                id: el.id,
+                                name: el.name,
+                                type: el.type,
+                                value_length: el.value.length
+                            });
+                        }
+                    });
+                });
+                
+                // Track scroll depth
+                const throttledScroll = _.throttle(() => {
+                    const scrollDepth = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                    this.logEvent('scroll', {
+                        depth: Math.round(scrollDepth),
+                        current_section: this.getCurrentSection()
+                    });
+                }, 1000);
+                
+                window.addEventListener('scroll', throttledScroll);
+                
+                // Track time spent on page before unload
+                window.addEventListener('beforeunload', () => {
+                    const timeSpent = (new Date() - this.sessionStart) / 1000;
+                    this.logEvent('page_exit', {
+                        time_spent_seconds: timeSpent,
+                        final_scroll: window.scrollY
+                    });
+                    this.sendEvents();
+                });
+            }
+            
+            getCurrentSection() {
+                const sections = ['hero', 'features', 'categories', 'progress-analyzer', 'puzzle-hub'];
+                for (const section of sections) {
+                    const el = document.getElementById(section);
+                    if (el && this.isElementInViewport(el)) {
+                        return section;
+                    }
+                }
+                return 'other';
+            }
+            
+            isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.bottom >= 0
+                );
+            }
+            
+            logEvent(type, data = {}) {
+                const event = {
+                    type,
+                    timestamp: new Date().toISOString(),
+                    page: window.location.pathname,
+                    ...data
+                };
+                this.events.push(event);
+                
+                if (this.events.length >= 5 || ['form_submit', 'signup', 'purchase'].includes(type)) {
+                    this.sendEvents();
+                }
+            }
+            
+            async sendEvents() {
+                if (this.events.length === 0) return;
+                
+                try {
+                    await axios.post('/api/activity', {
+                        userId: this.userId,
+                        sessionId: this.sessionStart.toISOString(),
+                        events: this.events,
+                        userAgent: navigator.userAgent,
+                        pageTitle: document.title
+                    });
+                    
+                    this.events = [];
+                } catch (error) {
+                    console.error('Error logging activity:', error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

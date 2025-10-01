@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Learning for Free | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Reset and Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        .dark-mode {
+            --text: #f9fafb;
+            --text-light: #d1d5db;
+            --bg: #111827;
+            --card-bg: #1f2937;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header with User Profile */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--text);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text);
+        }
+        
+        /* User Profile Dropdown Styles */
+        .user-profile {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: 1px solid #dadce0;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .profile-button:hover {
+            background-color: #f1f3f4;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
+            border: 1px solid #f1f1f1;
+        }
+
+        .username {
+            margin-right: 8px;
+            font-weight: 500;
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #5f6368;
+            transition: transform 0.2s;
+        }
+
+        .profile-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 320px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 16px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            display: flex;
+            padding: 0 24px 16px;
+            align-items: center;
+        }
+
+        .avatar-large {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 16px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 500;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 14px;
+            color: #5f6368;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 8px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 24px;
+            text-decoration: none;
+            color: #202124;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f1f3f4;
+        }
+
+        .dropdown-item i {
+            margin-right: 16px;
+            width: 20px;
+            text-align: center;
+            color: #5f6368;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: #202124;
+        }
+
+        /* Badge for notifications */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #d93025;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .signup-hero {
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .signup-hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .signup-hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        
+        /* Signup Options */
+        .signup-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .signup-option {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .signup-option:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .signup-option.recommended {
+            position: relative;
+            border-color: var(--primary);
+        }
+        
+        .recommended-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .option-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .option-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .option-price {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .option-price span {
+            font-size: 16px;
+            font-weight: normal;
+            color: var(--text-light);
+        }
+        
+        .option-features {
+            list-style: none;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .option-features li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .option-features li::before {
+            content: "✓";
+            color: var(--success);
+            position: absolute;
+            left: 0;
+        }
+        
+        .option-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .option-button:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Signup Form */
+        .signup-form-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--text-light);
+        }
+        
+        .signup-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--text-light);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-note {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .form-check-input {
+            margin-right: 10px;
+        }
+        
+        .form-check-label {
+            font-size: 14px;
+        }
+        
+        .form-check-label a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .form-submit {
+            grid-column: span 2;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .form-submit:hover {
+            background: var(--primary-dark);
+        }
+        
+        .social-login {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .social-login p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: var(--text-light);
+        }
+        
+        .social-login p::before {
+            left: 0;
+        }
+        
+        .social-login p::after {
+            right: 0;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--text-light);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .social-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            padding: 60px 0;
+            background: var(--card-bg);
+            margin-bottom: 60px;
+        }
+        
+        .benefits-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .benefits-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .benefits-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .benefits-header p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .benefit-card {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .benefit-icon {
+            font-size: 30px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        
+        .benefit-content h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .benefit-content p {
+            color: var(--text-light);
+        }
+        
+        /* Testimonials */
+        .testimonials-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .testimonials-header {
+            margin-bottom: 40px;
+        }
+        
+        .testimonials-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .testimonials-header p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-text::before,
+        .testimonial-text::after {
+            content: '"';
+            font-size: 24px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .author-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .faq-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .faq-header p {
+            color: var(--text-light);
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 15px 20px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .faq-question::after {
+            content: "+";
+            font-size: 20px;
+        }
+        
+        .faq-question.active::after {
+            content: "-";
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: var(--bg);
+        }
+        
+        .faq-answer.show {
+            padding: 15px 20px;
+            max-height: 500px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            color: var(--text-light);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .signup-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .signup-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .form-submit {
+                grid-column: span 1;
+            }
+            
+            /* User profile responsive */
+            .username {
+                display: none;
+            }
+            
+            .profile-button {
+                padding: 6px;
+            }
+            
+            .dropdown-menu {
+                width: 280px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">DeepLearn<span>AI</span></div>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle">🌓</button>
+                <!-- User Profile Dropdown (initially hidden) -->
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <button class="profile-button" id="profileDropdown" aria-expanded="false" aria-haspopup="true">
+                        <div class="avatar-container" style="position: relative;">
+                            <img src="" alt="User Avatar" class="avatar" id="userAvatar">
+                            <span class="badge" id="notificationBadge" style="display: none;">0</span>
+                        </div>
+                        <span class="username" id="usernameDisplay"></span>
+                        <span class="dropdown-arrow"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="dropdown-header">
+                            <img src="" alt="User Avatar" class="avatar-large" id="dropdownAvatar">
+                            <div class="user-info">
+                                <div class="user-name" id="dropdownUserName"></div>
+                                <div class="user-email" id="dropdownUserEmail"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="/account" class="dropdown-item">
+                            <i class="fas fa-user-circle"></i> My Account
+                        </a>
+                        <a href="index.html" class="dropdown-item">
+                            <i class="fas fa-book-open"></i> My Courses
+                        </a>
+                        <a href="analyzer.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Learning Progress
+                        </a>
+                        <a href="/certificates" class="dropdown-item">
+                            <i class="fas fa-award"></i> Certificates
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="/settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <a href="/help" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i> Help Center
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <button class="dropdown-item logout-btn" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Sign out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <section class="signup-hero">
+            <h1>Start Learning for Free</h1>
+            <p>Join over 500 learners who are mastering new skills with our AI-powered platform. No credit card required.</p>
+        </section>
+        
+        <section class="signup-options">
+            <div class="signup-option">
+                <div class="option-icon">👩‍🎓</div>
+                <h3 class="option-title">Basic</h3>
+                <div class="option-price">🆓 <span>/ forever</span></div>
+                <ul class="option-features">
+                    <li>Access to 50 free courses</li>
+                    <li>Basic puzzle games</li>
+                    <li>Limited progress tracking</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="option-button" onclick="document.getElementById('signup-form').scrollIntoView({behavior: 'smooth'})">Get Started</button>
+            </div>
+            
+            <div class="signup-option recommended">
+                <div class="recommended-badge">Recommended</div>
+                <div class="option-icon">🚀</div>
+                <h3 class="option-title">Pro Learner</h3>
+                <div class="option-price">🆓 <span>/ month</span></div>
+                <ul class="option-features">
+                    <li>All Basic features plus:</li>
+                    <li>Full course library (30 courses)</li>
+                    <li>Advanced AI progress analyzer</li>
+                    <li>Premium puzzle games</li>
+                    <li>Personalized learning paths</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="option-button" onclick="document.getElementById('signup-form').scrollIntoView({behavior: 'smooth'})">Start Free Trial</button>
+            </div>
+            
+            <div class="signup-option">
+                <div class="option-icon">🏫</div>
+                <h3 class="option-title">Student</h3>
+                <div class="option-price">🆓 <span>/ month</span></div>
+                <ul class="option-features">
+                    <li>All Basic features plus:</li>
+                    <li>Full course library (300+ courses)</li>
+                    <li>Advanced progress tracking</li>
+                    <li>Premium puzzle games</li>
+                    <li>Valid student ID required</li>
+                </ul>
+                <button class="option-button" onclick="document.getElementById('signup-form').scrollIntoView({behavior: 'smooth'})">Verify Student Status</button>
+            </div>
+        </section>
+        
+        <section class="signup-form-section" id="signup-form">
+            <div class="form-header">
+                <h2>Create Your Free Account</h2>
+                <p>Join the future of learning today</p>
+            </div>
+            
+            <form class="signup-form" id="registrationForm">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" id="firstName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                    <p class="form-note">We'll never share your email with anyone else.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required minlength="8">
+                    <p class="form-note">Minimum 8 characters</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="plan" class="form-label">Select Plan</label>
+                    <select id="plan" class="form-control">
+                        <option value="free">Basic (Free)</option>
+                        <option value="pro">Pro Learner ( $.99/month)</option>
+                        <option value="student">Student ( 🆓)</option>
+                    </select>
+                </div>
+                
+                <div class="form-check full-width">
+                    <input type="checkbox" id="terms" class="form-check-input" required>
+                    <label for="terms" class="form-check-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                
+                <div class="form-check full-width">
+                    <input type="checkbox" id="newsletter" class="form-check-input" checked>
+                    <label for="newsletter" class="form-check-label">Send me occasional updates and learning tips</label>
+                </div>
+                
+                <button type="submit" class="form-submit">Create My Account</button>
+                
+                <div class="social-login full-width">
+                    <p>Or sign up with</p>
+                    <div class="social-buttons">
+                        <button type="button" class="social-button">G</button>
+                        <button type="button" class="social-button">f</button>
+                        <button type="button" class="social-button">in</button>
+                        <button type="button" class="social-button">A</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+        
+        <section class="benefits-section">
+            <div class="benefits-container">
+                <div class="benefits-header">
+                    <h2>Why Learn With DeepLearn AI?</h2>
+                    <p>Our platform is designed to help you learn faster and retain knowledge longer</p>
+                </div>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🧠</div>
+                        <div class="benefit-content">
+                            <h3>AI-Powered Learning</h3>
+                            <p>Our algorithms adapt to your learning style and pace, ensuring optimal knowledge retention.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🎮</div>
+                        <div class="benefit-content">
+                            <h3>Gamified Experience</h3>
+                            <p>Learn through interactive puzzles and games that make education engaging and fun.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📊</div>
+                        <div class="benefit-content">
+                            <h3>Detailed Analytics</h3>
+                            <p>Track your progress with comprehensive reports and personalized recommendations.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🌐</div>
+                        <div class="benefit-content">
+                            <h3>Learn Anywhere</h3>
+                            <p>Access your courses and progress from any device, online or offline.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">👨‍🏫</div>
+                        <div class="benefit-content">
+                            <h3>Expert Instructors</h3>
+                            <p>Learn from industry professionals and academic experts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📚</div>
+                        <div class="benefit-content">
+                            <h3>Comprehensive Library</h3>
+                            <p>300+ courses across STEM, humanities, and professional skills.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+             
+        <section class="faq-section">
+            <div class="faq-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Find answers to common questions about our platform</p>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is there really no cost for the Basic plan?</div>
+                <div class="faq-answer">
+                    <p>Yes! Our Basic plan is completely free forever. You'll have access to dozens of high-quality courses and basic features without ever needing to pay. We believe education should be accessible to everyone.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What's included in the free trial for Pro Learner?</div>
+                <div class="faq-answer">
+                    <p>The free trial gives you full access to all Pro features for 7 days, including all courses, advanced analytics, and premium puzzle games. No credit card is required to start the trial. You can cancel anytime before the trial ends with no charge.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How does the student verification work?</div>
+                <div class="faq-answer">
+                    <p>After signing up for the Student plan, you'll be asked to provide proof of current student status (like a student ID or enrollment verification). Our team typically verifies documents within 24 hours. The discount is valid as long as you remain a student.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I switch plans later?</div>
+                <div class="faq-answer">
+                    <p>Absolutely! You can upgrade, downgrade, or cancel your plan at any time. Changes take effect immediately for upgrades or at the end of your billing cycle for downgrades.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What payment methods do you accept?</div>
+                <div class="faq-answer">
+                    <p>We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and in some regions, Apple Pay and Google Pay. All payments are processed securely through our PCI-compliant payment processor.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Courses</a>
+                <a href="#">Puzzle Hub</a>
+                <a href="#">Progress Analyzer</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <p class= Devloped by anish sawant</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Dark/Light mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // FAQ functionality
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all answers first
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.classList.remove('show');
+                });
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                });
+                
+                // Open current if it wasn't active
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('show');
+                }
+            });
+        });
+        
+        // User Profile Dropdown Functionality
+        const dropdownButton = document.getElementById('profileDropdown');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const logoutButton = document.getElementById('logoutButton');
+        const userProfile = document.getElementById('userProfile');
+        
+        if (dropdownButton) {
+            // Toggle dropdown
+            dropdownButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
+                dropdownButton.setAttribute('aria-expanded', !isExpanded);
+                dropdownButton.classList.toggle('active');
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                dropdownButton.setAttribute('aria-expanded', 'false');
+                dropdownButton.classList.remove('active');
+                dropdownMenu.classList.remove('show');
+            });
+            
+            // Prevent dropdown from closing when clicking inside
+            dropdownMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Logout functionality
+            logoutButton.addEventListener('click', function() {
+                // Clear user data and hide profile
+                localStorage.removeItem('currentUser');
+                userProfile.style.display = 'none';
+                alert('You have been logged out');
+                // In a real app, you would redirect to login page
+                // window.location.href = '/login';
+            });
+        }
+        
+        // Form validation and user creation
+        const registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simple validation
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (!document.getElementById('terms').checked) {
+                alert('You must agree to the Terms of Service');
+                return;
+            }
+            
+            // Create user object
+            const user = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                plan: document.getElementById('plan').value,
+                // Generate a random avatar (in production, you might use Gravatar or upload)
+                avatar: `https://i.pravatar.cc/150?u=${document.getElementById('email').value}`
+            };
+            
+            // Save user to localStorage (in production, you would send to backend)
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Show success message and update UI
+            alert('Account created successfully! Welcome to DeepLearn AI');
+            updateUserProfile(user);
+            
+            // Show the user profile dropdown
+            userProfile.style.display = 'block';
+            
+            // In a real app, you would redirect to dashboard
+            // window.location.href = '/dashboard';
+        });
+        
+        // Update user profile in dropdown
+        function updateUserProfile(user) {
+            const fullName = `${user.firstName} ${user.lastName}`;
+            
+            // Update all profile elements
+            document.getElementById('usernameDisplay').textContent = user.firstName;
+            document.getElementById('dropdownUserName').textContent = fullName;
+            document.getElementById('dropdownUserEmail').textContent = user.email;
+            
+            // Set avatar images
+            const avatarElements = document.querySelectorAll('.avatar, .avatar-large');
+            avatarElements.forEach(el => {
+                el.src = user.avatar;
+                el.alt = fullName;
+            });
+        }
+        
+        // Check if user is already logged in (on page load)
+        function checkLoggedInUser() {
+            const userData = localStorage.getItem('currentUser');
+            if (userData) {
+                const user = JSON.parse(userData);
+                updateUserProfile(user);
+                userProfile.style.display = 'block';
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoggedInUser();
+            
+            // Social login buttons
+            document.querySelectorAll('.social-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    alert('Social login would be implemented here');
+                });
+            });
+            
+            // Plan selection effect
+            document.getElementById('plan').addEventListener('change', function() {
+                const selectedPlan = this.value;
+                console.log('Selected plan:', selectedPlan);
+            });
+        });
+    </script>
+</body>
+</html>

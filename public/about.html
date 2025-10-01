@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anish Sawant - Portfolio</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Card Styles */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            display: block;
+            background-color: #fff;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            color: #fff;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .details {
+            text-align: left;
+            margin-top: 30px;
+        }
+        
+        .detail-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-item i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: #fdbb2d;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .detail-item span {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .skill {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill:hover {
+            background: rgba(253, 187, 45, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .projects {
+            margin-top: 20px;
+        }
+        
+        .project {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .project-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #fdbb2d;
+        }
+        
+        .project-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: #fdbb2d;
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.2rem;
+            }
+            
+            h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="profile-card">
+        <img src="E:/project 2/public/IMG_20250105_203850_138.jpg" alt="Anish Sawant" class="profile-image">
+        <h1>Anish Sawant</h1>
+        <h2>Computer Science Student | Developer</h2>
+        
+        <div class="details">
+            <div class="detail-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Third Year Computer Science Student at SRM College, Kudal</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>From Kudal, Maharashtra, India</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-code"></i>
+                <span>Passionate about Programming, Web Development, and Emerging Technologies</span>
+            </div>
+            
+            <h3>Technical Skills</h3>
+            <div class="skills-container">
+                <div class="skill">HTML/CSS</div>
+                <div class="skill">JavaScript</div>
+                <div class="skill">Python</div>
+                <div class="skill">Java</div>
+                <div class="skill">C/C++</div>
+                <div class="skill">SQL</div>
+                <div class="skill">Git</div>
+                <div class="skill">Responsive Design</div>
+            </div>
+            
+            <h3>Projects</h3>
+            <div class="projects">
+                <div class="project">
+                    <div class="project-title">College Management System</div>
+                    <div class="project-desc">
+                        Developed a comprehensive college management system using Java and MySQL to automate student records, attendance, and grading.
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-title">Personal Portfolio Website</div>
+                    <div class="project-desc">
+                        Designed and built a responsive portfolio website showcasing my skills and projects using HTML, CSS, and JavaScript.
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Academic Achievements</h3>
+            <div class="detail-item">
+                <i class="fas fa-trophy"></i>
+                <span>Consistently ranked among top 10% of class in academic performance</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-certificate"></i>
+                <span>Completed certification in Advanced Python Programming</span>
+            </div>
+            
+            <h3>Goals & Aspirations</h3>
+            <div class="detail-item">
+                <i class="fas fa-bullseye"></i>
+                <span>To become a full-stack developer and contribute to innovative tech solutions</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-rocket"></i>
+                <span>Looking for internship opportunities to apply my skills in real-world projects</span>
+            </div>
+        </div>
+        
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepLearn AI - Daily Progress Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Simplified CSS for faster loading */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .analytics-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 3px solid #4f46e5;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+        .skill-meter {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .meter-bar {
+            flex-grow: 1;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+        .meter-fill {
+            height: 100%;
+            background: #4f46e5;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .meter-value {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+        }
+        .resource-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top: 4px solid #4f46e5;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        .daily-change {
+            font-size: 0.9em;
+            color: #666;
+            margin-left: 10px;
+        }
+        .positive {
+            color: #10b981;
+        }
+        .negative {
+            color: #ef4444;
+        }
+        .video-container {
+            margin: 20px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+        .video-container iframe {
+            width: 100%;
+            height: 315px;
+            border-radius: 8px;
+            border: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="analytics-panel">
+            <h2>Your Daily Learning Progress</h2>
+            <div class="tabs">
+                <div class="tab active" data-tab="skills">Skills</div>
+                <div class="tab" data-tab="progress">Progress</div>
+                <div class="tab" data-tab="recommendations">Recommendations</div>
+            </div>
+            
+            <div class="tab-content active" id="skills-tab">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Calculating today's proficiency...</p>
+                </div>
+                <div class="chart-container" style="display:none;">
+                    <canvas id="skills-chart"></canvas>
+                </div>
+                <div id="skills-list" style="display:none;"></div>
+            </div>
+            
+            <div class="tab-content" id="progress-tab">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing your progress...</p>
+                </div>
+                <div class="chart-container" style="display:none;">
+                    <canvas id="progress-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="recommendations-tab">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Finding best resources for you...</p>
+                </div>
+                <div id="recommendations-list" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Proficiency Calculator with Daily Changes
+        class DailyProficiencyAnalyzer {
+            constructor() {
+                this.userId = this.getUserId();
+                this.skillData = {};
+                this.lastVisitDate = this.getLastVisitDate();
+                this.today = new Date().toISOString().split('T')[0];
+                this.init();
+            }
+            
+            init() {
+                this.loadFromCache();
+                this.setupUI();
+                this.calculateProficiency();
+            }
+            
+            getUserId() {
+                return localStorage.getItem('dl_userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            getLastVisitDate() {
+                return localStorage.getItem(`dl_lastVisit_${this.userId}`) || null;
+            }
+            
+            setLastVisitDate() {
+                localStorage.setItem(`dl_lastVisit_${this.userId}`, this.today);
+            }
+            
+            loadFromCache() {
+                const cached = localStorage.getItem(`dl_proficiency_${this.userId}`);
+                if (cached) {
+                    this.skillData = JSON.parse(cached);
+                    
+                    // Initialize daily changes if not present
+                    if (!this.skillData.dailyChanges) {
+                        this.skillData.dailyChanges = {};
+                    }
+                }
+            }
+            
+            saveToCache() {
+                localStorage.setItem(`dl_proficiency_${this.userId}`, JSON.stringify(this.skillData));
+                this.setLastVisitDate();
+            }
+            
+            setupUI() {
+                // Tab switching
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        
+                        tab.classList.add('active');
+                        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                        
+                        // Refresh tab data when clicked
+                        if (tab.dataset.tab === 'skills') this.showSkills();
+                        if (tab.dataset.tab === 'progress') this.showProgress();
+                        if (tab.dataset.tab === 'recommendations') this.showRecommendations();
+                    });
+                });
+            }
+            
+            calculateProficiency() {
+                // Simulate quick calculation (50-300ms)
+                setTimeout(() => {
+                    const subjects = ['Math', 'Physics', 'Programming', 'Biology', 'Chemistry'];
+                    
+                    // Initialize or update scores with daily changes
+                    if (!this.skillData.scores || this.lastVisitDate !== this.today) {
+                        this.updateDailyScores(subjects);
+                    }
+                    
+                    this.showSkills();
+                }, 200);
+            }
+            
+            updateDailyScores(subjects) {
+                // Initialize or get current scores
+                const currentScores = this.skillData.scores || {};
+                
+                // Generate new scores with daily variation
+                const newScores = {};
+                const dailyChanges = {};
+                
+                subjects.forEach(subject => {
+                    const currentScore = currentScores[subject] || this.getRandomBaseScore();
+                    
+                    // Calculate daily change (-5 to +10 points)
+                    const dailyChange = Math.floor(Math.random() * 16) - 5;
+                    const newScore = Math.max(0, Math.min(100, currentScore + dailyChange));
+                    
+                    newScores[subject] = newScore;
+                    dailyChanges[subject] = {
+                        change: dailyChange,
+                        date: this.today
+                    };
+                });
+                
+                // Update skill data
+                this.skillData.scores = newScores;
+                this.skillData.dailyChanges = dailyChanges;
+                this.skillData.lastUpdated = new Date().toISOString();
+                
+                // Generate/update history
+                this.skillData.history = this.generateHistory(newScores);
+                
+                this.saveToCache();
+            }
+            
+            getRandomBaseScore() {
+                // Return a random base score between 30-70 for new users
+                return Math.floor(Math.random() * 41) + 30;
+            }
+            
+            generateHistory(currentScores) {
+                // Generate or update historical data
+                const history = this.skillData.history || {};
+                const subjects = Object.keys(currentScores);
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                
+                subjects.forEach(subject => {
+                    if (!history[subject]) {
+                        // Initialize history for new subjects
+                        history[subject] = [];
+                        const currentScore = currentScores[subject];
+                        const startScore = Math.max(10, currentScore - 30 + Math.random() * 20);
+                        
+                        for (let i = 0; i < months.length; i++) {
+                            const progress = i / (months.length - 1);
+                            const monthScore = Math.round(startScore + (currentScore - startScore) * progress);
+                            history[subject].push(monthScore);
+                        }
+                    } else {
+                        // Update most recent month with current score
+                        history[subject][months.length - 1] = currentScores[subject];
+                    }
+                });
+                
+                return history;
+            }
+            
+            showSkills() {
+                const container = document.getElementById('skills-tab');
+                const loading = container.querySelector('.loading');
+                const chartContainer = container.querySelector('.chart-container');
+                const skillsList = document.getElementById('skills-list');
+                
+                // Hide loading after calculation
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    chartContainer.style.display = 'block';
+                    skillsList.style.display = 'block';
+                    
+                    // Render chart
+                    this.renderSkillsChart();
+                    
+                    // Render skill meters with daily changes
+                    skillsList.innerHTML = '';
+                    Object.entries(this.skillData.scores).forEach(([subject, score]) => {
+                        const dailyChange = this.skillData.dailyChanges[subject]?.change || 0;
+                        const changeClass = dailyChange > 0 ? 'positive' : (dailyChange < 0 ? 'negative' : '');
+                        const changeSymbol = dailyChange > 0 ? '↑' : (dailyChange < 0 ? '↓' : '→');
+                        
+                        const skillEl = document.createElement('div');
+                        skillEl.className = 'skill-meter';
+                        skillEl.innerHTML = `
+                            <div>${subject}</div>
+                            <div class="meter-bar"><div class="meter-fill" style="width:${score}%"></div></div>
+                            <div class="meter-value">${score}% 
+                                <span class="daily-change ${changeClass}">
+                                    ${changeSymbol} ${Math.abs(dailyChange)}%
+                                </span>
+                            </div>
+                        `;
+                        skillsList.appendChild(skillEl);
+                    });
+                }, 100);
+            }
+            
+            renderSkillsChart() {
+                const ctx = document.getElementById('skills-chart').getContext('2d');
+                
+                if (window.skillsChart) {
+                    window.skillsChart.destroy();
+                }
+                
+                const subjects = Object.keys(this.skillData.scores);
+                const scores = subjects.map(subj => this.skillData.scores[subj]);
+                
+                window.skillsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: subjects,
+                        datasets: [{
+                            label: 'Today\'s Proficiency',
+                            data: scores,
+                            backgroundColor: [
+                                'rgba(79, 70, 229, 0.7)',
+                                'rgba(99, 102, 241, 0.7)',
+                                'rgba(129, 140, 248, 0.7)',
+                                'rgba(167, 139, 250, 0.7)',
+                                'rgba(196, 181, 253, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(79, 70, 229, 1)',
+                                'rgba(99, 102, 241, 1)',
+                                'rgba(129, 140, 248, 1)',
+                                'rgba(167, 139, 250, 1)',
+                                'rgba(196, 181, 253, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Proficiency Score'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Daily Proficiency Changes',
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            showProgress() {
+                const container = document.getElementById('progress-tab');
+                const loading = container.querySelector('.loading');
+                const chartContainer = container.querySelector('.chart-container');
+                
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    chartContainer.style.display = 'block';
+                    this.renderProgressChart();
+                }, 100);
+            }
+            
+            renderProgressChart() {
+                const ctx = document.getElementById('progress-chart').getContext('2d');
+                
+                if (window.progressChart) {
+                    window.progressChart.destroy();
+                }
+                
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                const subjects = Object.keys(this.skillData.history);
+                
+                window.progressChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: subjects.map((subject, i) => ({
+                            label: subject,
+                            data: this.skillData.history[subject],
+                            borderColor: [
+                                'rgba(79, 70, 229, 1)',
+                                'rgba(99, 102, 241, 1)',
+                                'rgba(129, 140, 248, 1)',
+                                'rgba(167, 139, 250, 1)',
+                                'rgba(196, 181, 253, 1)'
+                            ][i],
+                            backgroundColor: 'transparent',
+                            tension: 0.3,
+                            pointBackgroundColor: '#fff',
+                            pointBorderWidth: 2
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Proficiency Score'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Monthly Progress Trend',
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            showRecommendations() {
+                const container = document.getElementById('recommendations-tab');
+                const loading = container.querySelector('.loading');
+                const recList = document.getElementById('recommendations-list');
+                
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    recList.style.display = 'block';
+                    
+                    // Generate recommendations based on daily changes
+                    const subjectsWithChanges = Object.entries(this.skillData.dailyChanges)
+                        .map(([subject, change]) => ({
+                            subject,
+                            score: this.skillData.scores[subject],
+                            change: change.change
+                        }));
+                    
+                    // Sort by worst performers (biggest negative changes or lowest scores)
+                    const sortedSubjects = subjectsWithChanges.sort((a, b) => {
+                        // Prioritize negative changes
+                        if (a.change < 0 && b.change >= 0) return -1;
+                        if (b.change < 0 && a.change >= 0) return 1;
+                        
+                        // Then by lowest scores
+                        return a.score - b.score;
+                    });
+                    
+                    const focusAreas = sortedSubjects.slice(0, 2);
+                    
+                    recList.innerHTML = `
+                        <h3>Today's Focus Areas</h3>
+                        <p>Based on your recent changes, we recommend focusing on:</p>
+                        <ul>
+                            ${focusAreas.map(area => `
+                                <li>
+                                    <strong>${area.subject}</strong> 
+                                    (${area.score}% proficiency)
+                                    <span class="daily-change ${area.change > 0 ? 'positive' : (area.change < 0 ? 'negative' : '')}">
+                                        ${area.change > 0 ? '↑' : (area.change < 0 ? '↓' : '→')} ${Math.abs(area.change)}% today
+                                    </span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        
+                        <h3>Recommended Resources</h3>
+                        ${this.generateRecommendationsHTML(focusAreas.map(a => a.subject))}
+                    `;
+                    
+                    // Set up video play buttons
+                    this.setupVideoButtons();
+                }, 100);
+            }
+            
+            generateRecommendationsHTML(subjects) {
+                const resources = {
+                    'Math': [
+                        {
+                            title: 'Algebra Fundamentals Crash Course', 
+                            type: 'video', 
+                            duration: '45 min', 
+                            rating: '4.8',
+                            videoUrl: 'https://www.youtube.com/embed/gnn771kiqQk'
+                        },
+                        {
+                            title: 'Calculus Practice Problems', 
+                            type: 'exercises', 
+                            count: '50 problems', 
+                            rating: '4.5',
+                            videoUrl: 'https://www.youtube.com/embed/7a2N6GBjIRk'
+                        }
+                    ],
+                    'Physics': [
+                        {
+                            title: 'Newtonian Mechanics Explained', 
+                            type: 'interactive', 
+                            duration: '1h 10min', 
+                            rating: '4.9',
+                            videoUrl: 'https://www.youtube.com/embed/9Uh5mTxRQcg'
+                        },
+                        {
+                            title: 'Physics Problem Solving Techniques', 
+                            type: 'guide', 
+                            pages: '25', 
+                            rating: '4.7',
+                            videoUrl: 'https://www.youtube.com/embed/ysB5nN6JYXg'
+                        }
+                    ],
+                    'Programming': [
+                        {
+                            title: 'Python for Beginners', 
+                            type: 'course', 
+                            duration: '3h', 
+                            rating: '4.8',
+                            videoUrl: 'https://www.youtube.com/embed/rfscVS0vtbw'
+                        },
+                        {
+                            title: 'Algorithm Challenges', 
+                            type: 'practice', 
+                            count: '30 challenges', 
+                            rating: '4.6',
+                            videoUrl: 'https://www.youtube.com/embed/8hly31xKli0'
+                        }
+                    ],
+                    'Biology': [
+                        {
+                            title: 'Cell Biology Visual Guide', 
+                            type: 'interactive', 
+                            duration: '55 min', 
+                            rating: '4.7',
+                            videoUrl: 'https://www.youtube.com/embed/URUJD5NEXC8'
+                        },
+                        {
+                            title: 'Genetics Fundamentals', 
+                            type: 'course', 
+                            duration: '2h', 
+                            rating: '4.5',
+                            videoUrl: 'https://www.youtube.com/embed/CBezq1fFUEA'
+                        }
+                    ],
+                    'Chemistry': [
+                        {
+                            title: 'Organic Chemistry Reactions', 
+                            type: 'video', 
+                            duration: '1h 20min', 
+                            rating: '4.8',
+                            videoUrl: 'https://www.youtube.com/embed/LeOUIkEh7x0'
+                        },
+                        {
+                            title: 'Chemical Bonding Exercises', 
+                            type: 'practice', 
+                            count: '40 problems', 
+                            rating: '4.4',
+                            videoUrl: 'https://www.youtube.com/embed/1wpDicW_MQQ'
+                        }
+                    ]
+                };
+                
+                return subjects.map(subj => `
+                    <div class="resource-section">
+                        <h4>${subj}</h4>
+                        <div class="video-container" id="video-container-${subj.replace(/\s+/g, '-').toLowerCase()}"></div>
+                        ${resources[subj].map(res => `
+                            <div class="resource-card">
+                                <h5>${res.title}</h5>
+                                <p>${res.type} • ${res.duration || res.count || res.pages} • ★${res.rating}</p>
+                                <button class="start-btn" data-video-url="${res.videoUrl}" data-container-id="video-container-${subj.replace(/\s+/g, '-').toLowerCase()}">Start</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('');
+            }
+            
+            setupVideoButtons() {
+                document.querySelectorAll('.start-btn').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const videoUrl = button.getAttribute('data-video-url');
+                        const containerId = button.getAttribute('data-container-id');
+                        this.playVideo(videoUrl, containerId);
+                    });
+                });
+            }
+            
+            playVideo(videoUrl, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = `
+                    <iframe width="560" height="315" src="${videoUrl}?autoplay=1" 
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                    encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                `;
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.proficiencyAnalyzer = new DailyProficiencyAnalyzer();
+        });
+    </script>
+</body>
+</html>

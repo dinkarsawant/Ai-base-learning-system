@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Courses | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 600;
+            color: #2a2a2a;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+        
+        /* Chemistry Specific Styles */
+        :root {
+            --chemistry-primary: #9c27b0;
+            --chemistry-primary-light: #d05ce3;
+            --chemistry-primary-dark: #6a0080;
+            --chemistry-secondary: #ff9800;
+            --chemistry-tertiary: #4caf50;
+        }
+        
+        .chemistry-theme {
+            --primary: var(--chemistry-primary);
+            --primary-light: var(--chemistry-primary-light);
+            --primary-dark: var(--chemistry-primary-dark);
+            --secondary: var(--chemistry-secondary);
+            --tertiary: var(--chemistry-tertiary);
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-bar {
+            position: relative;
+            margin-right: 20px;
+        }
+        
+        .search-bar input {
+            padding: 8px 15px 8px 35px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        /* Subject Hero Section */
+        .subject-hero {
+            padding: 80px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subject-hero.chemistry-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .subject-hero .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .breadcrumb a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .subject-icon.chemistry-icon {
+            background-color: var(--primary-light);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subject-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .subject-hero p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Subject Overview */
+        .subject-overview {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .subject-overview h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .subject-overview p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Video Section */
+        .video-section {
+            padding: 80px 0;
+            background-color: #f5f5f5;
+        }
+        
+        .video-section h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .video-section p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .video-info p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .video-duration {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--primary-light);
+            color: white;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        /* Periodic Table Demo */
+        .periodic-table-demo {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .periodic-table-demo h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .periodic-table-demo p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 4px;
+            margin: 40px auto;
+            max-width: 1000px;
+        }
+        
+        .element {
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 0.7rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #e0e0e0;
+            position: relative;
+            font-weight: 600;
+        }
+        
+        .element:hover {
+            transform: scale(1.3);
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .element::after {
+            content: attr(data-number);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 0.5rem;
+            opacity: 0.7;
+        }
+        
+        .element::before {
+            content: attr(data-name);
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            font-size: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .element:hover::before {
+            opacity: 1;
+        }
+        
+        /* Element categories */
+        .alkali-metal { background-color: #ff9e80; }
+        .alkaline-earth { background-color: #ffcc80; }
+        .transition-metal { background-color: #ffab91; }
+        .basic-metal { background-color: #b39ddb; }
+        .semimetal { background-color: #80deea; }
+        .nonmetal { background-color: #c5e1a5; }
+        .halogen { background-color: #80cbc4; }
+        .noble-gas { background-color: #ce93d8; }
+        .lanthanide { background-color: #f48fb1; }
+        .actinide { background-color: #ffab91; }
+        
+        /* Modal for Periodic Table */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1000px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .full-periodic-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        /* Course Categories */
+        .subject-categories {
+            padding: 80px 0;
+            background-color: #f5f5f5;
+        }
+        
+        .subject-categories h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+        
+        .category-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .category-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .course-count {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--primary-light);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background-color: var(--secondary);
+            transition: height 0.3s ease;
+        }
+        
+        .category-card:hover::before {
+            height: 100%;
+        }
+
+        /* Category Videos Section */
+        .category-videos {
+            padding: 60px 0;
+            background-color: white;
+        }
+
+        .category-videos h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .category-videos .video-grid {
+            margin-top: 20px;
+        }
+
+        /* Virtual Lab CTA */
+        .lab-cta {
+            padding: 100px 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .lab-cta .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .lab-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .lab-cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-rating {
+            color: var(--secondary);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2a2a2a;
+            color: #ddd;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .footer-logo span {
+            color: var(--secondary);
+        }
+        
+        .footer-about p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            opacity: 0.8;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--primary-light);
+            padding-left: 5px;
+        }
+        
+        .footer-newsletter p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter-form {
+            display: flex;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            outline: none;
+        }
+        
+        .newsletter-form button {
+            padding: 0 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .subject-hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content {
+                margin-bottom: 50px;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .periodic-table {
+                grid-template-columns: repeat(9, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0 15px 10px;
+            }
+            
+            .periodic-table {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .hero-stats {
+                flex-wrap: wrap;
+            }
+            
+            .stat-item {
+                flex: 0 0 50%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .periodic-table {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .subject-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subject-overview h2,
+            .periodic-table-demo h2,
+            .subject-categories h2,
+            .video-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        
+        /* Tooltip for periodic table */
+        .element-tooltip {
+            position: absolute;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 200px;
+            text-align: left;
+        }
+        
+        .element:hover .element-tooltip {
+            opacity: 1;
+        }
+        
+        .element-tooltip h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .element-tooltip p {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<body class="chemistry-theme">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo">Deep<span>Learn</span> AI</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="about.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search courses...">
+                </div>
+                <a href="auth.html" class="btn btn-primary">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Subject Hero Section -->
+    <section class="subject-hero chemistry-hero">
+        <div class="container">
+            <div class="hero-content animated">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> / <a href="categories.html">Categories</a> / <span>Chemistry</span>
+                </div>
+                <div class="subject-icon chemistry-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h1>Unlock the Secrets of Chemistry</h1>
+                <p>From atomic structure to complex reactions, our interactive platform makes chemistry engaging and intuitive with AI-powered learning tools and virtual labs.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">320+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">62K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image animated delay-1">
+                <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chemistry Visualizations">
+            </div>
+        </div>
+    </section>
+
+    <!-- Subject Overview -->
+    <section class="subject-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2 class="animated">Interactive Chemistry Learning Experience</h2>
+                <p class="animated delay-1">Our platform transforms abstract chemical concepts into visual, interactive experiences that enhance understanding and retention.</p>
+                <div class="features-grid">
+                    <div class="feature-item animated delay-1">
+                        <i class="fas fa-atom"></i>
+                        <h3>Molecular Visualizer</h3>
+                        <p>Manipulate 3D models of molecules with real-time rendering and orbital visualization</p>
+                    </div>
+                    <div class="feature-item animated delay-2">
+                        <i class="fas fa-vial"></i>
+                        <h3>Virtual Labs</h3>
+                        <p>Conduct experiments safely with our realistic lab simulations and safety training</p>
+                    </div>
+                    <div class="feature-item animated delay-3">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Reaction Simulator</h3>
+                        <p>Visualize chemical processes with dynamic equilibrium and kinetics modeling</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="container">
+            <h2 class="animated">Featured Chemistry Videos</h2>
+            <p class="animated delay-1">Learn from our expert instructors through these engaging video lessons</p>
+            
+            <div class="video-grid">
+                <div class="video-card animated delay-1">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Lk5R6qkkh-M?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Introduction to Organic Chemistry</h3>
+                        <p>Learn the fundamentals of carbon compounds and functional groups in this beginner-friendly lesson.</p>
+                        <span class="video-duration">12:45</span>
+                    </div>
+                </div>
+                
+                <div class="video-card animated delay-2">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/6nCx4p7wKbw?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Chemical Bonding Explained</h3>
+                        <p>Understand ionic, covalent, and metallic bonds with clear visual examples.</p>
+                        <span class="video-duration">15:30</span>
+                    </div>
+                </div>
+                
+                <div class="video-card animated delay-3">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/VIkXswG36vE?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Thermodynamics Basics</h3>
+                        <p>Explore the first law of thermodynamics and enthalpy changes in reactions.</p>
+                        <span class="video-duration">18:20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Periodic Table Demo -->
+    <section class="periodic-table-demo">
+        <div class="container">
+            <h2 class="animated">Interactive Periodic Table</h2>
+            <p class="animated delay-1">Hover over elements to see details or click to explore courses about them. Our periodic table adapts to your learning level.</p>
+            <div class="periodic-table">
+                <!-- First Row -->
+                <div class="element alkali-metal" data-number="1" data-name="Hydrogen">H
+                    <div class="element-tooltip">
+                        <h4>Hydrogen (H)</h4>
+                        <p><strong>Atomic Number:</strong> 1</p>
+                        <p><strong>Category:</strong> Reactive nonmetal</p>
+                        <p><strong>Discoverer:</strong> Henry Cavendish</p>
+                    </div>
+                </div>
+                <div class="element" style="grid-column: 18;" data-number="2" data-name="Helium">He
+                    <div class="element-tooltip">
+                        <h4>Helium (He)</h4>
+                        <p><strong>Atomic Number:</strong> 2</p>
+                        <p><strong>Category:</strong> Noble gas</p>
+                        <p><strong>Discoverer:</strong> Pierre Janssen</p>
+                    </div>
+                </div>
+                
+                <!-- Second Row -->
+                <div class="element alkali-metal" style="grid-column: 1; grid-row: 2;" data-number="3" data-name="Lithium">Li</div>
+                <div class="element alkaline-earth" style="grid-column: 2; grid-row: 2;" data-number="4" data-name="Beryllium">Be</div>
+                <div class="element semimetal" style="grid-column: 13; grid-row: 2;" data-number="5" data-name="Boron">B</div>
+                <div class="element nonmetal" style="grid-column: 14; grid-row: 2;" data-number="6" data-name="Carbon">C</div>
+                <div class="element nonmetal" style="grid-column: 15; grid-row: 2;" data-number="7" data-name="Nitrogen">N</div>
+                <div class="element nonmetal" style="grid-column: 16; grid-row: 2;" data-number="8" data-name="Oxygen">O</div>
+                <div class="element halogen" style="grid-column: 17; grid-row: 2;" data-number="9" data-name="Fluorine">F</div>
+                <div class="element noble-gas" style="grid-column: 18; grid-row: 2;" data-number="10" data-name="Neon">Ne</div>
+                
+                <!-- Third Row -->
+                <div class="element alkali-metal" style="grid-column: 1; grid-row: 3;" data-number="11" data-name="Sodium">Na</div>
+                <div class="element alkaline-earth" style="grid-column: 2; grid-row: 3;" data-number="12" data-name="Magnesium">Mg</div>
+                <div class="element transition-metal" style="grid-column: 3; grid-row: 3;" data-number="13" data-name="Aluminum">Al</div>
+                <div class="element semimetal" style="grid-column: 14; grid-row: 3;" data-number="14" data-name="Silicon">Si</div>
+                <div class="element nonmetal" style="grid-column: 15; grid-row: 3;" data-number="15" data-name="Phosphorus">P</div>
+                <div class="element nonmetal" style="grid-column: 16; grid-row: 3;" data-number="16" data-name="Sulfur">S</div>
+                <div class="element halogen" style="grid-column: 17; grid-row: 3;" data-number="17" data-name="Chlorine">Cl</div>
+                <div class="element noble-gas" style="grid-column: 18; grid-row: 3;" data-number="18" data-name="Argon">Ar</div>
+                
+                <!-- Transition Metals -->
+                <div class="element transition-metal" style="grid-column: 4; grid-row: 4;" data-number="21" data-name="Scandium">Sc</div>
+                <div class="element transition-metal" style="grid-column: 5; grid-row: 4;" data-number="22" data-name="Titanium">Ti</div>
+                <!-- More elements would go here... -->
+                
+                <!-- Lanthanides -->
+                <div class="element lanthanide" style="grid-column: 3; grid-row: 6;" data-number="57" data-name="Lanthanum">La</div>
+                <!-- More lanthanides... -->
+                
+                <!-- Actinides -->
+                <div class="element actinide" style="grid-column: 3; grid-row: 7;" data-number="89" data-name="Actinium">Ac</div>
+                <!-- More actinides... -->
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="explorePeriodicTable"  onclick="window.location.href='"table.html'>Explore Full Periodic Table</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Categories -->
+    <section class="subject-categories">
+        <div class="container">
+            <h2 class="animated">Chemistry Learning Paths</h2>
+            <p class="animated delay-1" style="text-align: center; max-width: 700px; margin: 0 auto 30px;">Choose your focus area and start your chemical journey with our structured learning paths.</p>
+            <div class="categories-grid">
+                <a href="organic-chemistry.html" class="category-card animated delay-1">
+                    <h3>Organic Chemistry</h3>
+                    <p>Explore carbon compounds, functional groups, and reaction mechanisms</p>
+                    <span class="course-count">6 Courses</span>
+                </a>
+                <a href="inorganic-chemistry.html" class="category-card animated delay-1">
+                    <h3>Inorganic Chemistry</h3>
+                    <p>Study metals, coordination compounds, and materials science</p>
+                    <span class="course-count">5 Courses</span>
+                </a>
+                <a href="physical-chemistry.html" class="category-card animated delay-2">
+                    <h3>Physical Chemistry</h3>
+                    <p>Master thermodynamics, quantum chemistry, and kinetics</p>
+                    <span class="course-count">5 Courses</span>
+                </a>
+                <a href="biochemistry.html" class="category-card animated delay-2">
+                    <h3>Biochemistry</h3>
+                    <p>Understand the chemistry of life processes and biomolecules</p>
+                    <span class="course-count">4 Courses</span>
+                </a>
+                <a href="analytical-chemistry.html" class="category-card animated delay-3">
+                    <h3>Analytical Chemistry</h3>
+                    <p>Learn measurement techniques and chemical analysis methods</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                <a href="environmental-chemistry.html" class="category-card animated delay-3">
+                    <h3>Environmental Chemistry</h3>
+                    <p>Examine chemical processes in air, water, and soil systems</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organic Chemistry Videos -->
+    <section class="category-videos">
+        <div class="container">
+            <h3 class="animated">Organic Chemistry Videos</h3>
+            <div class="video-grid">
+                <div class="video-card animated delay-1">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/PmvLB5dIEp8?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Introduction to Organic Chemistry</h3>
+                        <p>Learn the basics of organic chemistry including hydrocarbons and functional groups.</p>
+                        <span class="video-duration">14:20</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-2">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/iz9oGuE5kJI?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Naming Organic Compounds</h3>
+                        <p>Master IUPAC nomenclature for alkanes, alkenes, and alkynes.</p>
+                        <span class="video-duration">18:45</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-3">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/LeOUIkEhvYs?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Organic Reaction Mechanisms</h3>
+                        <p>Understand substitution, elimination, and addition reactions.</p>
+                        <span class="video-duration">22:10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inorganic Chemistry Videos -->
+    <section class="category-videos" style="background-color: #f5f5f5;">
+        <div class="container">
+            <h3 class="animated">Inorganic Chemistry Videos</h3>
+            <div class="video-grid">
+                <div class="video-card animated delay-1">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/6nCx4p7wKbw?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Chemical Bonding</h3>
+                        <p>Explore ionic, covalent, and metallic bonding in inorganic compounds.</p>
+                        <span class="video-duration">15:30</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-2">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/4y4Q8yX8Iqk?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Coordination Chemistry</h3>
+                        <p>Introduction to coordination compounds and crystal field theory.</p>
+                        <span class="video-duration">19:15</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-3">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/0NNVKethU_Q?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Periodic Trends</h3>
+                        <p>Understand atomic radius, ionization energy, and electronegativity trends.</p>
+                        <span class="video-duration">12:50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Physical Chemistry Videos -->
+    <section class="category-videos">
+        <div class="container">
+            <h3 class="animated">Physical Chemistry Videos</h3>
+            <div class="video-grid">
+                <div class="video-card animated delay-1">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/VIkXswG36vE?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Thermodynamics Basics</h3>
+                        <p>First law of thermodynamics and enthalpy changes in reactions.</p>
+                        <span class="video-duration">18:20</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-2">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/6nCx4p7wKbw?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Chemical Kinetics</h3>
+                        <p>Reaction rates, rate laws, and the Arrhenius equation explained.</p>
+                        <span class="video-duration">16:45</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-3">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/T_HV3mQA1UQ?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Quantum Chemistry</h3>
+                        <p>Introduction to quantum mechanics and atomic structure.</p>
+                        <span class="video-duration">21:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biochemistry Videos -->
+    <section class="category-videos" style="background-color: #f5f5f5;">
+        <div class="container">
+            <h3 class="animated">Biochemistry Videos</h3>
+            <div class="video-grid">
+                <div class="video-card animated delay-1">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/H8WJ2KENlK0?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Protein Structure</h3>
+                        <p>Primary, secondary, tertiary, and quaternary protein structures.</p>
+                        <span class="video-duration">14:25</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-2">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/YO244P1e9QM?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Enzyme Kinetics</h3>
+                        <p>Michaelis-Menten kinetics and enzyme inhibition mechanisms.</p>
+                        <span class="video-duration">17:40</span>
+                    </div>
+                </div>
+                <div class="video-card animated delay-3">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/8kK2zwjRV0M?rel=0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Metabolic Pathways</h3>
+                        <p>Overview of glycolysis, Krebs cycle, and oxidative phosphorylation.</p>
+                        <span class="video-duration">20:15</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Lab CTA -->
+    <section class="lab-cta">
+        <div class="container">
+            <div class="cta-content animated">
+                <h2>Experience Our Virtual Chemistry Lab</h2>
+                <p>Mix chemicals, observe reactions, collect data, and learn lab safety with our immersive virtual laboratory environment powered by AI.</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <a href="chemistry-lab.html" class="btn btn-primary btn-lg">Launch Virtual Lab</a>
+                    <a href="lab-demo.html" class="btn btn-primary btn-lg" style="background-color: transparent; border: 2px solid white;">Watch Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px; color: var(--primary);">What Our Chemistry Students Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card animated delay-1">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Student" class="testimonial-img">
+                        <div>
+                            <h4>Dinkar Sawant</h4>
+                            <p style="color: #777; font-size: 0.9rem;">Organic Chemistry Student</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"The molecular visualizer helped me finally understand stereochemistry in a way no textbook ever could. I aced my exam thanks to this platform!"</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div class="testimonial-card animated delay-2">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Student" class="testimonial-img">
+                        <div>
+                            <h4>Anish Sawant</h4>
+                            <p style="color: #777; font-size: 0.9rem;">Physical Chemistry Student</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"The reaction simulator made quantum chemistry concepts click for me. Being able to manipulate variables and see real-time changes was revolutionary."</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div class="testimonial-card animated delay-3">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Student" class="testimonial-img">
+                        <div>
+                            <h4>Priya Patel</h4>
+                            <p style="color: #777; font-size: 0.9rem;">Biochemistry Student</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"As a visual learner, the 3D protein folding simulations transformed how I understand enzyme mechanisms. This is the future of chemistry education!"</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <a href="index.html" class="footer-logo">Deep<span>Learn</span> AI</a>
+                    <p>Transforming chemistry education through interactive AI-powered learning experiences since 2018.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">All Courses</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Chemistry Resources</h3>
+                    <ul>
+                        <li><a href="periodic-table.html">Interactive Periodic Table</a></li>
+                        <li><a href="chemistry-lab.html">Virtual Lab</a></li>
+                        <li><a href="reaction-database.html">Reaction Database</a></li>
+                        <li><a href="compound-library.html">Compound Library</a></li>
+                        <li><a href="chemistry-tools.html">Calculators & Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h3>Stay Updated</h3>
+                    <p>Subscribe to our newsletter for the latest courses and chemistry resources.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your Email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Devloped by Anish sawant | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation trigger
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animated');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                element.style.opacity = 0;
+                observer.observe(element);
+            });
+            
+            // Tooltip positioning for periodic table
+            const elements = document.querySelectorAll('.element');
+            elements.forEach(element => {
+                element.addEventListener('mouseenter', function(e) {
+                    const tooltip = this.querySelector('.element-tooltip');
+                    if (tooltip) {
+                        const rect = this.getBoundingClientRect();
+                        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+                        tooltip.style.left = `${rect.left}px`;
+                    }
+                });
+            });
+            
+            // Periodic Table Modal
+            const modal = document.getElementById('periodicTableModal');
+            const btn = document.getElementById('explorePeriodicTable');
+            const span = document.getElementsByClassName('close-modal')[0];
+            
+            btn.onclick = function() {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            span.onclick = function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
+                }
+            }
+        });
+    </script>
+</body>
+</html>

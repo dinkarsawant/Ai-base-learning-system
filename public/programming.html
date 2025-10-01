@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Courses | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e1e5eb;
+            --dark-gray: #6c757d;
+            --black: #212529;
+            --programming-primary: #2196f3;
+            --programming-primary-light: #6ec6ff;
+            --programming-primary-dark: #0069c0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--light-gray);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation - Simplified for demo */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+        }
+        
+        /* Hero Section */
+        .subject-hero {
+            display: flex;
+            align-items: center;
+            min-height: 400px;
+            padding: 4rem 0;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .programming-hero {
+            background: linear-gradient(135deg, var(--programming-primary) 0%, var(--programming-primary-dark) 100%);
+        }
+        
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .programming-icon {
+            background-color: var(--programming-primary-light);
+            color: var(--programming-primary-dark);
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .breadcrumb a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            opacity: 0.6;
+        }
+        
+        /* Subject Overview */
+        .subject-overview {
+            padding: 4rem 0;
+            background-color: var(--white);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-item {
+            background-color: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-item i {
+            font-size: 2rem;
+            color: var(--programming-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Code Editor */
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: var(--border-radius-lg);
+            padding: 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #d4d4d4;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .editor-header {
+            background: #252526;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        
+        .filename {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            color: #858585;
+        }
+        
+        pre {
+            margin: 0;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        code {
+            font-family: inherit;
+            line-height: 1.5;
+        }
+        
+        .python {
+            color: #d4d4d4;
+        }
+        
+        .python .comment {
+            color: #6A9955;
+        }
+        
+        .python .string {
+            color: #CE9178;
+        }
+        
+        .python .keyword {
+            color: #569CD6;
+        }
+        
+        .python .function {
+            color: #DCDCAA;
+        }
+        
+        /* Languages Section */
+        .languages-section {
+            padding: 4rem 0;
+            background-color: var(--light-gray);
+        }
+        
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .language-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--black);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .language-video {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .language-video iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        .language-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .language-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--programming-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--programming-primary-dark);
+        }
+        
+        .language-card h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .language-card p {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .course-count {
+            font-size: 0.8rem;
+            background-color: var(--programming-primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+        
+        /* Development Paths */
+        .dev-paths {
+            padding: 4rem 0;
+            background-color: var(--white);
+        }
+        
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .path-card {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .path-icon {
+            width: 80px;
+            background-color: var(--programming-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        
+        .path-content {
+            padding: 1.5rem;
+            flex: 1;
+        }
+        
+        .path-content h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .path-content p {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .path-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .btn-outline {
+            border-color: var(--programming-primary);
+            color: var(--programming-primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--programming-primary);
+            color: white;
+        }
+        
+        /* New Features */
+        .difficulty-meter {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .difficulty-label {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .meter {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .meter-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+        }
+        
+        .meter-dot.filled {
+            background-color: var(--programming-primary);
+        }
+        
+        /* Interactive Code Challenge */
+        .code-challenge {
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            margin: 3rem 0;
+            border-left: 4px solid var(--programming-primary);
+        }
+        
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-difficulty {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background-color: var(--warning);
+            color: var(--black);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .subject-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .subject-icon {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .languages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="programming-theme">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">DeepLearn AI</div>
+            <!-- Navigation items would go here -->
+        </div>
+    </nav>
+
+    <!-- Subject Hero Section -->
+    <section class="subject-hero programming-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> / <a href="categories.html">Categories</a> / <span>Programming</span>
+            </div>
+            <div class="hero-content">
+                <div class="subject-icon programming-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h1>Build Your Coding Skills</h1>
+                <p>Master programming with our interactive platform featuring real-time feedback, AI-assisted learning, and hands-on projects.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">32</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">450+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">120K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn-icons-png.flaticon.com/512/1329/1329016.png" alt="Programming Visualizations" width="400">
+            </div>
+        </div>
+    </section>
+
+    <!-- Subject Overview -->
+    <section class="subject-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2>Learn by Doing</h2>
+                <p>Our interactive coding environment provides instant feedback and AI-powered suggestions to help you learn faster and build real-world skills.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Built-in IDE</h3>
+                        <p>Code directly in your browser with syntax highlighting, autocomplete, and debugging tools</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Code Review</h3>
+                        <p>Get instant feedback on your code quality, style, and potential improvements</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Real Projects</h3>
+                        <p>Build portfolio-worthy applications with guided projects and challenges</p>
+                    </div>
+                </div>
+                
+                <!-- Interactive Code Challenge -->
+                <div class="code-challenge">
+                    <div class="challenge-header">
+                        <h3>Try It Now: Interactive Challenge</h3>
+                        <span class="challenge-difficulty">Beginner</span>
+                    </div>
+                    <p>Fix the function below to return the sum of two numbers:</p>
+                    
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="filename">sum_challenge.py</span>
+                        </div>
+                        <pre><code class="python"># Fix this function to return the sum of a and b
+def sum_numbers(a, b):
+    # Your code here
+    return
+    
+# Test your solution
+print(sum_numbers(5, 7))  # Should output: 12</code></pre>
+                    </div>
+                    
+                    <div class="difficulty-meter">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <div class="meter">
+                            <div class="meter-dot filled"></div>
+                            <div class="meter-dot"></div>
+                            <div class="meter-dot"></div>
+                            <div class="meter-dot"></div>
+                            <div class="meter-dot"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline" style="margin-top: 1rem;">Run Code</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programming Languages -->
+    <section class="languages-section">
+        <div class="container">
+            <h2>Popular Programming Languages</h2>
+            <p class="subheading">Choose a language to start your coding journey</p>
+            
+            <div class="languages-grid">
+                <!-- Python -->
+                <a href="python.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/rfscVS0vtbw?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <h3>Python</h3>
+                        <p>Beginner-friendly with powerful applications in data science, AI, and web development</p>
+                        <span class="course-count">8 Courses</span>
+                    </div>
+                </a>
+                
+                <!-- JavaScript -->
+                <a href="javascript.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/PkZNo7MFNFg?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fab fa-js-square"></i>
+                        </div>
+                        <h3>JavaScript</h3>
+                        <p>The language of the web, essential for frontend and full-stack development</p>
+                        <span class="course-count">6 Courses</span>
+                    </div>
+                </a>
+                
+                <!-- Java -->
+                <a href="java.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/eIrMbAQSU34?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fab fa-java"></i>
+                        </div>
+                        <h3>Java</h3>
+                        <p>Enterprise-grade applications, Android development, and large-scale systems</p>
+                        <span class="course-count">4 Courses</span>
+                    </div>
+                </a>
+                
+                <!-- C# -->
+                <a href="csharp.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/gfkTfcpWqAY?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fas fa-copyright"></i>
+                        </div>
+                        <h3>C#</h3>
+                        <p>Game development with Unity, Windows applications, and enterprise software</p>
+                        <span class="course-count">3 Courses</span>
+                    </div>
+                </a>
+                
+                <!-- Go -->
+                <a href="golang.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/YS4e4q9oBaU?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Go</h3>
+                        <p>Efficient systems programming, cloud services, and concurrent applications</p>
+                        <span class="course-count">2 Courses</span>
+                    </div>
+                </a>
+                
+                <!-- Rust -->
+                <a href="rust.html" class="language-card">
+                    <div class="language-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/5C_HPTJg5ek?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="language-content">
+                        <div class="language-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <h3>Rust</h3>
+                        <p>Memory-safe systems language for performance-critical applications</p>
+                        <span class="course-count">2 Courses</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Development Paths -->
+    <section class="dev-paths">
+        <div class="container">
+            <h2>Career Development Paths</h2>
+            <p class="subheading">Structured learning paths to achieve your career goals</p>
+            
+            <div class="paths-grid">
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="path-content">
+                        <h3>Web Development</h3>
+                        <p>Master frontend, backend, and full-stack development with modern frameworks and tools</p>
+                        <div class="path-meta">
+                            <span>7 Courses</span>
+                            <span>•</span>
+                            <span>Beginner to Advanced</span>
+                        </div>
+                        <a href="#" class="btn btn-outline">Explore Path</a>
+                    </div>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="path-content">
+                        <h3>Data Science</h3>
+                        <p>Learn Python, machine learning, data visualization, and statistical analysis</p>
+                        <div class="path-meta">
+                            <span>5 Courses</span>
+                            <span>•</span>
+                            <span>Intermediate to Advanced</span>
+                        </div>
+                        <a href="#" class="btn btn-outline">Explore Path</a>
+                    </div>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="path-content">
+                        <h3>Mobile Development</h3>
+                        <p>Build iOS and Android apps with Swift, Kotlin, and cross-platform frameworks</p>
+                        <div class="path-meta">
+                            <span>4 Courses</span>
+                            <span>•</span>
+                            <span>Beginner to Intermediate</span>
+                        </div>
+                        <a href="#" class="btn btn-outline">Explore Path</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Section: Learning Features -->
+    <section class="subject-overview" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2>Advanced Learning Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Progress Tracking</h3>
+                    <p>Detailed analytics on your learning progress, strengths, and areas for improvement</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <h3>Peer Coding</h3>
+                    <p>Collaborate in real-time with other learners on coding projects and challenges</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certifications</h3>
+                    <p>Earn verifiable certificates to showcase your skills to employers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 DeepLearn AI. All rights reserved.</p>
+            <div style="margin-top: 1rem;">
+                <a href="#" style="color: var(--white); margin: 0 10px;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: var(--white); margin: 0 10px;"><i class="fab fa-linkedin"></i></a>
+                <a href="#" style="color: var(--white); margin: 0 10px;"><i class="fab fa-github"></i></a>
+                <a href="#" style="color: var(--white); margin: 0 10px;"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactive elements for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click effect to cards
+            const cards = document.querySelectorAll('.language-card, .path-card, .feature-item');
+            cards.forEach(card => {
+                card.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(2px)';
+                });
+                card.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // Simulate code challenge interaction
+            const runButton = document.querySelector('.code-challenge .btn');
+            if (runButton) {
+                runButton.addEventListener('click', function() {
+                    alert('In a real implementation, this would run your code and show results!\n\nTry implementing this function:\n\ndef sum_numbers(a, b):\n    return a + b');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

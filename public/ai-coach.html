@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepLearn AI - Smart Learning Coach</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Color Variables */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --warning: #f59e0b;
+        }
+        
+        .dark-mode {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --text: #f9fafb;
+            --text-light: #d1d5db;
+            --bg: #111827;
+            --card-bg: #1f2937;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* AI Coach Container */
+        .ai-coach-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .coach-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .coach-title h2 {
+            font-size: 1.8rem;
+        }
+        
+        .coach-icon {
+            font-size: 2rem;
+        }
+        
+        /* Chat Interface */
+        .chat-container {
+            height: 400px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .coach-message {
+            background: #e9ecef;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .recommendation {
+            background: #e1f7e8;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .warning {
+            background: #fff3e0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--text-light);
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .progress-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .progress-bar-container {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Recommendations Section */
+        .recommendations-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.5rem;
+        }
+        
+        .recommendation-card {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            transition: transform 0.3s;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .rec-icon {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-top: 3px;
+        }
+        
+        .rec-content h4 {
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .rec-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .rec-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .rec-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+        
+        .rec-button:hover {
+            background: #0ca678;
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            background: #e9ecef;
+            border-radius: 18px;
+            max-width: 80px;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .progress-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .chat-container {
+                height: 300px;
+            }
+            
+            .recommendation-card {
+                flex-direction: column;
+            }
+        }
+        
+        /* Dark mode adjustments */
+        .dark-mode .coach-message {
+            background: #374151;
+        }
+        
+        .dark-mode .recommendation {
+            background: #1c3b2e;
+        }
+        
+        .dark-mode .warning {
+            background: #3e2c1c;
+        }
+        
+        .dark-mode .chat-input input {
+            background: #1f2937;
+            border-color: #4b5563;
+        }
+        
+        .dark-mode .typing-indicator {
+            background: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Smart Learning Coach</h1>
+            <p>Your AI-powered guide that understands your project and recommends the perfect learning resources</p>
+        </header>
+        
+        <main>
+            <section class="ai-coach-container">
+                <div class="coach-title">
+                    <span class="coach-icon">🤖</span>
+                    <h2>Coach DeepLearn</h2>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages"></div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Ask about courses, videos, or your project..." autocomplete="off">
+                    <button id="sendButton">Send</button>
+                </div>
+            </section>
+            
+            <section class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-title">Your Learning Journey</div>
+                    <div class="progress-stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="completedCount">0</div>
+                            <div class="stat-label">Courses</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="streakCount">0</div>
+                            <div class="stat-label">Day Streak</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="skillLevel">Beginner</div>
+                            <div class="stat-label">Level</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-bar-container">
+                    <div class="progress-title">Current Focus: <span id="currentFocus">Machine Learning Basics</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>Just Started</span>
+                        <span id="progressPercent">0%</span>
+                        <span>Mastered</span>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recommendations-section">
+                <h3 class="section-title"><i>🎯</i> Today's Recommendations</h3>
+                <div id="recommendationsContainer">
+                    <!-- Recommendations will be inserted here by JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const completedCount = document.getElementById('completedCount');
+            const streakCount = document.getElementById('streakCount');
+            const skillLevel = document.getElementById('skillLevel');
+            const currentFocus = document.getElementById('currentFocus');
+            const recommendationsContainer = document.getElementById('recommendationsContainer');
+            
+            // Expanded Knowledge Base - AI Learning Platform Focus
+            const knowledgeBase = {
+                projectInfo: {
+                    name: "DeepLearn AI Platform",
+                    description: "An adaptive learning platform that uses AI to personalize education paths, recommend resources, and track progress in technical skills development.",
+                    currentVersion: "3.2",
+                    techStack: ["React", "Node.js", "MongoDB", "TensorFlow.js", "Python", "FastAPI"],
+                    team: [
+                        "Anish Sawant (Lead Developer)", 
+                        "Sarah Chen (UX Designer)", 
+                        "David Kim (Data Scientist)",
+                        "Maria Rodriguez (Content Specialist)",
+                        "James Wilson (DevOps Engineer)"
+                    ],
+                    upcomingFeatures: [
+                        "Collaborative learning spaces",
+                        "3D concept visualizer for complex topics",
+                        "AI-powered code review system",
+                        "Personalized project suggestions",
+                        "Skill gap analysis"
+                    ],
+                    launchDate: "2023-10-15",
+                    partners: ["Google AI", "Microsoft Learn", "OpenAI", "DeepMind"],
+                    certifications: [
+                        "AI Fundamentals Certification",
+                        "Machine Learning Engineer Certification",
+                        "Data Science Professional Certificate"
+                    ]
+                },
+                courses: {
+                    "Machine Learning Basics": {
+                        level: "Beginner",
+                        progress: 35,
+                        duration: "6 weeks",
+                        description: "Learn the fundamentals of machine learning, including supervised and unsupervised learning, basic algorithms, and model evaluation.",
+                        videos: [
+                            { id: "ml-101", title: "Introduction to ML", duration: "15 min", watched: true },
+                            { id: "ml-102", title: "Supervised vs Unsupervised Learning", duration: "22 min", watched: true },
+                            { id: "ml-103", title: "Your First Neural Network", duration: "30 min", watched: false },
+                            { id: "ml-104", title: "Evaluating ML Models", duration: "18 min", watched: false },
+                            { id: "ml-105", title: "Feature Engineering Basics", duration: "25 min", watched: false }
+                        ],
+                        projects: [
+                            "Predict housing prices with linear regression",
+                            "Classify iris flowers with decision trees"
+                        ],
+                        nextSteps: "Complete 'Your First Neural Network' video and try the accompanying exercise",
+                        prerequisites: "Basic Python knowledge"
+                    },
+                    "Advanced Python for AI": {
+                        level: "Intermediate",
+                        progress: 70,
+                        duration: "8 weeks",
+                        description: "Master Python concepts essential for AI development including decorators, generators, and metaprogramming.",
+                        videos: [
+                            { id: "py-201", title: "Decorators Explained", duration: "25 min", watched: true },
+                            { id: "py-202", title: "Generators & Iterators", duration: "20 min", watched: true },
+                            { id: "py-203", title: "Metaclasses", duration: "35 min", watched: false },
+                            { id: "py-204", title: "Async/Await Patterns", duration: "28 min", watched: false }
+                        ],
+                        projects: [
+                            "Build a Python package with advanced features",
+                            "Create a custom ORM using metaclasses"
+                        ],
+                        nextSteps: "Review generators before tackling metaclasses",
+                        prerequisites: "Python Fundamentals"
+                    },
+                    "Data Visualization with Python": {
+                        level: "Beginner",
+                        progress: 10,
+                        duration: "4 weeks",
+                        description: "Learn to create impactful visualizations using Matplotlib, Seaborn, and Plotly for data analysis.",
+                        videos: [
+                            { id: "dv-101", title: "Matplotlib Fundamentals", duration: "28 min", watched: false },
+                            { id: "dv-102", title: "Seaborn for Statistical Viz", duration: "32 min", watched: false },
+                            { id: "dv-103", title: "Interactive Visualizations", duration: "25 min", watched: false }
+                        ],
+                        projects: [
+                            "Visualize COVID-19 trends",
+                            "Create an interactive dashboard"
+                        ],
+                        nextSteps: "Start with Matplotlib fundamentals to build your base",
+                        prerequisites: "Basic Python and pandas"
+                    },
+                    "Deep Learning Fundamentals": {
+                        level: "Intermediate",
+                        progress: 0,
+                        duration: "10 weeks",
+                        description: "Dive into neural networks, backpropagation, and modern architectures like CNNs and RNNs.",
+                        videos: [
+                            { id: "dl-101", title: "Neural Networks 101", duration: "30 min", watched: false },
+                            { id: "dl-102", title: "Backpropagation Demystified", duration: "35 min", watched: false }
+                        ],
+                        projects: [
+                            "MNIST digit classifier",
+                            "Sentiment analysis model"
+                        ],
+                        nextSteps: "Start with the introductory video",
+                        prerequisites: "Machine Learning Basics"
+                    },
+                    "Natural Language Processing": {
+                        level: "Advanced",
+                        progress: 0,
+                        duration: "12 weeks",
+                        description: "Learn text processing, word embeddings, transformers, and modern NLP architectures.",
+                        videos: [
+                            { id: "nlp-101", title: "Text Preprocessing", duration: "25 min", watched: false },
+                            { id: "nlp-102", title: "Word2Vec and GloVe", duration: "30 min", watched: false }
+                        ],
+                        projects: [
+                            "Build a sentiment analysis tool",
+                            "Create a text summarizer"
+                        ],
+                        nextSteps: "Complete prerequisite Deep Learning course first",
+                        prerequisites: "Deep Learning Fundamentals"
+                    }
+                },
+                videos: {
+                    "ml-103": {
+                        title: "Your First Neural Network",
+                        url: "/videos/ml-103",
+                        importance: "high",
+                        prerequisites: ["ml-101", "ml-102"],
+                        related: ["ml-104", "ml-105"],
+                        summary: "This video walks through creating a simple neural network from scratch using Python and NumPy, explaining activation functions, forward propagation, and basic architecture."
+                    },
+                    "py-203": {
+                        title: "Metaclasses",
+                        url: "/videos/py-203",
+                        importance: "medium",
+                        prerequisites: ["py-201", "py-202"],
+                        related: ["py-204"],
+                        summary: "Learn how metaclasses work in Python, their relationship to classes and objects, and practical use cases for metaprogramming."
+                    },
+                    "dv-101": {
+                        title: "Matplotlib Fundamentals",
+                        url: "/videos/dv-101",
+                        importance: "high",
+                        prerequisites: [],
+                        related: ["dv-102", "dv-103"],
+                        summary: "Introduction to Matplotlib's pyplot interface, creating basic plots, customizing styles, and saving visualizations."
+                    },
+                    "dl-101": {
+                        title: "Neural Networks 101",
+                        url: "/videos/dl-101",
+                        importance: "high",
+                        prerequisites: ["ml-103"],
+                        related: ["dl-102"],
+                        summary: "Deep dive into neural network architectures, activation functions, and the mathematics behind forward propagation."
+                    }
+                },
+                learningPaths: {
+                    "Data Scientist": {
+                        description: "Become proficient in data analysis, visualization, and machine learning",
+                        courses: [
+                            "Machine Learning Basics",
+                            "Data Visualization with Python",
+                            "Deep Learning Fundamentals"
+                        ],
+                        duration: "6 months",
+                        jobs: ["Data Analyst", "Data Scientist", "ML Engineer"]
+                    },
+                    "AI Engineer": {
+                        description: "Master AI development from fundamentals to deployment",
+                        courses: [
+                            "Machine Learning Basics",
+                            "Advanced Python for AI",
+                            "Deep Learning Fundamentals",
+                            "Natural Language Processing"
+                        ],
+                        duration: "9 months",
+                        jobs: ["AI Engineer", "ML Researcher", "AI Product Developer"]
+                    },
+                    "Python Developer": {
+                        description: "Become an expert Python programmer with AI specialization",
+                        courses: [
+                            "Advanced Python for AI",
+                            "Data Visualization with Python"
+                        ],
+                        duration: "4 months",
+                        jobs: ["Python Developer", "Backend Engineer", "Data Engineer"]
+                    }
+                },
+                commonQuestions: {
+                    "project": [
+                        "What is DeepLearn AI?",
+                        "Who is working on this project?",
+                        "What technologies are used?",
+                        "What features are coming soon?",
+                        "What certifications do you offer?",
+                        "Who are your partners?"
+                    ],
+                    "courses": [
+                        "What should I learn next?",
+                        "Which courses am I taking?",
+                        "What videos should I watch?",
+                        "How am I progressing?",
+                        "What learning paths are available?",
+                        "What are the prerequisites for [course]?"
+                    ],
+                    "technical": [
+                        "How do I implement X?",
+                        "What's the best way to learn Y?",
+                        "How does Z work in our codebase?",
+                        "Explain [concept] to me",
+                        "Show me examples of [topic]"
+                    ]
+                },
+                resources: {
+                    "Cheat Sheets": [
+                        {name: "Python for Data Science", url: "/resources/python-ds"},
+                        {name: "Machine Learning Algorithms", url: "/resources/ml-algos"},
+                        {name: "Matplotlib Quick Reference", url: "/resources/matplotlib"}
+                    ],
+                    "Community": [
+                        {name: "Discord Server", url: "https://discord.gg/deeplearn"},
+                        {name: "Stack Overflow Tag", url: "https://stackoverflow.com/questions/tagged/deeplearn"},
+                        {name: "GitHub Repository", url: "https://github.com/deeplearn-ai"}
+                    ],
+                    "External Links": [
+                        {name: "TensorFlow Documentation", url: "https://www.tensorflow.org"},
+                        {name: "PyTorch Tutorials", url: "https://pytorch.org/tutorials"},
+                        {name: "Kaggle Competitions", url: "https://www.kaggle.com"}
+                    ]
+                }
+            };
+            
+            // User data with more detailed tracking
+            let userData = {
+                completedCourses: 2,
+                streak: 5,
+                lastActive: new Date().toISOString().split('T')[0],
+                currentCourse: "Machine Learning Basics",
+                skillLevel: "Beginner",
+                learningPath: "AI Engineer",
+                lastRecommendations: [],
+                watchedVideos: ["ml-101", "ml-102"],
+                completedProjects: ["Predict housing prices with linear regression"],
+                interests: ["neural networks", "natural language processing", "python"],
+                timeAvailable: "5-10 hours/week"
+            };
+            
+            // Initial setup
+            updateDashboard();
+            generateRecommendations();
+            
+            // Initial messages from AI Coach
+            setTimeout(() => {
+                addCoachMessage("Hello! I'm your Smart Learning Coach. I know everything about the DeepLearn AI platform and your learning progress.");
+            }, 800);
+            
+            setTimeout(() => {
+                addCoachMessage("You're currently on the <b>" + userData.learningPath + "</b> learning path. You can ask me about:<br>" +
+                    "- Project details (team, tech stack, roadmap)<br>" +
+                    "- Course recommendations and learning paths<br>" +
+                    "- Which videos to watch next<br>" +
+                    "- Technical questions about AI concepts<br>" +
+                    "- Your progress and skill development");
+            }, 2000);
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            // Functions
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addUserMessage(message);
+                    userInput.value = '';
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        processUserMessage(message);
+                    }, 1000 + Math.random() * 1000); // Simulate thinking time
+                }
+            }
+            
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                typingDiv.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                chatMessages.appendChild(typingDiv);
+                scrollToBottom();
+            }
+            
+            function hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            function addUserMessage(text) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message user-message';
+                msgDiv.textContent = text;
+                chatMessages.appendChild(msgDiv);
+                scrollToBottom();
+            }
+            
+            function addCoachMessage(text, type = 'normal') {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message coach-message ${type}`;
+                msgDiv.innerHTML = text;
+                chatMessages.appendChild(msgDiv);
+                scrollToBottom();
+            }
+            
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function updateDashboard() {
+                // Update progress bars and counters
+                const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                const percent = currentCourse ? currentCourse.progress : 0;
+                
+                progressFill.style.width = `${percent}%`;
+                progressPercent.textContent = `${percent}%`;
+                completedCount.textContent = userData.completedCourses;
+                streakCount.textContent = userData.streak;
+                skillLevel.textContent = userData.skillLevel;
+                currentFocus.textContent = userData.currentCourse;
+            }
+            
+            function generateRecommendations() {
+                recommendationsContainer.innerHTML = '';
+                
+                // 1. Next video in current course
+                const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                if (currentCourse) {
+                    const nextVideo = currentCourse.videos.find(v => !userData.watchedVideos.includes(v.id));
+                    if (nextVideo) {
+                        addRecommendation(
+                            "Continue Your Current Course",
+                            `Watch "${nextVideo.title}" (${nextVideo.duration})`,
+                            "This is the next video in your current learning path",
+                            "Continue",
+                            `video:${nextVideo.id}`
+                        );
+                    }
+                    
+                    // Next project if videos are mostly watched
+                    const watchedCount = currentCourse.videos.filter(v => userData.watchedVideos.includes(v.id)).length;
+                    if (watchedCount / currentCourse.videos.length > 0.6) {
+                        const nextProject = currentCourse.projects.find(p => !userData.completedProjects.includes(p));
+                        if (nextProject) {
+                            addRecommendation(
+                                "Apply Your Knowledge",
+                                `Start project: "${nextProject}"`,
+                                "Practice what you've learned with a hands-on project",
+                                "Start Project",
+                                `project:${nextProject}`
+                            );
+                        }
+                    }
+                }
+                
+                // 2. New course if current one is nearly complete
+                if (currentCourse && currentCourse.progress > 70) {
+                    const learningPath = knowledgeBase.learningPaths[userData.learningPath];
+                    if (learningPath) {
+                        const nextCourse = learningPath.courses.find(c => 
+                            c !== userData.currentCourse && 
+                            knowledgeBase.courses[c].progress < 10
+                        );
+                        
+                        if (nextCourse) {
+                            addRecommendation(
+                                "Continue Your Learning Path",
+                                `Start "${nextCourse}" course`,
+                                "This is the next course in your selected learning path",
+                                "Explore",
+                                `course:${nextCourse}`
+                            );
+                        }
+                    }
+                }
+                
+                // 3. Community engagement
+                addRecommendation(
+                    "Join the Community",
+                    "Connect with other learners in our Discord server",
+                    "Get help and share knowledge with peers",
+                    "Join Now",
+                    "resource:Discord Server",
+                    "👥"
+                );
+                
+                // 4. Skill assessment
+                if (userData.completedCourses > 0 && userData.lastActive === new Date().toISOString().split('T')[0]) {
+                    addRecommendation(
+                        "Skill Assessment",
+                        "Take a quick test to measure your progress",
+                        "Identify strengths and areas for improvement",
+                        "Start Test",
+                        "assessment:basic",
+                        "📝"
+                    );
+                }
+                
+                // Store recommendations for reference
+                userData.lastRecommendations = Array.from(recommendationsContainer.querySelectorAll('.rec-button'))
+                    .map(btn => btn.dataset.id);
+            }
+            
+            function addRecommendation(title, description, details, action, id, icon = "📚") {
+                const card = document.createElement('div');
+                card.className = 'recommendation-card';
+                card.innerHTML = `
+                    <div class="rec-icon">${icon}</div>
+                    <div class="rec-content">
+                        <h4>${title}</h4>
+                        <p>${description}</p>
+                        <p class="rec-meta">
+                            <span>${details}</span>
+                        </p>
+                        <button class="rec-button" data-id="${id || ''}">${action}</button>
+                    </div>
+                `;
+                recommendationsContainer.appendChild(card);
+                
+                // Add click handler
+                const button = card.querySelector('.rec-button');
+                button.addEventListener('click', function() {
+                    handleRecommendationClick(this.dataset.id);
+                });
+            }
+            
+            function handleRecommendationClick(recommendationId) {
+                if (!recommendationId) return;
+                
+                const [type, id] = recommendationId.split(':');
+                
+                switch(type) {
+                    case 'video':
+                        // Mark video as watched
+                        if (!userData.watchedVideos.includes(id)) {
+                            userData.watchedVideos.push(id);
+                            
+                            // Update course progress
+                            const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                            if (currentCourse) {
+                                const videoCount = currentCourse.videos.length;
+                                const watchedCount = currentCourse.videos.filter(v => userData.watchedVideos.includes(v.id)).length;
+                                currentCourse.progress = Math.min(100, Math.round((watchedCount / videoCount) * 100));
+                                
+                                // Check if course is completed
+                                if (watchedCount === videoCount && currentCourse.progress < 100) {
+                                    currentCourse.progress = 100;
+                                    userData.completedCourses++;
+                                    addCoachMessage(`🎉 Congratulations! You've completed the "${userData.currentCourse}" course!`);
+                                    
+                                    // Suggest next course
+                                    const learningPath = knowledgeBase.learningPaths[userData.learningPath];
+                                    if (learningPath) {
+                                        const nextCourse = learningPath.courses.find(c => 
+                                            c !== userData.currentCourse && 
+                                            knowledgeBase.courses[c].progress < 10
+                                        );
+                                        
+                                        if (nextCourse) {
+                                            setTimeout(() => {
+                                                addCoachMessage(`Would you like to start the next course in your learning path: <b>${nextCourse}</b>?`, "recommendation");
+                                            }, 1500);
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            updateDashboard();
+                            generateRecommendations();
+                            addCoachMessage(`I've marked "${getVideoTitle(id)}" as watched. Great job!`);
+                        } else {
+                            addCoachMessage(`You've already watched "${getVideoTitle(id)}". Would you like to review it?`);
+                        }
+                        break;
+                        
+                    case 'course':
+                        // Switch to new course
+                        if (knowledgeBase.courses[id]) {
+                            userData.currentCourse = id;
+                            updateDashboard();
+                            generateRecommendations();
+                            addCoachMessage(`You're now enrolled in <b>${id}</b>. Here's what you'll learn:<br>${knowledgeBase.courses[id].description}`);
+                            
+                            // Show first video recommendation
+                            setTimeout(() => {
+                                const firstVideo = knowledgeBase.courses[id].videos[0];
+                                if (firstVideo && !userData.watchedVideos.includes(firstVideo.id)) {
+                                    addCoachMessage(`Start with the first video: <b>${firstVideo.title}</b>`, "recommendation");
+                                }
+                            }, 1000);
+                        }
+                        break;
+                        
+                    case 'project':
+                        addCoachMessage(`Great choice! Starting project: <b>${id}</b>. I've opened the project instructions for you.`, "recommendation");
+                        // In a real app, would navigate to project page
+                        break;
+                        
+                    case 'resource':
+                        addCoachMessage(`Opening resource: <b>${id}</b>. Check your browser for the new tab.`, "recommendation");
+                        // In a real app, would open the resource URL
+                        break;
+                        
+                    case 'assessment':
+                        addCoachMessage(`Starting <b>${id}</b> assessment. This will help identify your strengths.`, "recommendation");
+                        // In a real app, would start assessment
+                        break;
+                }
+            }
+            
+            function getVideoTitle(id) {
+                const video = knowledgeBase.videos[id];
+                return video ? video.title : id;
+            }
+            
+            function processUserMessage(message) {
+                const lowerMsg = message.toLowerCase();
+                
+                // Project information queries
+                if (lowerMsg.includes('project') || lowerMsg.includes('deeplearn') || lowerMsg.includes('platform')) {
+                    if (lowerMsg.includes('what') || lowerMsg.includes('describe') || lowerMsg.includes('about')) {
+                        addCoachMessage(`<b>${knowledgeBase.projectInfo.name}</b>: ${knowledgeBase.projectInfo.description}<br><br>
+                            <b>Version</b>: ${knowledgeBase.projectInfo.currentVersion}<br>
+                            <b>Launch Date</b>: ${knowledgeBase.projectInfo.launchDate}<br>
+                            <b>Certifications Offered</b>: ${knowledgeBase.projectInfo.certifications.join(', ')}`);
+                    }
+                    else if (lowerMsg.includes('team') || lowerMsg.includes('who work') || lowerMsg.includes('developer')) {
+                        addCoachMessage(`<b>Project Team</b>:<br>${knowledgeBase.projectInfo.team.join('<br>')}`);
+                    }
+                    else if (lowerMsg.includes('tech') || lowerMsg.includes('stack') || lowerMsg.includes('use') || lowerMsg.includes('technology')) {
+                        addCoachMessage(`<b>Technology Stack</b>:<br>${knowledgeBase.projectInfo.techStack.join(', ')}`);
+                    }
+                    else if (lowerMsg.includes('feature') || lowerMsg.includes('next') || lowerMsg.includes('upcoming') || lowerMsg.includes('roadmap')) {
+                        addCoachMessage(`<b>Upcoming Features</b>:<br>${knowledgeBase.projectInfo.upcomingFeatures.join('<br>')}`);
+                    }
+                    else if (lowerMsg.includes('partner') || lowerMsg.includes('collaborat')) {
+                        addCoachMessage(`<b>Platform Partners</b>:<br>${knowledgeBase.projectInfo.partners.join(', ')}`);
+                    }
+                    else if (lowerMsg.includes('certif') || lowerMsg.includes('credential')) {
+                        addCoachMessage(`<b>Available Certifications</b>:<br>${knowledgeBase.projectInfo.certifications.join('<br>')}`);
+                    }
+                    else {
+                        addCoachMessage("I can tell you about the project's team, tech stack, upcoming features, partners, or certifications. What would you like to know?");
+                    }
+                }
+                // Course recommendations and information
+                else if (lowerMsg.includes('course') || lowerMsg.includes('learn') || lowerMsg.includes('what next') || lowerMsg.includes('class')) {
+                    if (lowerMsg.includes('list') || lowerMsg.includes('all') || lowerMsg.includes('available')) {
+                        const courseList = Object.keys(knowledgeBase.courses).map(name => 
+                            `<b>${name}</b> (${knowledgeBase.courses[name].level}, ${knowledgeBase.courses[name].duration})`
+                        ).join('<br>');
+                        addCoachMessage(`<b>Available Courses</b>:<br>${courseList}`);
+                    }
+                    else if (lowerMsg.includes('path') || lowerMsg.includes('track') || lowerMsg.includes('journey')) {
+                        const pathList = Object.keys(knowledgeBase.learningPaths).map(name => 
+                            `<b>${name}</b>: ${knowledgeBase.learningPaths[name].description} (${knowledgeBase.learningPaths[name].duration})`
+                        ).join('<br><br>');
+                        addCoachMessage(`<b>Learning Paths</b>:<br><br>${pathList}`);
+                    }
+                    else if (lowerMsg.includes('current') || lowerMsg.includes('my course') || lowerMsg.includes('taking')) {
+                        const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                        const response = [
+                            `You're currently working on <b>${userData.currentCourse}</b>:`,
+                            currentCourse.description,
+                            `<br><b>Progress</b>: ${currentCourse.progress}% complete`,
+                            `<b>Duration</b>: ${currentCourse.duration}`,
+                            `<b>Level</b>: ${currentCourse.level}`
+                        ];
+                        
+                        // Add next steps if available
+                        if (currentCourse.nextSteps) {
+                            response.push(`<br><b>Next Steps</b>: ${currentCourse.nextSteps}`);
+                        }
+                        
+                        addCoachMessage(response.join('<br>'));
+                    }
+                    else if (lowerMsg.includes('recommend') || lowerMsg.includes('suggest') || lowerMsg.includes('what next')) {
+                        const response = [`You're currently working on <b>${userData.currentCourse}</b> (${knowledgeBase.courses[userData.currentCourse].progress}% complete).`];
+                        
+                        response.push("<br><br><b>Recommendations:</b>");
+                        
+                        // Check if current course is nearly complete
+                        if (knowledgeBase.courses[userData.currentCourse].progress > 70) {
+                            const learningPath = knowledgeBase.learningPaths[userData.learningPath];
+                            if (learningPath) {
+                                const nextCourse = learningPath.courses.find(c => 
+                                    c !== userData.currentCourse && 
+                                    knowledgeBase.courses[c].progress < 10
+                                );
+                                
+                                if (nextCourse) {
+                                    response.push(`<br>- Consider starting <b>${nextCourse}</b> next (part of your ${userData.learningPath} path)`);
+                                }
+                            }
+                        }
+                        
+                        // Show next video recommendation
+                        const nextVideo = knowledgeBase.courses[userData.currentCourse].videos
+                            .find(v => !userData.watchedVideos.includes(v.id));
+                        
+                        if (nextVideo) {
+                            response.push(`<br>- Next video: <b>${nextVideo.title}</b>`);
+                        }
+                        
+                        // Show project if videos are mostly watched
+                        const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                        const watchedCount = currentCourse.videos.filter(v => userData.watchedVideos.includes(v.id)).length;
+                        if (watchedCount / currentCourse.videos.length > 0.6) {
+                            const nextProject = currentCourse.projects.find(p => !userData.completedProjects.includes(p));
+                            if (nextProject) {
+                                response.push(`<br>- Next project: <b>${nextProject}</b>`);
+                            }
+                        }
+                        
+                        addCoachMessage(response.join(''));
+                    }
+                    else if (lowerMsg.includes('prereq') || lowerMsg.includes('requirement')) {
+                        const courseMatch = Object.keys(knowledgeBase.courses).find(course => 
+                            lowerMsg.includes(course.toLowerCase().replace(/ /g, ''))
+                        );
+                        
+                        if (courseMatch) {
+                            const course = knowledgeBase.courses[courseMatch];
+                            addCoachMessage(`<b>Prerequisites for ${courseMatch}</b>:<br>${course.prerequisites || "None specified"}`);
+                        } else {
+                            addCoachMessage("Which course are you asking about prerequisites for?");
+                        }
+                    }
+                    else {
+                        addCoachMessage("I can help with:<br>" +
+                            "- Listing all available courses<br>" +
+                            "- Showing your current course progress<br>" +
+                            "- Recommending next steps<br>" +
+                            "- Explaining learning paths<br>" +
+                            "- Checking course prerequisites<br><br>" +
+                            "What would you like to know?");
+                    }
+                }
+                // Video suggestions
+                else if (lowerMsg.includes('video') || lowerMsg.includes('watch') || lowerMsg.includes('lesson') || lowerMsg.includes('lecture')) {
+                    const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                    const nextVideo = currentCourse.videos.find(v => !userData.watchedVideos.includes(v.id));
+                    
+                    if (nextVideo) {
+                        const videoInfo = knowledgeBase.videos[nextVideo.id];
+                        let response = `For <b>${userData.currentCourse}</b>, you should watch:<br>
+                            <b>${nextVideo.title}</b> (${nextVideo.duration})`;
+                            
+                        if (videoInfo && videoInfo.summary) {
+                            response += `<br><br><b>Summary</b>: ${videoInfo.summary}`;
+                        }
+                        
+                        if (videoInfo && videoInfo.prerequisites && videoInfo.prerequisites.length > 0) {
+                            const prereqVideos = videoInfo.prerequisites.map(id => {
+                                const v = currentCourse.videos.find(v => v.id === id);
+                                return v ? v.title : id;
+                            }).join(', ');
+                            response += `<br><br><b>Before watching</b>: Make sure you've seen ${prereqVideos}`;
+                        }
+                        
+                        addCoachMessage(response, "recommendation");
+                    } else {
+                        addCoachMessage("You've completed all videos in your current course! Great job! Would you like to start a new one?", "recommendation");
+                    }
+                }
+                // Progress queries
+                else if (lowerMsg.includes('progress') || lowerMsg.includes('how am i doing') || lowerMsg.includes('stats')) {
+                    const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                    const watchedCount = currentCourse.videos.filter(v => userData.watchedVideos.includes(v.id)).length;
+                    const totalVideos = currentCourse.videos.length;
+                    
+                    addCoachMessage(`Your learning progress:<br>
+                        - <b>Current Course</b>: ${userData.currentCourse} (${currentCourse.progress}%)<br>
+                        - <b>Videos Watched</b>: ${watchedCount}/${totalVideos} in current course<br>
+                        - <b>Completed Courses</b>: ${userData.completedCourses}<br>
+                        - <b>Learning Streak</b>: ${userData.streak} days<br>
+                        - <b>Skill Level</b>: ${userData.skillLevel}<br>
+                        - <b>Learning Path</b>: ${userData.learningPath}<br><br>
+                        ${currentCourse.progress > 70 ? 
+                            "You're doing great! Almost ready for something new!" : 
+                            "Keep going! Consistency is key to mastery."}`);
+                }
+                // Technical questions
+                else if (lowerMsg.includes('how') || lowerMsg.includes('implement') || lowerMsg.includes('technical') || 
+                         lowerMsg.includes('what is') || lowerMsg.includes('explain') || lowerMsg.includes('example')) {
+                    const technicalTerms = {
+                        "neural network": "A neural network is a series of algorithms that attempts to recognize underlying relationships in data through a process that mimics how the human brain operates. It consists of input, hidden, and output layers with interconnected nodes.",
+                        "backpropagation": "Backpropagation is the algorithm used to train neural networks by calculating the gradient of the loss function with respect to the weights, then adjusting the weights to minimize loss.",
+                        "supervised learning": "Supervised learning is where you have input variables (x) and output variables (Y) and use an algorithm to learn the mapping function from input to output (Y = f(X)).",
+                        "unsupervised learning": "Unsupervised learning is where you only have input data (X) and no corresponding output variables, letting the algorithm find structure in the input data.",
+                        "activation function": "An activation function determines whether a neuron should be activated by calculating weighted sum and adding bias. Common ones include ReLU, sigmoid, and tanh.",
+                        "gradient descent": "Gradient descent is an optimization algorithm used to minimize some function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient."
+                    };
+                    
+                    const foundTerm = Object.keys(technicalTerms).find(term => 
+                        lowerMsg.includes(term)
+                    );
+                    
+                    if (foundTerm) {
+                        addCoachMessage(`<b>${foundTerm.charAt(0).toUpperCase() + foundTerm.slice(1)}</b>: ${technicalTerms[foundTerm]}`);
+                    } else {
+                        addCoachMessage("For technical implementation questions, I can:<br>" +
+                            "1. Explain AI/ML concepts from our courses<br>" +
+                            "2. Point you to relevant documentation<br>" +
+                            "3. Suggest best practices<br><br>" +
+                            "Some concepts I can explain: neural networks, backpropagation, supervised/unsupervised learning, activation functions, gradient descent.<br><br>" +
+                            "What specifically would you like to know?", "warning");
+                    }
+                }
+                // Resource queries
+                else if (lowerMsg.includes('resource') || lowerMsg.includes('material') || lowerMsg.includes('reference') || 
+                         lowerMsg.includes('cheat sheet') || lowerMsg.includes('documentation')) {
+                    const resourceTypes = Object.keys(knowledgeBase.resources).map(type => 
+                        `<b>${type}</b>:<br>${knowledgeBase.resources[type].map(r => 
+                            `- ${r.name}`).join('<br>')}`
+                    ).join('<br><br>');
+                    
+                    addCoachMessage(`<b>Available Resources</b>:<br><br>${resourceTypes}`);
+                }
+                // Greetings
+                else if (lowerMsg.includes('hi') || lowerMsg.includes('hello') || lowerMsg.includes('hey') || lowerMsg.match(/^yo/i)) {
+                    const greetings = [
+                        "Hello! How can I help you with your learning today? 😊",
+                        "Hi there! Ready to continue your AI learning journey?",
+                        "Greetings! What would you like to learn about today?"
+                    ];
+                    addCoachMessage(greetings[Math.floor(Math.random() * greetings.length)]);
+                }
+                // Thanks
+                else if (lowerMsg.includes('thank') || lowerMsg.includes('thanks') || lowerMsg.includes('appreciate')) {
+                    addCoachMessage("You're welcome! Happy to help with your learning journey. 😊");
+                }
+                // Default response
+                else {
+                    const defaultResponses = [
+                        "I can help you with project information, course recommendations, video suggestions, and technical concepts. What would you like to know?",
+                        "I specialize in helping with the DeepLearn AI platform and your learning progress. How can I assist you?",
+                        "As your learning coach, I can provide course guidance, explain concepts, or help with your projects. What do you need?"
+                    ];
+                    addCoachMessage(defaultResponses[Math.floor(Math.random() * defaultResponses.length)]);
+                }
+            }
+            
+            // Simulate completing tasks (for demo)
+            function simulateProgress() {
+                setInterval(() => {
+                    // Randomly increment progress in current course
+                    const currentCourse = knowledgeBase.courses[userData.currentCourse];
+                    if (currentCourse.progress < 100) {
+                        currentCourse.progress = Math.min(100, currentCourse.progress + Math.random() * 5);
+                        updateDashboard();
+                        
+                        // Mark videos as watched as progress increases
+                        currentCourse.videos.forEach(video => {
+                            if (!userData.watchedVideos.includes(video.id) && Math.random() > 0.7) {
+                                userData.watchedVideos.push(video.id);
+                            }
+                        });
+                    }
+                    
+                    // Randomly change recommendations
+                    if (Math.random() > 0.8) {
+                        generateRecommendations();
+                    }
+                    
+                    // Randomly increase streak (1 in 5 chance)
+                    if (Math.random() > 0.8) {
+                        userData.streak++;
+                        updateDashboard();
+                    }
+                    
+                    // Randomly update skill level if making good progress
+                    if (currentCourse.progress > 80 && userData.skillLevel === "Beginner" && Math.random() > 0.7) {
+                        userData.skillLevel = "Intermediate";
+                        updateDashboard();
+                        addCoachMessage("🎉 Your skill level has been upgraded to <b>Intermediate</b>! Keep up the great work!");
+                    }
+                }, 10000); // Updates every 10 seconds for demo
+            }
+            
+            // Start simulation for demo purposes
+            simulateProgress();
+        });
+    </script>
+</body>
+</html>

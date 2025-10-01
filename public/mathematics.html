@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics Courses | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modernized Styles */
+        :root {
+            --math-primary: #5a67d8;
+            --math-primary-light: #7f91ff;
+            --math-primary-dark: #3f478a;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --bg-light: #f7fafc;
+            --white: #ffffff;
+            --gray-light: #e2e8f0;
+            --gray-medium: #a0aec0;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3, h4 {
+            margin-bottom: 1rem;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--math-primary);
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: var(--math-primary-dark);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--math-primary);
+            color: var(--white);
+            border: 2px solid var(--math-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--math-primary-dark);
+            border-color: var(--math-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--math-primary);
+            border: 2px solid var(--math-primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(90, 103, 216, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--math-primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-links a {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--math-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Subject Hero Section */
+        .subject-hero {
+            padding: 100px 0;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        
+        .math-hero {
+            background: linear-gradient(45deg, var(--math-primary-dark), var(--math-primary));
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 550px;
+        }
+        
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 45%;
+            max-width: 600px;
+            z-index: 1;
+        }
+        
+        .subject-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: var(--white);
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: left;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .breadcrumb span {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+        }
+        
+        .section-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Subject Overview */
+        .subject-overview {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-item {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--math-primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Interactive Visualizer */
+        .concept-visualizer {
+            background-color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .visualizer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-light);
+            border-radius: var(--radius-md);
+        }
+        
+        .visualizer-toolbar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .visualizer-btn {
+            padding: 10px 20px;
+            background-color: var(--math-primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .visualizer-btn.active {
+            background-color: var(--math-primary-dark);
+        }
+        
+        .visualizer-btn:hover {
+            background-color: var(--math-primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .visualizer-canvas {
+            width: 100%;
+            min-height: 400px;
+            background-color: #f0f4f8;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            border: 1px solid var(--gray-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-placeholder {
+            text-align: center;
+            color: var(--gray-medium);
+            padding: 20px;
+        }
+        
+        .concept-description {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        /* Course Categories */
+        .subject-categories {
+            padding: 80px 0;
+            background-color: var(--bg-light);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+        
+        .category-card {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--radius-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid var(--math-primary);
+            display: block;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .category-card h3 {
+            color: var(--math-primary);
+            margin-bottom: 10px;
+        }
+        
+        .course-count {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 5px 10px;
+            background-color: rgba(90, 103, 216, 0.1);
+            color: var(--math-primary);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .category-video {
+            margin: -25px -25px 20px -25px;
+            overflow: hidden;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            background: #000;
+        }
+
+        .category-video iframe {
+            display: block;
+            width: 100%;
+            height: 180px;
+            border: none;
+        }
+        
+        /* Popular Courses */
+        .popular-courses {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .course-card {
+            background-color: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .math-card .course-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 3px solid var(--math-primary);
+        }
+        
+        .course-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .course-card:hover .course-image img {
+            transform: scale(1.05);
+        }
+        
+        .course-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--warning);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+        
+        .course-content {
+            padding: 24px;
+        }
+        
+        .course-content h3 {
+            font-size: 1.25rem;
+        }
+        
+        .instructor {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        
+        .rating {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stars {
+            color: #fbbf24;
+        }
+        
+        .review-count {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .level {
+            background-color: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 999px; /* Pill shape */
+            font-weight: 600;
+        }
+        
+        .duration {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 24px;
+            border-top: 1px solid var(--gray-light);
+            background-color: #fcfdfe;
+        }
+        
+        .price {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .buy-btn {
+            background-color: var(--math-primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .buy-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Math Challenge Section */
+        .math-challenge {
+            background: linear-gradient(135deg, var(--math-primary-dark) 0%, #1a202c 100%);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .challenge-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .challenge-problem {
+            font-size: 1.8rem;
+            margin: 30px 0;
+            padding: 30px;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: var(--radius-md);
+        }
+        
+        .challenge-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .challenge-option {
+            padding: 20px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .challenge-option:hover {
+            background-color: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
+        }
+        
+        .challenge-option.selected {
+            background-color: rgba(255,255,255,0.4);
+            border: 2px solid var(--math-primary-light);
+        }
+        
+        .challenge-feedback {
+            margin-top: 20px;
+            min-height: 50px;
+        }
+
+        .challenge-feedback p {
+            font-weight: 600;
+        }
+
+        .challenge-feedback.correct {
+            color: var(--success);
+        }
+
+        .challenge-feedback.incorrect {
+            color: #f56565;
+        }
+        
+        .challenge-meta {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .show-solution-btn {
+            background-color: var(--math-primary-light);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* Hide by default */
+        }
+        
+        /* Learning Paths */
+        .learning-paths {
+            padding: 80px 0;
+            background-color: var(--bg-light);
+        }
+        
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .path-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .path-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .path-header h3 {
+            color: var(--math-primary);
+        }
+        
+        .courses-count {
+            background-color: rgba(90, 103, 216, 0.1);
+            color: var(--math-primary);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .path-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: var(--gray-light);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--math-primary);
+            border-radius: 4px;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            font-family: serif;
+            font-size: 8rem;
+            color: var(--math-primary-light);
+            opacity: 0.1;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            line-height: 1;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--math-primary);
+        }
+        
+        .author-info h4 {
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .author-info p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #1a202c;
+            color: var(--white);
+            padding: 60px 0 20px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: inline-block;
+            color: var(--math-primary-light);
+        }
+        
+        .footer-about p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            color: var(--white);
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--math-primary-light);
+        }
+        
+        .footer-links h3 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-image {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .visualizer-toolbar {
+                flex-wrap: wrap;
+            }
+            
+            .challenge-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 2000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+        
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+        
+        .close-btn {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .payment-methods {
+            margin-top: 20px;
+        }
+
+        .payment-methods h3 {
+            margin-bottom: 15px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .payment-option:hover {
+            border-color: var(--math-primary-light);
+            box-shadow: 0 0 5px rgba(90, 103, 216, 0.2);
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 15px;
+        }
+
+        .payment-option label {
+            flex-grow: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .payment-option .payment-icon {
+            font-size: 1.5rem;
+            color: var(--math-primary);
+            margin-left: auto;
+        }
+
+        .payment-option-details {
+            display: none;
+            padding: 15px;
+            border: 1px solid var(--gray-light);
+            border-top: none;
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            margin-bottom: 20px;
+        }
+        
+        .payment-option-details input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+        }
+        
+        .payment-summary {
+            background-color: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            margin-top: 20px;
+        }
+
+        .payment-summary p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .payment-summary .total {
+            font-weight: 700;
+            font-size: 1.25rem;
+            border-top: 1px solid var(--gray-medium);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .pay-now-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        #confirmation-message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+            border-radius: var(--radius-sm);
+            display: none;
+            font-weight: 600;
+        }
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="math-theme">
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo">DeepLearn AI</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="categories.html">Categories</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="auth.html" class="btn btn-outline">Login</a>
+                <a href="auth.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="subject-hero math-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> / <a href="categories.html">Categories</a> / <span>Mathematics</span>
+            </div>
+            <div class="hero-content">
+                <div class="subject-icon">
+                    <i class="fas fa-square-root-alt"></i>
+                </div>
+                <h1>Master Mathematics</h1>
+                <p>From foundational concepts to advanced applications, our interactive AI-powered platform makes learning math an intuitive and rewarding experience. Unlock the language of the universe with us.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">320+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">85K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://illustrations.popsy.co/amber/learning-mathematics.svg" alt="Mathematics Visualizations">
+            </div>
+        </div>
+    </section>
+
+    <section class="subject-overview">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Learn Mathematics with Us?</h2>
+                <p>Our platform transforms abstract mathematical concepts into visual, interactive experiences. Experience math like never before with our innovative learning tools.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Visual Learning</h3>
+                    <p>Interactive graphs, 3D models, and dynamic visualizations that bring complex concepts to life with real-time manipulation</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Step-by-Step Solutions</h3>
+                    <p>Detailed breakdowns for every problem with alternative solving methods and common mistake highlights</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <h3>Adaptive Practice</h3>
+                    <p>AI-generated exercises that adjust to your skill level, with personalized difficulty scaling and focus areas</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Tutor Assistance</h3>
+                    <p>24/7 access to our virtual math tutor that can explain concepts in multiple ways based on your learning style</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Real-world Applications</h3>
+                    <p>Case studies and projects showing how mathematical concepts are applied in science, engineering, and finance</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Gamified Learning</h3>
+                    <p>Earn badges, compete in math challenges, and track your progress with our achievement system</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="concept-visualizer">
+        <div class="container">
+            <div class="section-header">
+                <h2>Interactive Concept Explorer</h2>
+                <p>Manipulate mathematical concepts in real-time to deepen your understanding</p>
+            </div>
+            
+            <div class="visualizer-container">
+                <div class="visualizer-toolbar">
+                    <button class="visualizer-btn active" data-concept="function-grapher">Function Grapher</button>
+                    <button class="visualizer-btn" data-concept="derivative-visualizer">Derivative Visualizer</button>
+                    <button class="visualizer-btn" data-concept="integral-visualizer">Integral Visualizer</button>
+                    <button class="visualizer-btn" data-concept="vector-fields">Vector Fields</button>
+                    <button class="visualizer-btn" data-concept="3d-geometry">3D Geometry</button>
+                </div>
+                
+                <div class="visualizer-canvas">
+                    <div class="canvas-placeholder">
+                        <i class="fas fa-project-diagram" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                        <h3>Function Grapher</h3>
+                        <p>Enter a function to see it visualized in real-time</p>
+                        <div style="margin: 20px auto; max-width: 300px;">
+                            <input type="text" placeholder="Try: sin(x) * x^2" style="width: 100%; padding: 10px; border: 1px solid var(--gray-medium); border-radius: var(--radius-sm);">
+                        </div>
+                        <button class="btn btn-primary">Plot Function</button>
+                    </div>
+                </div>
+                
+                <div class="concept-description">
+                    <h3>Understanding Function Behavior</h3>
+                    <p>Visualizing functions helps identify key characteristics like roots, maxima, minima, and inflection points. Our grapher allows you to zoom, pan, and analyze function behavior across its domain.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="subject-categories">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mathematics Categories</h2>
+                <p>Explore our comprehensive mathematics curriculum organized by subject area</p>
+            </div>
+            <div class="categories-grid">
+                <a href="algebra.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/ykcjooQvFX4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Algebra</h3>
+                    <p>Master equations, functions, polynomials, and algebraic structures</p>
+                    <span class="course-count">6 Courses</span>
+                </a>
+                
+                <a href="calculus.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/WUvTyaaNkzM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Calculus</h3>
+                    <p>Explore limits, derivatives, integrals, and their applications</p>
+                    <span class="course-count">5 Courses</span>
+                </a>
+                
+                <a href="geometry.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/AK6Qq7K2_4c" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Geometry</h3>
+                    <p>Study shapes, angles, spatial relationships, and transformations</p>
+                    <span class="course-count">4 Courses</span>
+                </a>
+                
+                <a href="statistics.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/xxpc-HPKN28" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Probability & Statistics</h3>
+                    <p>Learn data analysis, inference, and probabilistic modeling</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                
+                <a href="discrete-math.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/rdXw7Ps9vxc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Discrete Mathematics</h3>
+                    <p>Dive into logic, set theory, combinatorics, and graph theory</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                
+                <a href="linear-algebra.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/kjBOesZCoqc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Linear Algebra</h3>
+                    <p>Understand vectors, matrices, linear transformations, and spaces</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                
+                <a href="number-theory.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/19SW3P_PRHQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Number Theory</h3>
+                    <p>Explore properties of integers and advanced arithmetic concepts</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+                
+                <a href="differential-equations.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/p_di4Zn4wz4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Differential Equations</h3>
+                    <p>Solve equations that describe dynamic systems and phenomena</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Mathematics Courses</h2>
+                <p>Top-rated courses and professional certificates to advance your career.</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card math-card">
+                    <div class="course-badge">BESTSELLER</div>
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb" alt="Algebra Fundamentals">
+                    </div>
+                    <div class="course-content">
+                        <h3>Algebra Fundamentals</h3>
+                        <p class="instructor">Dr. Anish Sawant</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="review-count">(1,245 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Beginner</span>
+                            <span class="duration"><i class="far fa-clock"></i> 12 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$59</span>
+                        <a href="#" class="buy-btn" data-price="59" data-course="Algebra Fundamentals">Buy Now</a>
+                    </div>
+                </div>
+                
+                <div class="course-card math-card">
+                    <div class="course-badge">PROFESSIONAL CERTIFICATE</div>
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1509228627152-72ae9ae6848d" alt="Calculus I">
+                    </div>
+                    <div class="course-content">
+                        <h3>Advanced Calculus for Engineers</h3>
+                        <p class="instructor">Prof. Michael Jecksan</p>
+                        <div class="rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="review-count">(872 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Intermediate</span>
+                            <span class="duration"><i class="far fa-clock"></i> 40 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$249</span>
+                        <a href="#" class="buy-btn" data-price="249" data-course="Advanced Calculus for Engineers">Buy Now</a>
+                    </div>
+                </div>
+                
+                <div class="course-card math-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ce" alt="Linear Algebra">
+                    </div>
+                    <div class="course-content">
+                        <h3>Applied Linear Algebra</h3>
+                        <p class="instructor">Dr. Dinkar Sawant</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="review-count">(654 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Advanced</span>
+                            <span class="duration"><i class="far fa-clock"></i> 24 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$89</span>
+                        <a href="#" class="buy-btn" data-price="89" data-course="Applied Linear Algebra">Buy Now</a>
+                    </div>
+                </div>
+                
+                <div class="course-card math-card">
+                    <div class="course-badge">FREE</div>
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d" alt="Statistics">
+                    </div>
+                    <div class="course-content">
+                        <h3>Probability & Statistics</h3>
+                        <p class="instructor">Dr. Anish Sawant</p>
+                        <div class="rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="review-count">(1,032 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Intermediate</span>
+                            <span class="duration"><i class="far fa-clock"></i> 16 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">Free</span>
+                        <a href="javascript:void(0);" onclick="alert('Redirecting to course page...');" class="buy-btn">Enroll for Free</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="math-challenge">
+        <div class="container challenge-container">
+            <h2>Daily Math Challenge</h2>
+            <p>Test your skills with our daily problem</p>
+            
+            <div class="challenge-problem">
+                <p>What is the derivative of $f(x) = 3x^2\sin(x)$ at $x = \frac{\pi}{2}$?</p>
+            </div>
+            
+            <div class="challenge-options">
+                <div class="challenge-option" data-answer="A">A) $3\pi$</div>
+                <div class="challenge-option" data-answer="B">B) $\frac{3\pi^2}{4}$</div>
+                <div class="challenge-option" data-answer="C">C) $\frac{3\pi}{2}$</div>
+                <div class="challenge-option" data-answer="D">D) $\frac{3\pi^2}{2}$</div>
+            </div>
+            
+            <button class="btn btn-outline" id="submit-answer-btn" style="color: white; border-color: white;">Submit Answer</button>
+            <button class="show-solution-btn" id="show-solution-btn">Show Solution</button>
+            
+            <div class="challenge-feedback">
+                </div>
+            
+            <div class="challenge-meta">
+                <p>Difficulty: <strong>Medium</strong> | Topic: <strong>Calculus</strong></p>
+                <p>Today's completion rate: 68%</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="learning-paths">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mathematics Learning Paths</h2>
+                <p>Structured roadmaps to guide your mathematical journey from novice to expert.</p>
+            </div>
+            <div class="paths-grid">
+                <div class="path-card">
+                    <div class="path-header">
+                        <h3>High School Mathematics</h3>
+                        <span class="courses-count">8 Courses</span>
+                    </div>
+                    <p>Complete curriculum covering algebra, geometry, trigonometry, and pre-calculus with real-world applications</p>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 25%"></div>
+                        </div>
+                        <span>Beginner Path • 25% Avg. Completion</span>
+                    </div>
+                    <a href="#" class="btn btn-outline">Explore Path</a>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-header">
+                        <h3>College Calculus</h3>
+                        <span class="courses-count">5 Courses</span>
+                    </div>
+                    <p>Master single and multivariable calculus with applications in physics, engineering, and economics</p>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 42%"></div>
+                        </div>
+                        <span>Intermediate Path • 42% Avg. Completion</span>
+                    </div>
+                    <a href="#" class="btn btn-outline">Explore Path</a>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-header">
+                        <h3>Data Science Mathematics</h3>
+                        <span class="courses-count">6 Courses</span>
+                    </div>
+                    <p>Essential math for data science including linear algebra, statistics, and optimization</p>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 35%"></div>
+                        </div>
+                        <span>Career Path • 35% Avg. Completion</span>
+                    </div>
+                    <a href="#" class="btn btn-outline">Explore Path</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Our Students Say</h2>
+                <p>Success stories from our mathematics learners who have transformed their skills and careers.</p>
+            </div>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>The visual approach to calculus completely changed my understanding of derivatives and integrals. I went from struggling to acing my college course!</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Jessica Tan">
+                        </div>
+                        <div class="author-info">
+                            <h4>Jessica Tan</h4>
+                            <p>Computer Science Student</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>As a returning adult learner, I was intimidated by math. The step-by-step explanations and patient AI tutor helped me rebuild my skills from the ground up.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="David Miller">
+                        </div>
+                        <div class="author-info">
+                            <h4>David Miller</h4>
+                            <p>Career Changer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>The linear algebra course was instrumental in helping me understand machine learning concepts. The interactive visualizations made abstract concepts concrete.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Priya Patel">
+                        </div>
+                        <div class="author-info">
+                            <h4>Priya Patel</h4>
+                            <p>AI Researcher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <a href="index.html" class="footer-logo">DeepLearn AI</a>
+                    <p>Transforming mathematical education through AI-powered learning experiences. Making complex concepts accessible to everyone.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="algebra.html">Algebra</a></li>
+                        <li><a href="calculus.html">Calculus</a></li>
+                        <li><a href="geometry.html">Geometry</a></li>
+                        <li><a href="statistics.html">Statistics</a></li>
+                        <li><a href="linear-algebra.html">Linear Algebra</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="blog.html">Math Blog</a></li>
+                        <li><a href="cheatsheets.html">Cheat Sheets</a></li>
+                        <li><a href="practice.html">Practice Problems</a></li>
+                        <li><a href="webinars.html">Live Webinars</a></li>
+                        <li><a href="tools.html">Math Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="press.html">Press</a></li>
+                        <li><a href="affiliates.html">Affiliates</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 DeepLearn AI. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Complete Your Purchase</h2>
+            <div class="payment-summary">
+                <p>Course: <span id="checkout-course-title"></span></p>
+                <p class="total">Total: <span id="checkout-total-price"></span></p>
+            </div>
+            <div class="payment-methods">
+                <h3>Select a Payment Method</h3>
+                <div class="payment-option">
+                    <input type="radio" id="credit-card-radio" name="payment-method" value="credit-card" checked>
+                    <label for="credit-card-radio">Credit Card</label>
+                    <i class="fas fa-credit-card payment-icon"></i>
+                </div>
+                <div id="credit-card-details" class="payment-option-details" style="display: block;">
+                    <input type="text" placeholder="Card Number" required>
+                    <input type="text" placeholder="Cardholder Name" required>
+                    <input type="text" placeholder="MM/YY" style="width: 48%; display: inline-block;">
+                    <input type="text" placeholder="CVC" style="width: 48%; display: inline-block; float: right;">
+                </div>
+                
+                <div class="payment-option">
+                    <input type="radio" id="paypal-radio" name="payment-method" value="paypal">
+                    <label for="paypal-radio">PayPal</label>
+                    <i class="fab fa-paypal payment-icon"></i>
+                </div>
+                <div id="paypal-details" class="payment-option-details">
+                    <p>You will be securely redirected to the PayPal website to complete your purchase.</p>
+                </div>
+
+                <div class="payment-option">
+                    <input type="radio" id="gpay-radio" name="payment-method" value="gpay">
+                    <label for="gpay-radio">Google Pay</label>
+                    <i class="fab fa-google-pay payment-icon"></i>
+                </div>
+                <div id="gpay-details" class="payment-option-details">
+                    <p>You will be prompted to confirm your payment with your Google account.</p>
+                </div>
+                
+            </div>
+            <button class="btn btn-primary pay-now-btn" id="pay-now-btn">Pay Now</button>
+            <div id="confirmation-message">
+                <p>Thank you for your purchase! Your enrollment is confirmed.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Interactive Visualizer Buttons
+            const visualizerBtns = document.querySelectorAll('.visualizer-btn');
+            visualizerBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    visualizerBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const concept = this.getAttribute('data-concept');
+                    const canvas = document.querySelector('.visualizer-canvas');
+                    const description = document.querySelector('.concept-description');
+                    
+                    // Update content based on selected concept
+                    let content = '';
+                    let desc = '';
+                    
+                    switch (concept) {
+                        case 'function-grapher':
+                            content = `
+                                <i class="fas fa-project-diagram" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                                <h3>Function Grapher</h3>
+                                <p>Enter a function to see it visualized in real-time</p>
+                                <div style="margin: 20px auto; max-width: 300px;">
+                                    <input type="text" placeholder="Try: sin(x) * x^2" style="width: 100%; padding: 10px; border: 1px solid var(--gray-medium); border-radius: var(--radius-sm);">
+                                </div>
+                                <button class="btn btn-primary">Plot Function</button>
+                            `;
+                            desc = `
+                                <h3>Understanding Function Behavior</h3>
+                                <p>Visualizing functions helps identify key characteristics like roots, maxima, minima, and inflection points. Our grapher allows you to zoom, pan, and analyze function behavior across its domain.</p>
+                            `;
+                            break;
+                        case 'derivative-visualizer':
+                            content = `
+                                <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                                <h3>Derivative Visualizer</h3>
+                                <p>See the tangent line of any function change as you move a point along the curve.</p>
+                                <button class="btn btn-primary">Start Demo</button>
+                            `;
+                            desc = `
+                                <h3>Grasping the Concept of Slope</h3>
+                                <p>The derivative visualizer makes the abstract concept of a function's instantaneous rate of change concrete. Witness how the tangent line's slope corresponds to the derivative's value at any point.</p>
+                            `;
+                            break;
+                        case 'integral-visualizer':
+                            content = `
+                                <i class="fas fa-chart-area" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                                <h3>Integral Visualizer</h3>
+                                <p>Watch as an area under a curve is computed in real-time with an animated Riemann sum.</p>
+                                <button class="btn btn-primary">Start Demo</button>
+                            `;
+                            desc = `
+                                <h3>Seeing the Summation of Area</h3>
+                                <p>Our integral visualizer helps you understand how integrals calculate the area under a curve. You can adjust the number of rectangles in a Riemann sum to see how the approximation approaches the exact area.</p>
+                            `;
+                            break;
+                        case 'vector-fields':
+                            content = `
+                                <i class="fas fa-compass" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                                <h3>Vector Fields</h3>
+                                <p>Visualize the flow of a vector field in 2D or 3D space.</p>
+                                <button class="btn btn-primary">Start Demo</button>
+                            `;
+                            desc = `
+                                <h3>Making Sense of Direction and Magnitude</h3>
+                                <p>Vector fields can be challenging to conceptualize. Our tool lets you manipulate and interact with them, which is essential for understanding concepts in fluid dynamics, electromagnetism, and more.</p>
+                            `;
+                            break;
+                        case '3d-geometry':
+                            content = `
+                                <i class="fas fa-cube" style="font-size: 3rem; color: var(--math-primary); margin-bottom: 15px;"></i>
+                                <h3>3D Geometry</h3>
+                                <p>Rotate and inspect 3D objects like polyhedra and spheres.</p>
+                                <button class="btn btn-primary">Start Demo</button>
+                            `;
+                            desc = `
+                                <h3>Exploring Spatial Relationships</h3>
+                                <p>Our 3D geometry tool provides an immersive way to study shapes and solids. You can change properties like size, color, and transparency to better understand their characteristics.</p>
+                            `;
+                            break;
+                    }
+                    canvas.innerHTML = `<div class="canvas-placeholder">${content}</div>`;
+                    description.innerHTML = desc;
+                });
+            });
+
+            // Daily Math Challenge Logic
+            const challengeOptions = document.querySelectorAll('.challenge-option');
+            const submitBtn = document.getElementById('submit-answer-btn');
+            const showSolutionBtn = document.getElementById('show-solution-btn');
+            const feedbackDiv = document.querySelector('.challenge-feedback');
+            const correctOption = 'A'; // The correct answer to the derivative problem
+
+            let selectedAnswer = null;
+
+            challengeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    challengeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAnswer = this.getAttribute('data-answer');
+                    feedbackDiv.innerHTML = ''; // Clear feedback on new selection
+                    showSolutionBtn.style.display = 'none'; // Hide solution button
+                });
+            });
+
+            submitBtn.addEventListener('click', function() {
+                if (selectedAnswer) {
+                    if (selectedAnswer === correctOption) {
+                        feedbackDiv.innerHTML = '<p class="correct"><i class="fas fa-check-circle"></i> Correct! Excellent work!</p>';
+                        showSolutionBtn.style.display = 'none';
+                    } else {
+                        feedbackDiv.innerHTML = '<p class="incorrect"><i class="fas fa-times-circle"></i> That\'s not quite right. Try again or see the solution.</p>';
+                        showSolutionBtn.style.display = 'inline-block';
+                    }
+                } else {
+                    feedbackDiv.innerHTML = '<p style="color: #ed8936;"><i class="fas fa-info-circle"></i> Please select an answer first.</p>';
+                }
+            });
+
+            showSolutionBtn.addEventListener('click', function() {
+                feedbackDiv.innerHTML = `
+                    <p class="correct">
+                        <i class="fas fa-check-circle"></i> 
+                        The correct answer is **A) $3\pi$**.
+                    </p>
+                    <p>
+                        **Explanation:**
+                        We use the product rule for $f(x) = u(x)v(x)$, where $u(x)=3x^2$ and $v(x)=\sin(x)$.
+                        The product rule is $f'(x) = u'(x)v(x) + u(x)v'(x)$.
+                        
+                        1.  Derivative of $u(x)=3x^2$ is $u'(x) = 6x$.
+                        2.  Derivative of $v(x)=\sin(x)$ is $v'(x) = \cos(x)$.
+                        
+                        Applying the rule:
+                        $f'(x) = (6x)(\sin(x)) + (3x^2)(\cos(x))$
+                        
+                        Now, evaluate at $x = \frac{\pi}{2}$:
+                        $f'(\frac{\pi}{2}) = 6(\frac{\pi}{2})\sin(\frac{\pi}{2}) + 3(\frac{\pi}{2})^2\cos(\frac{\pi}{2})$
+                        
+                        Since $\sin(\frac{\pi}{2}) = 1$ and $\cos(\frac{\pi}{2}) = 0$, the equation simplifies to:
+                        $f'(\frac{\pi}{2}) = 6(\frac{\pi}{2})(1) + 3(\frac{\pi^2}{4})(0)$
+                        $f'(\frac{\pi}{2}) = 3\pi + 0$
+                        $f'(\frac{\pi}{2}) = 3\pi$
+                    </p>
+                `;
+            });
+
+
+            // Payment Modal Logic
+            const buyButtons = document.querySelectorAll('.buy-btn');
+            const modal = document.getElementById('payment-modal');
+            const closeBtn = document.querySelector('.close-btn');
+            const payNowBtn = document.getElementById('pay-now-btn');
+            const confirmationMsg = document.getElementById('confirmation-message');
+            const courseTitleSpan = document.getElementById('checkout-course-title');
+            const totalPriceSpan = document.getElementById('checkout-total-price');
+
+            // Open the modal
+            buyButtons.forEach(btn => {
+                btn.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent page reload
+                    const courseName = this.getAttribute('data-course');
+                    const price = this.getAttribute('data-price');
+                    
+                    // Update modal content with course details
+                    courseTitleSpan.textContent = courseName;
+                    totalPriceSpan.textContent = `$${price}`;
+                    
+                    confirmationMsg.style.display = 'none';
+                    modal.style.display = 'flex';
+                });
+            });
+
+            // Close the modal
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            window.addEventListener('click', function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Show confirmation on "Pay Now"
+            payNowBtn.addEventListener('click', function() {
+                confirmationMsg.style.display = 'block';
+                // You can add a delay to simulate processing
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 3000); // Close after 3 seconds
+            });
+
+            // Toggle payment details based on selection
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const detailsId = this.querySelector('input').value + '-details';
+                    document.querySelectorAll('.payment-option-details').forEach(details => {
+                        details.style.display = 'none';
+                    });
+                    document.getElementById(detailsId).style.display = 'block';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

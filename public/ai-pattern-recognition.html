@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pattern Recognition</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+        
+        .back-btn {
+            background: #3a2e8a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background: #4a3a9a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn span {
+            margin-right: 8px;
+        }
+        
+        /* Main Game Area */
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        
+        /* Pattern Display */
+        .pattern-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pattern-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .pattern-header h2 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .pattern-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .pattern-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            min-height: 100px;
+        }
+        
+        .pattern-element {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .pattern-element.question {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed #ffffff;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-next {
+            background-color: #00d4ff;
+            color: #000;
+        }
+        
+        .btn-hint {
+            background-color: #ffab40;
+            color: #000;
+        }
+        
+        .btn-skip {
+            background-color: #ff5252;
+            color: #000;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Difficulty Indicator */
+        .difficulty {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .difficulty.easy {
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+        
+        .difficulty.medium {
+            color: #ffab40;
+            border: 1px solid #ffab40;
+        }
+        
+        .difficulty.hard {
+            color: #ff5252;
+            border: 1px solid #ff5252;
+        }
+        
+        /* Message Display */
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: rgba(0, 212, 255, 0.2);
+            border-left: 4px solid #00d4ff;
+            display: block;
+        }
+        
+        .message.error {
+            background: rgba(255, 82, 82, 0.2);
+            border-left: 4px solid #ff5252;
+            display: block;
+        }
+        
+        .message.info {
+            background: rgba(255, 171, 64, 0.2);
+            border-left: 4px solid #ffab40;
+            display: block;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ffcc);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Instructions */
+        .instructions {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #00d4ff;
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .pattern-element {
+                width: 60px;
+                height: 60px;
+                font-size: 22px;
+            }
+            
+            .option {
+                height: 60px;
+                font-size: 20px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .pattern-element {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+            
+            .option {
+                height: 50px;
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span>🔍</span>
+                AI Pattern Recognition
+            </div>
+            <a href="index.html" class="back-btn">
+                <span>←</span> Back to Home
+            </a>
+        </header>
+        
+        <div class="game-wrapper">
+            <div class="game-header">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div>Level</div>
+                        <div class="stat-value" id="level-display">1</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Score</div>
+                        <div class="stat-value" id="score-display">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Streak</div>
+                        <div class="stat-value" id="streak-display">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div>Progress: <span id="progress-text">1/10</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="pattern-container">
+                <div class="difficulty easy" id="difficulty-display">Easy</div>
+                <div class="pattern-header">
+                    <h2>Identify the Pattern</h2>
+                    <p>Select the element that completes the sequence</p>
+                </div>
+                
+                <div class="pattern-display" id="pattern-display">
+                    <!-- Pattern will be generated here -->
+                </div>
+                
+                <div class="options-grid" id="options-grid">
+                    <!-- Options will be generated here -->
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-hint" id="btn-hint">
+                        <span>💡</span> Hint
+                    </button>
+                    <button class="btn btn-skip" id="btn-skip">
+                        <span>⏭</span> Skip
+                    </button>
+                    <button class="btn btn-next" id="btn-next" disabled>
+                        <span>➡️</span> Next
+                    </button>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h2><span>ℹ️</span> How to Play</h2>
+                <ul>
+                    <li>Analyze the sequence of elements to identify the pattern</li>
+                    <li>Select the option that correctly completes the sequence</li>
+                    <li>Correct answers earn more points for harder patterns</li>
+                    <li>Consecutive correct answers increase your streak multiplier</li>
+                    <li>Use hints when stuck (costs points)</li>
+                    <li>Complete all levels to master pattern recognition</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        class AIPatternRecognition {
+            constructor() {
+                this.level = 1;
+                this.score = 0;
+                this.streak = 0;
+                this.maxStreak = 0;
+                this.currentProblem = 0;
+                this.totalProblems = 10;
+                this.currentPattern = null;
+                this.selectedOption = null;
+                this.hintUsed = false;
+                
+                // DOM Elements
+                this.patternDisplay = document.getElementById('pattern-display');
+                this.optionsGrid = document.getElementById('options-grid');
+                this.levelDisplay = document.getElementById('level-display');
+                this.scoreDisplay = document.getElementById('score-display');
+                this.streakDisplay = document.getElementById('streak-display');
+                this.progressText = document.getElementById('progress-text');
+                this.progressFill = document.getElementById('progress-fill');
+                this.messageElement = document.getElementById('message');
+                this.difficultyDisplay = document.getElementById('difficulty-display');
+                this.nextBtn = document.getElementById('btn-next');
+                
+                this.initGame();
+                this.setupEventListeners();
+            }
+            
+            initGame() {
+                this.currentProblem = 0;
+                this.streak = 0;
+                this.updateDisplays();
+                this.generatePattern();
+                this.updateProgress();
+            }
+            
+            generatePattern() {
+                this.hintUsed = false;
+                this.selectedOption = null;
+                this.nextBtn.disabled = true;
+                this.patternDisplay.innerHTML = '';
+                this.optionsGrid.innerHTML = '';
+                this.currentProblem++;
+                
+                const difficulty = this.getDifficulty();
+                this.difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+                this.difficultyDisplay.className = `difficulty ${difficulty}`;
+                
+                // Generate pattern based on difficulty
+                let pattern, options, correctAnswer;
+                
+                switch(difficulty) {
+                    case 'easy':
+                        [pattern, options, correctAnswer] = this.generateEasyPattern();
+                        break;
+                    case 'medium':
+                        [pattern, options, correctAnswer] = this.generateMediumPattern();
+                        break;
+                    case 'hard':
+                        [pattern, options, correctAnswer] = this.generateHardPattern();
+                        break;
+                }
+                
+                this.currentPattern = { pattern, options, correctAnswer };
+                
+                // Display pattern
+                pattern.forEach((item, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'pattern-element';
+                    element.textContent = item;
+                    this.patternDisplay.appendChild(element);
+                });
+                
+                // Add question mark for missing element
+                const question = document.createElement('div');
+                question.className = 'pattern-element question';
+                question.textContent = '?';
+                this.patternDisplay.appendChild(question);
+                
+                // Display options
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.dataset.index = index;
+                    
+                    optionElement.addEventListener('click', () => {
+                        // Remove selection from other options
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                            opt.style.background = 'rgba(255, 255, 255, 0.1)';
+                        });
+                        
+                        // Highlight selected option
+                        optionElement.style.borderColor = '#00d4ff';
+                        optionElement.style.background = 'rgba(0, 212, 255, 0.2)';
+                        
+                        this.selectedOption = option;
+                        this.nextBtn.disabled = false;
+                    });
+                    
+                    this.optionsGrid.appendChild(optionElement);
+                });
+            }
+            
+            generateEasyPattern() {
+                // Simple numerical patterns
+                const patternTypes = [
+                    // Arithmetic sequence
+                    () => {
+                        const step = this.getRandomInt(1, 5);
+                        const start = this.getRandomInt(1, 10);
+                        const length = 4;
+                        const pattern = [];
+                        for (let i = 0; i < length; i++) {
+                            pattern.push(start + i * step);
+                        }
+                        const correct = start + length * step;
+                        const options = this.generateOptions(correct, 1, 20);
+                        return [pattern, options, correct];
+                    },
+                    // Geometric sequence
+                    () => {
+                        const ratio = this.getRandomInt(2, 3);
+                        const start = this.getRandomInt(1, 5);
+                        const length = 4;
+                        const pattern = [];
+                        for (let i = 0; i < length; i++) {
+                            pattern.push(start * Math.pow(ratio, i));
+                        }
+                        const correct = start * Math.pow(ratio, length);
+                        const options = this.generateOptions(correct, 1, 100);
+                        return [pattern, options, correct];
+                    },
+                    // Simple alternating pattern
+                    () => {
+                        const pattern = ['A', 'B', 'A', 'B'];
+                        const correct = 'A';
+                        const options = ['A', 'B', 'C', 'D'];
+                        return [pattern, options, correct];
+                    }
+                ];
+                
+                return patternTypes[Math.floor(Math.random() * patternTypes.length)]();
+            }
+            
+            generateMediumPattern() {
+                // More complex patterns
+                const patternTypes = [
+                    // Fibonacci-like
+                    () => {
+                        const a = this.getRandomInt(1, 5);
+                        const b = this.getRandomInt(1, 5);
+                        const pattern = [a, b, a + b, a + b * 2];
+                        const correct = a * 2 + b * 3;
+                        const options = this.generateOptions(correct, 1, 50);
+                        return [pattern, options, correct];
+                    },
+                    // Shape patterns
+                    () => {
+                        const shapes = ['▲', '▼', '◆', '●', '■', '⬢'];
+                        const pattern = [];
+                        const length = 4;
+                        let current = Math.floor(Math.random() * shapes.length);
+                        const step = this.getRandomInt(1, 2);
+                        
+                        for (let i = 0; i < length; i++) {
+                            pattern.push(shapes[current]);
+                            current = (current + step) % shapes.length;
+                        }
+                        
+                        const correct = shapes[(current + step) % shapes.length];
+                        const options = this.getRandomSubarray(shapes, 4, correct);
+                        return [pattern, options, correct];
+                    },
+                    // Prime numbers
+                    () => {
+                        const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+                        const start = this.getRandomInt(0, 3);
+                        const pattern = primes.slice(start, start + 4);
+                        const correct = primes[start + 4];
+                        const options = this.generateOptions(correct, 1, 30);
+                        return [pattern, options, correct];
+                    }
+                ];
+                
+                return patternTypes[Math.floor(Math.random() * patternTypes.length)]();
+            }
+            
+            generateHardPattern() {
+                // Complex patterns requiring deeper analysis
+                const patternTypes = [
+                    // Multiple operations
+                    () => {
+                        const start = this.getRandomInt(1, 10);
+                        const pattern = [
+                            start,
+                            start * 2 + 1,
+                            start * 4 + 3,
+                            start * 8 + 7
+                        ];
+                        const correct = start * 16 + 15;
+                        const options = this.generateOptions(correct, 1, 200);
+                        return [pattern, options, correct];
+                    },
+                    // Letter-number patterns
+                    () => {
+                        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        const start = this.getRandomInt(0, 20);
+                        const pattern = [
+                            letters[start],
+                            letters[start + 1] + (start + 1),
+                            letters[start + 2],
+                            letters[start + 3] + (start + 3)
+                        ];
+                        const correct = letters[start + 4];
+                        const options = this.getRandomSubarray(letters.split(''), 4, correct);
+                        return [pattern, options, correct];
+                    },
+                    // Complex shape patterns
+                    () => {
+                        const shapes = ['▲', '▼', '◆', '●', '■', '⬢', '⬡'];
+                        const pattern = [];
+                        const length = 4;
+                        let current = Math.floor(Math.random() * shapes.length);
+                        let step = 1;
+                        let direction = 1;
+                        
+                        for (let i = 0; i < length; i++) {
+                            pattern.push(shapes[current]);
+                            step = (i % 2 === 0) ? 2 : 1;
+                            direction = (i % 3 === 0) ? -1 : 1;
+                            current = (current + step * direction + shapes.length) % shapes.length;
+                        }
+                        
+                        const nextStep = (length % 2 === 0) ? 2 : 1;
+                        const nextDirection = (length % 3 === 0) ? -1 : 1;
+                        const correct = shapes[(current + nextStep * nextDirection + shapes.length) % shapes.length];
+                        const options = this.getRandomSubarray(shapes, 4, correct);
+                        return [pattern, options, correct];
+                    }
+                ];
+                
+                return patternTypes[Math.floor(Math.random() * patternTypes.length)]();
+            }
+            
+            generateOptions(correct, min, max) {
+                const options = [correct];
+                
+                // Generate unique distractors
+                while (options.length < 4) {
+                    let distractor;
+                    if (typeof correct === 'number') {
+                        // For numbers, generate values close to correct answer
+                        const offset = this.getRandomInt(1, 5) * (Math.random() > 0.5 ? 1 : -1);
+                        distractor = correct + offset;
+                        
+                        // Ensure distractor is within bounds and unique
+                        if (distractor < min || distractor > max || options.includes(distractor)) {
+                            distractor = this.getRandomInt(min, max);
+                        }
+                    } else {
+                        // For letters/shapes, pick random alternatives
+                        const allOptions = typeof correct === 'string' && correct.length === 1 ?
+                            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('') :
+                            ['▲', '▼', '◆', '●', '■', '⬢', '⬡'];
+                        distractor = allOptions[Math.floor(Math.random() * allOptions.length)];
+                        
+                        // Ensure distractor is unique
+                        if (options.includes(distractor)) continue;
+                    }
+                    
+                    options.push(distractor);
+                }
+                
+                return this.shuffleArray(options);
+            }
+            
+            getRandomSubarray(array, size, include) {
+                const result = [include];
+                const tempArray = [...array].filter(item => item !== include);
+                
+                while (result.length < size && tempArray.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * tempArray.length);
+                    result.push(tempArray[randomIndex]);
+                    tempArray.splice(randomIndex, 1);
+                }
+                
+                return this.shuffleArray(result);
+            }
+            
+            checkAnswer() {
+                if (this.selectedOption === null) return;
+                
+                const isCorrect = this.selectedOption === this.currentPattern.correctAnswer;
+                
+                if (isCorrect) {
+                    // Calculate points
+                    let points = 0;
+                    switch(this.getDifficulty()) {
+                        case 'easy': points = 10; break;
+                        case 'medium': points = 20; break;
+                        case 'hard': points = 30; break;
+                    }
+                    
+                    // Apply streak multiplier (up to 3x)
+                    const streakMultiplier = Math.min(1 + this.streak * 0.1, 3);
+                    points = Math.round(points * streakMultiplier);
+                    
+                    // Deduct points if hint was used
+                    if (this.hintUsed) {
+                        points = Math.max(1, Math.floor(points * 0.5));
+                    }
+                    
+                    this.score += points;
+                    this.streak++;
+                    this.maxStreak = Math.max(this.maxStreak, this.streak);
+                    
+                    this.showMessage(
+                        `+${points} points! (${this.getDifficulty().charAt(0).toUpperCase() + this.getDifficulty().slice(1)})`, 
+                        'success'
+                    );
+                    
+                    // Move to next problem or complete level
+                    if (this.currentProblem < this.totalProblems) {
+                        setTimeout(() => {
+                            this.generatePattern();
+                            this.updateProgress();
+                        }, 1500);
+                    } else {
+                        this.levelComplete();
+                    }
+                } else {
+                    // Incorrect answer
+                    this.streak = 0;
+                    this.showMessage("Incorrect. Try again!", 'error');
+                    this.generatePattern();
+                }
+                
+                this.updateDisplays();
+            }
+            
+            skipProblem() {
+                this.streak = 0;
+                this.showMessage("Problem skipped", 'info');
+                
+                if (this.currentProblem < this.totalProblems) {
+                    setTimeout(() => {
+                        this.generatePattern();
+                        this.updateProgress();
+                    }, 1000);
+                } else {
+                    this.levelComplete();
+                }
+                
+                this.updateDisplays();
+            }
+            
+            showHint() {
+                if (this.score < 5) {
+                    this.showMessage("You need at least 5 points for a hint", 'error');
+                    return;
+                }
+                
+                this.score -= 5;
+                this.hintUsed = true;
+                
+                const hint = this.generateHint();
+                this.showMessage(`Hint: ${hint} (Cost: 5 points)`, 'info');
+                this.updateDisplays();
+            }
+            
+            generateHint() {
+                const pattern = this.currentPattern.pattern;
+                const correct = this.currentPattern.correctAnswer;
+                const difficulty = this.getDifficulty();
+                
+                if (difficulty === 'easy') {
+                    if (typeof correct === 'number') {
+                        const diff1 = pattern[1] - pattern[0];
+                        const diff2 = pattern[2] - pattern[1];
+                        
+                        if (diff1 === diff2) {
+                            return `The sequence increases by ${diff1} each time`;
+                        } else {
+                            const ratio = pattern[1] / pattern[0];
+                            if (pattern[2] / pattern[1] === ratio) {
+                                return `Each number is multiplied by ${ratio}`;
+                            }
+                        }
+                    } else {
+                        return "Look for alternating patterns";
+                    }
+                } else if (difficulty === 'medium') {
+                    if (typeof correct === 'number') {
+                        return "Look for combined operations (e.g., both addition and multiplication)";
+                    } else {
+                        return "The pattern may involve position in the alphabet or shape properties";
+                    }
+                } else {
+                    // Hard
+                    return "The pattern may involve multiple operations or changing rules";
+                }
+                
+                return "Analyze the relationship between consecutive elements";
+            }
+            
+            levelComplete() {
+                // In a full implementation, you might show a level complete screen
+                alert(`Level ${this.level} complete! Score: ${this.score}`);
+                this.level++;
+                this.currentProblem = 0;
+                this.streak = 0;
+                this.initGame();
+            }
+            
+            getDifficulty() {
+                const levelProgress = this.level + (this.currentProblem / this.totalProblems);
+                
+                if (levelProgress < 3) return 'easy';
+                if (levelProgress < 6) return 'medium';
+                return 'hard';
+            }
+            
+            getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            updateDisplays() {
+                this.levelDisplay.textContent = this.level;
+                this.scoreDisplay.textContent = this.score;
+                this.streakDisplay.textContent = this.streak;
+            }
+            
+            updateProgress() {
+                const percent = (this.currentProblem / this.totalProblems) * 100;
+                this.progressFill.style.width = `${percent}%`;
+                this.progressText.textContent = `${this.currentProblem}/${this.totalProblems}`;
+            }
+            
+            showMessage(text, type) {
+                this.messageElement.textContent = text;
+                this.messageElement.className = `message ${type}`;
+                
+                setTimeout(() => {
+                    this.messageElement.style.display = 'none';
+                }, 3000);
+            }
+            
+            setupEventListeners() {
+                document.getElementById('btn-next').addEventListener('click', () => this.checkAnswer());
+                document.getElementById('btn-hint').addEventListener('click', () => this.showHint());
+                document.getElementById('btn-skip').addEventListener('click', () => this.skipProblem());
+                
+                // Allow pressing Enter to submit answer
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !this.nextBtn.disabled) {
+                        this.checkAnswer();
+                    }
+                });
+            }
+        }
+        
+        // Initialize the game when page loads
+        window.onload = () => {
+            const game = new AIPatternRecognition();
+        };
+    </script>
+</body>
+</html>

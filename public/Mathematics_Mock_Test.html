@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepLearnAi- Professional Mock Test Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --purple: #9b59b6;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --light-gray: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        #user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #user-name {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            background-color: var(--info);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        /* Navigation Styles */
+        nav {
+            background-color: #34495e;
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 74px;
+            z-index: 99;
+        }
+        
+        .nav-list {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--info);
+        }
+        
+        /* Main Content Styles */
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        .stats-card {
+            background: var(--light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--info);
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .stats-card span {
+            color: var(--info);
+            font-weight: 600;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            color: var(--dark);
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            font-size: 20px;
+        }
+        
+        .progress-bar-container {
+            margin-bottom: 15px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: var(--light-gray);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        
+        .activity-icon {
+            background: #e8f4fc;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .activity-content h4 {
+            margin: 0 0 5px;
+            font-weight: 500;
+        }
+        
+        .activity-content p {
+            margin: 0;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .action-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn i {
+            font-size: 24px;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .action-btn.math { background: var(--info); }
+        .action-btn.physics { background: var(--danger); }
+        .action-btn.chemistry { background: var(--warning); }
+        .action-btn.programming { background: var(--success); }
+        .action-btn.biology { background: var(--purple); }
+        
+        .rank-card {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+        
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--info);
+        }
+        
+        .subject-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .subject-card.math { border-top-color: var(--info); }
+        .subject-card.physics { border-top-color: var(--danger); }
+        .subject-card.chemistry { border-top-color: var(--warning); }
+        .subject-card.programming { border-top-color: var(--success); }
+        .subject-card.biology { border-top-color: var(--purple); }
+        
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .subject-header h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .subject-icon {
+            background: #e8f4fc;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .subject-card.math .subject-icon { background: #e8f4fc; }
+        .subject-card.physics .subject-icon { background: #fce8e8; }
+        .subject-card.chemistry .subject-icon { background: #fcf4e8; }
+        .subject-card.programming .subject-icon { background: #e8f8f0; }
+        .subject-card.biology .subject-icon { background: #f4e8fc; }
+        
+        .subject-card p {
+            color: var(--gray);
+            margin: 0 0 15px;
+            font-size: 14px;
+        }
+        
+        .subject-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .subject-progress {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .subject-rank {
+            background: var(--info);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .subject-card.math .subject-rank { background: var(--info); }
+        .subject-card.physics .subject-rank { background: var(--danger); }
+        .subject-card.chemistry .subject-rank { background: var(--warning); }
+        .subject-card.programming .subject-rank { background: var(--success); }
+        .subject-card.biology .subject-rank { background: var(--purple); }
+        
+        /* Test Section */
+        .test-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        @media (min-width: 900px) {
+            .test-container {
+                grid-template-columns: 1fr 350px;
+            }
+        }
+        
+        .subject-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--info);
+            margin-bottom: 15px;
+        }
+        
+        .subject-option:hover {
+            background: #e8f4fc;
+        }
+        
+        .subject-option.math { border-left-color: var(--info); }
+        .subject-option.physics { border-left-color: var(--danger); }
+        .subject-option.chemistry { border-left-color: var(--warning); }
+        .subject-option.programming { border-left-color: var(--success); }
+        .subject-option.biology { border-left-color: var(--purple); }
+        
+        .subject-option-icon {
+            background: #e8f4fc;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .subject-option.math .subject-option-icon { background: #e8f4fc; }
+        .subject-option.physics .subject-option-icon { background: #fce8e8; }
+        .subject-option.chemistry .subject-option-icon { background: #fcf4e8; }
+        .subject-option.programming .subject-option-icon { background: #e8f8f0; }
+        .subject-option.biology .subject-option-icon { background: #f4e8fc; }
+        
+        .subject-option-content h4 {
+            margin: 0 0 5px;
+            color: var(--dark);
+        }
+        
+        .subject-option-content p {
+            margin: 0;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .instructions-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            height: fit-content;
+        }
+        
+        .instructions-list {
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .tip-card {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .tip-card h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .start-test-btn {
+            width: 100%;
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .start-test-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Test Taking Section */
+        #test-taking {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            display: none;
+        }
+        
+        .test-header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        @media (min-width: 768px) {
+            .test-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        .test-title {
+            font-size: 22px;
+            color: var(--dark);
+        }
+        
+        .test-timer {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--danger);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            border-color: var(--info);
+            background-color: #f0f7ff;
+        }
+        
+        .option.selected {
+            border-color: var(--info);
+            background-color: #e6f2ff;
+        }
+        
+        .option input {
+            margin-right: 12px;
+        }
+        
+        .test-navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .test-navigation {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: var(--info);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn.prev {
+            background: var(--gray);
+        }
+        
+        .nav-btn.next {
+            background: var(--info);
+        }
+        
+        .nav-btn.submit {
+            background: var(--success);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: var(--secondary);
+            color: white;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-section p {
+            margin: 0;
+            line-height: 1.6;
+            color: #bdc3c7;
+        }
+        
+        .footer-section h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .footer-links li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links li a:hover {
+            color: white;
+        }
+        
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .contact-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contact-list span {
+            color: #bdc3c7;
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        
+        .copyright {
+            color: #bdc3c7;
+            font-size: 14px;
+            order: 2;
+        }
+        
+        @media (min-width: 768px) {
+            .copyright {
+                order: 1;
+            }
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            order: 1;
+        }
+        
+        @media (min-width: 768px) {
+            .social-icons {
+                order: 2;
+            }
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            opacity: 0.8;
+        }
+        
+        /* Charts */
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+        
+        /* Test Results */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .result-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #e8f8f0;
+        }
+        
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 10px;
+        }
+        
+        .result-label {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .weakness-card {
+            border: 1px solid #fce8e8;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fffafa;
+            margin-bottom: 20px;
+        }
+        
+        .weakness-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .weakness-score {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .review-btn {
+            margin-top: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .review-item {
+            background: #fffafa;
+            border: 1px solid #fce8e8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .review-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .incorrect-tag {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .review-answers {
+            margin-bottom: 15px;
+        }
+        
+        .incorrect-answer {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        
+        .correct-answer {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+        
+        .review-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .retake-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .study-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Progress Table */
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .progress-table th, .progress-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .progress-table th {
+            background: var(--light);
+            font-weight: 600;
+        }
+        
+        .progress-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .score-high {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+        
+        .score-medium {
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .score-low {
+            color: #f39c12;
+            font-weight: 500;
+        }
+        
+        .review-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>DeepLearnAl</h1>
+            </div>
+            <div id="user-info">
+                <div id="user-name">Welcome, Student</div>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="nav-list">
+                <li><a href="#" class="nav-link active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('tests')">Take Test</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('progress')">My Progress</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('results')">Results</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Dashboard</h2>
+                    <div class="stats-card">
+                        <p>Overall Progress: <span id="overall-progress">68%</span></p>
+                    </div>
+                </div>
+
+                <div class="grid-container">
+                    <!-- Performance Card -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line" style="color: #3498db;"></i> Performance Overview
+                        </h3>
+                        <div class="progress-container">
+                            <div class="progress-bar-container">
+                                <div class="progress-label">
+                                    <span>Mathematics</span>
+                                    <span>72%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 72%; background: #3498db;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-label">
+                                    <span>Physics</span>
+                                    <span>65%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%; background: #e74c3c;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-label">
+                                    <span>Chemistry</span>
+                                    <span>58%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 58%; background: #f39c12;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-label">
+                                    <span>Programming</span>
+                                    <span>82%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 82%; background: #2ecc71;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-label">
+                                    <span>Biology</span>
+                                    <span>63%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 63%; background: #9b59b6;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <i class="fas fa-history" style="color: #3498db;"></i> Recent Activity
+                        </h3>
+                        <div class="activity-container">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Completed Programming Test</h4>
+                                    <p>Score: 82% | Today, 10:45 AM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: #fce8e8;">
+                                    <i class="fas fa-times-circle" style="color: #e74c3c;"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Reviewed Chemistry Mistakes</h4>
+                                    <p>5 questions | Yesterday, 4:30 PM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-chart-bar" style="color: #3498db;"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Improved Math Ranking</h4>
+                                    <p>From #24 to #18 | Yesterday, 9:15 AM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: #fcf4e8;">
+                                    <i class="fas fa-book" style="color: #f39c12;"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Started Biology Test</h4>
+                                    <p>15/25 completed | Jul 28, 2:20 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <i class="fas fa-bolt" style="color: #3498db;"></i> Quick Actions
+                        </h3>
+                        <div class="actions-grid">
+                            <button onclick="showSection('tests')" class="action-btn">
+                                <i class="fas fa-play-circle"></i>
+                                <span>Start Test</span>
+                            </button>
+                            <button onclick="showSection('progress')" class="action-btn">
+                                <i class="fas fa-chart-line"></i>
+                                <span>View Progress</span>
+                            </button>
+                            <button onclick="showSection('results')" class="action-btn">
+                                <i class="fas fa-medal"></i>
+                                <span>See Results</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-book"></i>
+                                <span>Study Materials</span>
+                            </button>
+                        </div>
+                        <div class="rank-card">
+                            <i class="fas fa-trophy" style="color: #f39c12;"></i>
+                            <span>Current Rank: <span style="color: #3498db;">#18</span> out of 120 students</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Subject Cards -->
+                <h3 class="card-title">
+                    <i class="fas fa-book-open" style="color: #3498db;"></i> Subjects
+                </h3>
+                <div class="subject-grid">
+                    <div onclick="selectSubject('Mathematics')" class="subject-card math">
+                        <div class="subject-header">
+                            <h4>Mathematics</h4>
+                            <div class="subject-icon">
+                                <i class="fas fa-calculator" style="color: #3498db;"></i>
+                            </div>
+                        </div>
+                        <p>Algebra, Calculus, Geometry, Trigonometry</p>
+                        <div class="subject-footer">
+                            <span class="subject-progress">Progress: 72%</span>
+                            <span class="subject-rank">Rank: #18</span>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectSubject('Physics')" class="subject-card physics">
+                        <div class="subject-header">
+                            <h4>Physics</h4>
+                            <div class="subject-icon">
+                                <i class="fas fa-atom" style="color: #e74c3c;"></i>
+                            </div>
+                        </div>
+                        <p>Mechanics, Thermodynamics, Electromagnetism</p>
+                        <div class="subject-footer">
+                            <span class="subject-progress">Progress: 65%</span>
+                            <span class="subject-rank">Rank: #22</span>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectSubject('Chemistry')" class="subject-card chemistry">
+                        <div class="subject-header">
+                            <h4>Chemistry</h4>
+                            <div class="subject-icon">
+                                <i class="fas fa-flask" style="color: #f39c12;"></i>
+                            </div>
+                        </div>
+                        <p>Organic, Inorganic, Physical, Analytical</p>
+                        <div class="subject-footer">
+                            <span class="subject-progress">Progress: 58%</span>
+                            <span class="subject-rank">Rank: #30</span>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectSubject('Programming')" class="subject-card programming">
+                        <div class="subject-header">
+                            <h4>Programming</h4>
+                            <div class="subject-icon">
+                                <i class="fas fa-code" style="color: #2ecc71;"></i>
+                            </div>
+                        </div>
+                        <p>Algorithms, Data Structures, OOP, Web Dev</p>
+                        <div class="subject-footer">
+                            <span class="subject-progress">Progress: 82%</span>
+                            <span class="subject-rank">Rank: #12</span>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectSubject('Biology')" class="subject-card biology">
+                        <div class="subject-header">
+                            <h4>Biology</h4>
+                            <div class="subject-icon">
+                                <i class="fas fa-dna" style="color: #9b59b6;"></i>
+                            </div>
+                        </div>
+                        <p>Genetics, Ecology, Anatomy, Microbiology</p>
+                        <div class="subject-footer">
+                            <span class="subject-progress">Progress: 63%</span>
+                            <span class="subject-rank">Rank: #20</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Take Test Section -->
+            <section id="tests" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Take a Test</h2>
+                    <div class="stats-card">
+                        <p>Time: <span>60 minutes</span> | Questions: <span>25</span></p>
+                    </div>
+                </div>
+
+                <div class="test-container">
+                    <!-- Subject Selection -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <i class="fas fa-book" style="color: #3498db;"></i> Select a Subject
+                        </h3>
+                        
+                        <div class="subject-options">
+                            <div onclick="selectSubject('Mathematics')" class="subject-option math">
+                                <div class="subject-option-icon">
+                                    <i class="fas fa-calculator" style="color: #3498db;"></i>
+                                </div>
+                                <div class="subject-option-content">
+                                    <h4>Mathematics</h4>
+                                    <p>25 Questions | 60 Minutes</p>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectSubject('Physics')" class="subject-option physics">
+                                <div class="subject-option-icon">
+                                    <i class="fas fa-atom" style="color: #e74c3c;"></i>
+                                </div>
+                                <div class="subject-option-content">
+                                    <h4>Physics</h4>
+                                    <p>25 Questions | 60 Minutes</p>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectSubject('Chemistry')" class="subject-option chemistry">
+                                <div class="subject-option-icon">
+                                    <i class="fas fa-flask" style="color: #f39c12;"></i>
+                                </div>
+                                <div class="subject-option-content">
+                                    <h4>Chemistry</h4>
+                                    <p>25 Questions | 60 Minutes</p>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectSubject('Programming')" class="subject-option programming">
+                                <div class="subject-option-icon">
+                                    <i class="fas fa-code" style="color: #2ecc71;"></i>
+                                </div>
+                                <div class="subject-option-content">
+                                    <h4>Programming</h4>
+                                    <p>25 Questions | 60 Minutes</p>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectSubject('Biology')" class="subject-option biology">
+                                <div class="subject-option-icon">
+                                    <i class="fas fa-dna" style="color: #9b59b6;"></i>
+                                </div>
+                                <div class="subject-option-content">
+                                    <h4>Biology</h4>
+                                    <p>25 Questions | 60 Minutes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Test Instructions -->
+                    <div class="instructions-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-info-circle" style="color: #3498db;"></i> Test Instructions
+                        </h3>
+                        <ul class="instructions-list">
+                            <li>Each test contains 25 multiple choice questions</li>
+                            <li>You have 60 minutes to complete each test</li>
+                            <li>Each correct answer awards 4 points</li>
+                            <li>No negative marking for wrong answers</li>
+                            <li>You can review your answers before submission</li>
+                            <li>Results and rankings will be available immediately</li>
+                        </ul>
+                        
+                        <div class="tip-card">
+                            <h4>
+                                <i class="fas fa-lightbulb" style="color: #f39c12;"></i> Pro Tip
+                            </h4>
+                            <p>Focus on your weaker subjects first. Reviewing incorrect answers after each test improves retention by 65%.</p>
+                        </div>
+                        
+                        <button onclick="startTest()" class="start-test-btn">
+                            <i class="fas fa-play"></i> Start Selected Test
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Test Taking Section -->
+            <section id="test-taking" class="content-section">
+                <div class="test-header">
+                    <h2 class="test-title" id="test-subject">Programming Test</h2>
+                    <div class="test-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">60:00</span>
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question" id="question-text">What is the time complexity of bubble sort in the worst case?</div>
+                    <div class="options-container" id="options-container">
+                        <label class="option">
+                            <input type="radio" name="answer" value="A"> 
+                            O(n)
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="answer" value="B"> 
+                            O(n log n)
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="answer" value="C"> 
+                            O(n²)
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="answer" value="D"> 
+                            O(1)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="test-navigation">
+                    <button class="nav-btn prev" onclick="prevQuestion()">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <div>
+                        <button class="nav-btn next" onclick="nextQuestion()">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="nav-btn submit" onclick="submitTest()">
+                            <i class="fas fa-paper-plane"></i> Submit Test
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section id="progress" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">My Progress</h2>
+                    <div class="stats-card">
+                        <p>Last Test: <span>Programming</span> | Score: <span>82%</span></p>
+                    </div>
+                </div>
+                
+                <!-- Progress Overview -->
+                <div class="card">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-line" style="color: #3498db;"></i> Performance Trends
+                    </h3>
+                    
+                    <div class="chart-container">
+                        <canvas id="weeklyProgressChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Weak Areas -->
+                <div class="card">
+                    <h3 class="card-title">
+                        <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> Areas Needing Improvement
+                    </h3>
+                    
+                    <div>
+                        <div class="weakness-card">
+                            <div class="weakness-header">
+                                <h4>Organic Chemistry</h4>
+                                <span class="weakness-score">Accuracy: 42%</span>
+                            </div>
+                            <p>Reaction mechanisms, functional groups, nomenclature</p>
+                            <button class="review-btn">Review Mistakes</button>
+                        </div>
+                        
+                        <div class="weakness-card">
+                            <div class="weakness-header">
+                                <h4>Electromagnetism</h4>
+                                <span class="weakness-score">Accuracy: 48%</span>
+                            </div>
+                            <p>Maxwell's equations, electromagnetic waves, circuits</p>
+                            <button class="review-btn">Review Mistakes</button>
+                        </div>
+                        
+                        <div class="weakness-card">
+                            <div class="weakness-header">
+                                <h4>Genetics</h4>
+                                <span class="weakness-score">Accuracy: 52%</span>
+                            </div>
+                            <p>Mendelian inheritance, DNA replication, genetic disorders</p>
+                            <button class="review-btn">Review Mistakes</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress History -->
+                <div class="card">
+                    <h3 class="card-title">
+                        <i class="fas fa-history" style="color: #3498db;"></i> Test History
+                    </h3>
+                    
+                    <table class="progress-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Correct</th>
+                                <th>Time Taken</th>
+                                <th>Rank</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Aug 12, 2025</td>
+                                <td>Programming</td>
+                                <td class="score-high">82%</td>
+                                <td>21/25</td>
+                                <td>48m 32s</td>
+                                <td>#12</td>
+                                <td><a href="#" class="review-link">Review</a></td>
+                            </tr>
+                            <tr>
+                                <td>Aug 10, 2025</td>
+                                <td>Mathematics</td>
+                                <td class="score-medium">72%</td>
+                                <td>18/25</td>
+                                <td>55m 12s</td>
+                                <td>#18</td>
+                                <td><a href="#" class="review-link">Review</a></td>
+                            </tr>
+                            <tr>
+                                <td>Aug 8, 2025</td>
+                                <td>Physics</td>
+                                <td class="score-low">65%</td>
+                                <td>16/25</td>
+                                <td>59m 45s</td>
+                                <td>#22</td>
+                                <td><a href="#" class="review-link">Review</a></td>
+                            </tr>
+                            <tr>
+                                <td>Aug 5, 2025</td>
+                                <td>Chemistry</td>
+                                <td class="score-low">58%</td>
+                                <td>14/25</td>
+                                <td>52m 18s</td>
+                                <td>#30</td>
+                                <td><a href="#" class="review-link">Review</a></td>
+                            </tr>
+                            <tr>
+                                <td>Aug 2, 2025</td>
+                                <td>Biology</td>
+                                <td class="score-medium">63%</td>
+                                <td>16/25</td>
+                                <td>57m 03s</td>
+                                <td>#20</td>
+                                <td><a href="#" class="review-link">Review</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Results Section -->
+            <section id="results" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Test Results</h2>
+                    <div class="stats-card">
+                        <p>Last Test: <span>Programming</span> | Score: <span id="result-score">82%</span></p>
+                    </div>
+                </div>
+                
+                <!-- Results Overview -->
+                <div class="card">
+                    <h3 class="card-title">
+                        <i class="fas fa-medal" style="color: #f39c12;"></i> Latest Test Results: Programming
+                    </h3>
+                    
+                    <div class="result-grid">
+                        <div class="result-card">
+                            <div class="result-value" id="overall-score">82%</div>
+                            <div class="result-label">Overall Score</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-value" id="correct-answers">21/25</div>
+                            <div class="result-label">Correct Answers</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-value" id="rank">#12</div>
+                            <div class="result-label">Rank Among Peers</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-value" id="time-taken">48m</div>
+                            <div class="result-label">Time Taken</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 30px;">
+                        <div>
+                            <h4 class="card-title">Performance by Topic</h4>
+                            <div class="progress-container">
+                                <div class="progress-bar-container">
+                                    <div class="progress-label">
+                                        <span>Data Structures</span>
+                                        <span>92%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 92%; background: #2ecc71;"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-label">
+                                        <span>Algorithms</span>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 85%; background: #2ecc71;"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-label">
+                                        <span>OOP Concepts</span>
+                                        <span>78%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 78%; background: #3498db;"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-label">
+                                        <span>Web Development</span>
+                                        <span>65%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 65%; background: #f39c12;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                        
+               
+                    
+                    <div class="review-actions">
+                        <button class="retake-btn" onclick="startTest()">
+                            <i class="fas fa-redo"></i> Retake Test
+                        </button>
+                        <button class="study-btn">
+                            <i class="fas fa-book"></i> Study Materials
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+      <script>
+    // Extended test data with 25 questions per subject
+    const subjects = {
+        Mathematics: [
+            // Calculus (8 questions)
+            {
+                question: "What is the derivative of sin(x)?",
+                options: ["cos(x)", "-cos(x)", "tan(x)", "sec(x)"],
+                answer: 0
+            },
+            {
+                question: "What is ∫ eˣ dx?",
+                options: ["eˣ + C", "ln|x| + C", "x²/2 + C", "eˣ/x + C"],
+                answer: 0
+            },
+            {
+                question: "What is the second derivative of x³?",
+                options: ["6x", "3x²", "9x", "x⁴/12"],
+                answer: 0
+            },
+            {
+                question: "What is L'Hôpital's rule used for?",
+                options: ["Evaluating limits", "Solving integrals", "Matrix operations", "Geometric proofs"],
+                answer: 0
+            },
+            {
+                question: "What is the derivative of ln(x)?",
+                options: ["1/x", "eˣ", "x", "1/(x ln10)"],
+                answer: 0
+            },
+            {
+                question: "What is ∫ 1/x dx?",
+                options: ["ln|x| + C", "x²/2 + C", "eˣ + C", "arctan(x) + C"],
+                answer: 0
+            },
+            {
+                question: "What is the derivative of sec(x)?",
+                options: ["sec(x)tan(x)", "-csc(x)cot(x)", "cos(x)", "sin(x)"],
+                answer: 0
+            },
+            {
+                question: "What is the fundamental theorem of calculus?",
+                options: ["Links derivatives and integrals", "Defines limits", "Proves Pythagorean theorem", "Solves differential equations"],
+                answer: 0
+            },
+            
+            // Algebra (8 questions)
+            {
+                question: "Solve for x: 3x - 7 = 14",
+                options: ["x=7", "x=5", "x=21", "x=3"],
+                answer: 0
+            },
+            {
+                question: "Factor: x² - 9",
+                options: ["(x+3)(x-3)", "(x-9)²", "x(x-9)", "(x+1)(x-9)"],
+                answer: 0
+            },
+            {
+                question: "What is the solution to |2x - 5| = 11?",
+                options: ["x=8 or x=-3", "x=3", "x=8", "x=-3"],
+                answer: 0
+            },
+            {
+                question: "Simplify: (2x² + 3x - 5) + (x² - 4x + 2)",
+                options: ["3x² - x - 3", "3x² + 7x - 3", "x² - x - 3", "2x⁴ -x -3"],
+                answer: 0
+            },
+            {
+                question: "Solve: x² - 5x + 6 = 0",
+                options: ["x=2, x=3", "x=1, x=6", "x=-2, x=-3", "x=0, x=5"],
+                answer: 0
+            },
+            {
+                question: "What is the vertex of y = x² - 6x + 8?",
+                options: ["(3, -1)", "(3, 8)", "(0, 8)", "(-3, -1)"],
+                answer: 0
+            },
+            {
+                question: "Expand: (2x + 3)²",
+                options: ["4x² + 12x + 9", "4x² + 6x + 9", "2x² + 12x + 9", "4x² + 9"],
+                answer: 0
+            },
+            {
+                question: "What is the inverse of f(x) = 3x - 2?",
+                options: ["f⁻¹(x)=(x+2)/3", "f⁻¹(x)=3x+2", "f⁻¹(x)=x/3+2", "f⁻¹(x)=2-3x"],
+                answer: 0
+            },
+            
+            // Geometry (9 questions)
+            {
+                question: "What is the area of a circle with radius 5?",
+                options: ["25π", "10π", "50π", "5π"],
+                answer: 0
+            },
+            {
+                question: "How many degrees in a pentagon's interior angles?",
+                options: ["540°", "360°", "720°", "180°"],
+                answer: 0
+            },
+            {
+                question: "What is the volume of a sphere with radius r?",
+                options: ["4/3πr³", "πr³", "4πr²", "2πr³"],
+                answer: 0
+            },
+            {
+                question: "In a 30-60-90 triangle, what is the ratio of sides?",
+                options: ["1:√3:2", "1:1:√2", "3:4:5", "1:2:3"],
+                answer: 0
+            },
+            {
+                question: "What is the distance between (1,2) and (4,6)?",
+                options: ["5", "4", "3", "7"],
+                answer: 0
+            },
+            {
+                question: "What is the circumference of a circle with diameter 10?",
+                options: ["10π", "5π", "20π", "25π"],
+                answer: 0
+            },
+            {
+                question: "How many edges does a cube have?",
+                options: ["12", "6", "8", "10"],
+                answer: 0
+            },
+            {
+                question: "What is the surface area of a cylinder with r=3, h=5?",
+                options: ["48π", "30π", "45π", "15π"],
+                answer: 0
+            },
+            {
+                question: "Two parallel lines are cut by a transversal. What is true?",
+                options: ["Corresponding angles equal", "Alternate angles unequal", "Consecutive angles supplementary", "Vertical angles complementary"],
+                answer: 0
+            }
+        ],
+        Physics: [
+            // Mechanics (8 questions)
+            {
+                question: "What is Newton's First Law?",
+                options: ["Inertia", "F=ma", "Action-Reaction", "Gravity"],
+                answer: 0
+            },
+            {
+                question: "What is the SI unit of force?",
+                options: ["Newton", "Joule", "Watt", "Pascal"],
+                answer: 0
+            },
+            {
+                question: "What is kinetic energy formula?",
+                options: ["½mv²", "mgh", "Fd", "Pt"],
+                answer: 0
+            },
+            {
+                question: "What is acceleration due to gravity?",
+                options: ["9.8 m/s²", "6.67×10⁻¹¹ N·m²/kg²", "3×10⁸ m/s", "1.6×10⁻¹⁹ C"],
+                answer: 0
+            },
+            {
+                question: "Momentum is defined as:",
+                options: ["mass × velocity", "force × time", "work / time", "mass × acceleration"],
+                answer: 0
+            },
+            {
+                question: "What is the weight of a 10kg object on Earth?",
+                options: ["98N", "10N", "9.8N", "100N"],
+                answer: 0
+            },
+            {
+                question: "In projectile motion, horizontal velocity:",
+                options: ["Remains constant", "Changes linearly", "Changes quadratically", "Is zero"],
+                answer: 0
+            },
+            {
+                question: "What is the unit of power?",
+                options: ["Watt", "Joule", "Newton", "Pascal"],
+                answer: 0
+            },
+            
+            // Electricity (8 questions)
+            {
+                question: "What is Ohm's Law?",
+                options: ["V=IR", "P=IV", "Q=CV", "F=ma"],
+                answer: 0
+            },
+            {
+                question: "What is the unit of resistance?",
+                options: ["Ohm", "Volt", "Ampere", "Farad"],
+                answer: 0
+            },
+            {
+                question: "In a series circuit, current is:",
+                options: ["Same everywhere", "Split between components", "Highest at source", "Zero in resistors"],
+                answer: 0
+            },
+            {
+                question: "What stores energy in an electric field?",
+                options: ["Capacitor", "Resistor", "Inductor", "Transistor"],
+                answer: 0
+            },
+            {
+                question: "What is Kirchhoff's Junction Rule?",
+                options: ["ΣI_in = ΣI_out", "ΣV_loop = 0", "P=VI", "Q=It"],
+                answer: 0
+            },
+            {
+                question: "A 100W bulb operates at 220V. What is its resistance?",
+                options: ["484Ω", "220Ω", "100Ω", "22Ω"],
+                answer: 0
+            },
+            {
+                question: "What does a diode do?",
+                options: ["Allows current in one direction", "Amplifies signals", "Stores charge", "Measures voltage"],
+                answer: 0
+            },
+            {
+                question: "What is the power dissipated in a 10Ω resistor with 2A current?",
+                options: ["40W", "20W", "100W", "5W"],
+                answer: 0
+            },
+            
+            // Waves (9 questions)
+            {
+                question: "What is the speed of light in vacuum?",
+                options: ["3×10⁸ m/s", "340 m/s", "1500 m/s", "1×10⁶ m/s"],
+                answer: 0
+            },
+            {
+                question: "Frequency and wavelength are related by:",
+                options: ["v = fλ", "E = hf", "F = ma", "P = ρgh"],
+                answer: 0
+            },
+            {
+                question: "What phenomenon causes the rainbow?",
+                options: ["Dispersion", "Reflection", "Diffraction", "Polarization"],
+                answer: 0
+            },
+            {
+                question: "In sound waves, regions of high pressure are called:",
+                options: ["Compressions", "Rarefactions", "Crests", "Troughs"],
+                answer: 0
+            },
+            {
+                question: "What is the unit of frequency?",
+                options: ["Hertz", "Decibel", "Watt", "Tesla"],
+                answer: 0
+            },
+            {
+                question: "When light passes from air to water, it:",
+                options: ["Bends toward normal", "Bends away from normal", "Reflects", "Speeds up"],
+                answer: 0
+            },
+            {
+                question: "What wave property allows you to hear around corners?",
+                options: ["Diffraction", "Refraction", "Reflection", "Interference"],
+                answer: 0
+            },
+            {
+                question: "What is the Doppler Effect?",
+                options: ["Frequency change due to motion", "Wave superposition", "Polarization shift", "Energy quantization"],
+                answer: 0
+            },
+            {
+                question: "Standing waves are produced by:",
+                options: ["Interference of waves", "Single wave source", "Changing media", "Gravitational waves"],
+                answer: 0
+            }
+        ],
+        Chemistry: [
+            // Organic (8 questions)
+            {
+                question: "What is the functional group in alcohols?",
+                options: ["-OH", "-COOH", "-CHO", "-NH₂"],
+                answer: 0
+            },
+            {
+                question: "How many bonds can carbon form?",
+                options: ["4", "2", "3", "1"],
+                answer: 0
+            },
+            {
+                question: "What is CH₄?",
+                options: ["Methane", "Ethane", "Methanol", "Ethylene"],
+                answer: 0
+            },
+            {
+                question: "Isomers have same:",
+                options: ["Molecular formula", "Structural formula", "Functional groups", "Physical properties"],
+                answer: 0
+            },
+            {
+                question: "What reaction breaks alkenes?",
+                options: ["Addition", "Substitution", "Elimination", "Polymerization"],
+                answer: 0
+            },
+            {
+                question: "What is the simplest alkene?",
+                options: ["Ethene", "Methane", "Ethane", "Propene"],
+                answer: 0
+            },
+            {
+                question: "Which is an aromatic compound?",
+                options: ["Benzene", "Ethanol", "Acetic acid", "Glucose"],
+                answer: 0
+            },
+            {
+                question: "What catalyst is used in hydrogenation?",
+                options: ["Nickel", "Platinum", "Iron", "Alumina"],
+                answer: 0
+            },
+            
+            // Reactions (8 questions)
+            {
+                question: "What type is: 2H₂ + O₂ → 2H₂O?",
+                options: ["Combination", "Decomposition", "Displacement", "Redox"],
+                answer: 0
+            },
+            {
+                question: "What is oxidized in: Zn + Cu²⁺ → Zn²⁺ + Cu?",
+                options: ["Zn", "Cu²⁺", "Cu", "None"],
+                answer: 0
+            },
+            {
+                question: "Balance: __Al + __O₂ → __Al₂O₃",
+                options: ["4,3,2", "2,3,1", "4,1,2", "1,1,1"],
+                answer: 0
+            },
+            {
+                question: "What is the pH of 0.01M HCl?",
+                options: ["2", "1", "3", "12"],
+                answer: 0
+            },
+            {
+                question: "In electrolysis, anions move to:",
+                options: ["Anode", "Cathode", "Both electrodes", "Nowhere"],
+                answer: 0
+            },
+            {
+                question: "What is produced at cathode in NaCl electrolysis?",
+                options: ["H₂", "Cl₂", "NaOH", "O₂"],
+                answer: 0
+            },
+            {
+                question: "Rate of reaction increases with:",
+                options: ["Higher temperature", "Lower concentration", "Smaller surface area", "Decreased catalyst"],
+                answer: 0
+            },
+            {
+                question: "What is the Arrhenius equation?",
+                options: ["k = Ae^(-Ea/RT)", "PV = nRT", "ΔG = ΔH - TΔS", "E = hc/λ"],
+                answer: 0
+            },
+            
+            // Periodic Table (9 questions)
+            {
+                question: "How many periods are in the periodic table?",
+                options: ["7", "8", "18", "6"],
+                answer: 0
+            },
+            {
+                question: "Alkali metals are in group:",
+                options: ["1", "2", "17", "18"],
+                answer: 0
+            },
+            {
+                question: "Which element has highest electronegativity?",
+                options: ["F", "Cl", "O", "N"],
+                answer: 0
+            },
+            {
+                question: "Atomic radius decreases:",
+                options: ["Left to right in period", "Top to bottom in group", "With increasing atomic number", "In noble gases"],
+                answer: 0
+            },
+            {
+                question: "What is the electron configuration of oxygen?",
+                options: ["1s²2s²2p⁴", "1s²2s²2p⁶", "1s²2s²2p⁶3s²", "1s²2s²"],
+                answer: 0
+            },
+            {
+                question: "Ionization energy is lowest for:",
+                options: ["Cs", "F", "He", "Ne"],
+                answer: 0
+            },
+            {
+                question: "Transition metals are in:",
+                options: ["d-block", "s-block", "p-block", "f-block"],
+                answer: 0
+            },
+            {
+                question: "Halogens have how many valence electrons?",
+                options: ["7", "1", "2", "8"],
+                answer: 0
+            },
+            {
+                question: "Which is not a metalloid?",
+                options: ["Aluminum", "Silicon", "Arsenic", "Germanium"],
+                answer: 0
+            }
+        ],
+        Programming: [
+            // Python (8 questions)
+            {
+                question: "How do you print 'Hello' in Python?",
+                options: ["print('Hello')", "console.log('Hello')", "System.out.print('Hello')", "echo 'Hello'"],
+                answer: 0
+            },
+            {
+                question: "What is the output of 3 * 'abc' in Python?",
+                options: ["'abcabcabc'", "9", "'abc'", "Error"],
+                answer: 0
+            },
+            {
+                question: "How do you start a for loop from 0 to 9?",
+                options: ["for i in range(10):", "for(i=0;i<10;i++)", "for i<10:", "loop i in 0..9"],
+                answer: 0
+            },
+            {
+                question: "Which creates a tuple?",
+                options: ["t = (1,2,3)", "t = [1,2,3]", "t = {1,2,3}", "t = '1,2,3'"],
+                answer: 0
+            },
+            {
+                question: "What does [x**2 for x in range(5)] create?",
+                options: ["[0,1,4,9,16]", "[0,1,4,9]", "[1,4,9,16,25]", "Error"],
+                answer: 0
+            },
+            {
+                question: "How do you read a file in Python?",
+                options: ["with open('file.txt') as f:", "file.read('file.txt')", "read_file('file.txt')", "open('file.txt').read()"],
+                answer: 0
+            },
+            {
+                question: "What is the output of 'Hello'[1:4]?",
+                options: ["'ell'", "'Hel'", "'llo'", "'Hello'"],
+                answer: 0
+            },
+            {
+                question: "Which is immutable?",
+                options: ["Tuple", "List", "Dictionary", "Set"],
+                answer: 0
+            },
+            
+            // JavaScript (8 questions)
+            {
+                question: "How do you declare a variable in JS?",
+                options: ["let x;", "var x;", "int x;", "Both 1 & 2"],
+                answer: 3
+            },
+            {
+                question: "What is the output of 2 + '2' in JS?",
+                options: ["'22'", "4", "NaN", "Error"],
+                answer: 0
+            },
+            {
+                question: "How do you add an event listener?",
+                options: ["element.addEventListener('click',func)", "element.onclick(func)", "element.click=func", "element:click(func)"],
+                answer: 0
+            },
+            {
+                question: "What does === check?",
+                options: ["Value and type", "Only value", "Only type", "Reference"],
+                answer: 0
+            },
+            {
+                question: "What is the DOM?",
+                options: ["Document Object Model", "Data Object Model", "Display Object Management", "Document Order Model"],
+                answer: 0
+            },
+            {
+                question: "How do you make an HTTP request?",
+                options: ["fetch()", "http.get()", "request()", "ajax()"],
+                answer: 0
+            },
+            {
+                question: "What is a closure?",
+                options: ["Function with access to outer scope", "Block of code", "Data structure", "Loop type"],
+                answer: 0
+            },
+            {
+                question: "What does Array.map() do?",
+                options: ["Creates new array by transforming elements", "Filters elements", "Reduces to single value", "Sorts elements"],
+                answer: 0
+            },
+            
+            // Algorithms (9 questions)
+            {
+                question: "What is the time complexity of binary search?",
+                options: ["O(log n)", "O(n)", "O(n log n)", "O(1)"],
+                answer: 0
+            },
+            {
+                question: "Which is a stable sorting algorithm?",
+                options: ["Merge sort", "Quick sort", "Heap sort", "Selection sort"],
+                answer: 0
+            },
+            {
+                question: "In a max-heap, the largest element is at:",
+                options: ["Root", "Leftmost leaf", "Rightmost leaf", "Random position"],
+                answer: 0
+            },
+            {
+                question: "BFS uses which data structure?",
+                options: ["Queue", "Stack", "Heap", "Tree"],
+                answer: 0
+            },
+            {
+                question: "What is memoization used for?",
+                options: ["Optimizing recursion", "Data storage", "Encryption", "Sorting"],
+                answer: 0
+            },
+            {
+                question: "Which algorithm uses divide and conquer?",
+                options: ["Merge sort", "Bubble sort", "Insertion sort", "Linear search"],
+                answer: 0
+            },
+            {
+                question: "What does Dijkstra's algorithm find?",
+                options: ["Shortest path", "Minimum spanning tree", "Strongly connected components", "Max flow"],
+                answer: 0
+            },
+            {
+                question: "What is the worst-case complexity of quicksort?",
+                options: ["O(n²)", "O(n log n)", "O(n)", "O(log n)"],
+                answer: 0
+            },
+            {
+                question: "Which data structure uses LIFO?",
+                options: ["Stack", "Queue", "Array", "Linked list"],
+                answer: 0
+            }
+        ],
+        Biology: [
+            // Cell Biology (8 questions)
+            {
+                question: "What is the powerhouse of the cell?",
+                options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi"],
+                answer: 0
+            },
+            {
+                question: "Where does photosynthesis occur?",
+                options: ["Chloroplast", "Mitochondria", "Nucleus", "Vacuole"],
+                answer: 0
+            },
+            {
+                question: "What is the function of ribosomes?",
+                options: ["Protein synthesis", "Lipid synthesis", "ATP production", "Waste removal"],
+                answer: 0
+            },
+            {
+                question: "What is diffusion?",
+                options: ["Movement from high to low concentration", "Movement against gradient", "Water movement", "Active transport"],
+                answer: 0
+            },
+            {
+                question: "Which organelle contains DNA?",
+                options: ["Nucleus", "Ribosome", "Endoplasmic reticulum", "Lysosome"],
+                answer: 0
+            },
+            {
+                question: "What is osmosis?",
+                options: ["Water diffusion", "Ion transport", "Glucose transport", "Protein synthesis"],
+                answer: 0
+            },
+            {
+                question: "What process produces gametes?",
+                options: ["Meiosis", "Mitosis", "Binary fission", "Budding"],
+                answer: 0
+            },
+            {
+                question: "What is the cell membrane made of?",
+                options: ["Phospholipid bilayer", "Cellulose", "Chitin", "Protein"],
+                answer: 0
+            },
+            
+            // Genetics (8 questions)
+            {
+                question: "What is a genotype?",
+                options: ["Genetic makeup", "Physical trait", "Protein structure", "Cell type"],
+                answer: 0
+            },
+            {
+                question: "How many chromosomes in humans?",
+                options: ["46", "23", "48", "24"],
+                answer: 0
+            },
+            {
+                question: "What is a dominant allele?",
+                options: ["Expressed in phenotype", "Hidden in phenotype", "Rare allele", "Mutated gene"],
+                answer: 0
+            },
+            {
+                question: "What does DNA polymerase do?",
+                options: ["Synthesizes DNA", "Unzips DNA", "Repairs DNA", "Transcribes DNA"],
+                answer: 0
+            },
+            {
+                question: "What is transcription?",
+                options: ["DNA to RNA", "RNA to protein", "DNA to protein", "RNA to DNA"],
+                answer: 0
+            },
+            {
+                question: "What is a mutation?",
+                options: ["Change in DNA sequence", "Cell division error", "Protein misfolding", "Chromosome loss"],
+                answer: 0
+            },
+            {
+                question: "What is PCR used for?",
+                options: ["DNA amplification", "Protein synthesis", "Cell culture", "DNA sequencing"],
+                answer: 0
+            },
+            {
+                question: "Which is not a nitrogenous base?",
+                options: ["Amino acid", "Adenine", "Guanine", "Cytosine"],
+                answer: 0
+            },
+            
+            // Ecology (9 questions)
+            {
+                question: "What is a primary consumer?",
+                options: ["Herbivore", "Carnivore", "Decomposer", "Producer"],
+                answer: 0
+            },
+            {
+                question: "What is carrying capacity?",
+                options: ["Max population an environment can support", "Growth rate", "Birth rate", "Death rate"],
+                answer: 0
+            },
+            {
+                question: "What is commensalism?",
+                options: ["One benefits, other unaffected", "Both benefit", "One harmed", "Both harmed"],
+                answer: 0
+            },
+            {
+                question: "Which is a biotic factor?",
+                options: ["Predator", "Temperature", "Rainfall", "Sunlight"],
+                answer: 0
+            },
+            {
+                question: "What is the carbon cycle?",
+                options: ["Movement of carbon through ecosystems", "Oxygen exchange", "Nitrogen fixation", "Water cycle"],
+                answer: 0
+            },
+            {
+                question: "What is biodiversity?",
+                options: ["Variety of life", "Population size", "Ecosystem area", "Genetic similarity"],
+                answer: 0
+            },
+            {
+                question: "What causes acid rain?",
+                options: ["SO₂ and NOₓ", "CO₂", "O₃", "CH₄"],
+                answer: 0
+            },
+            {
+                question: "What is an invasive species?",
+                options: ["Non-native that causes harm", "Endangered species", "Keystone species", "Indicator species"],
+                answer: 0
+            },
+            {
+                question: "What is the main greenhouse gas?",
+                options: ["CO₂", "O₂", "N₂", "H₂O"],
+                answer: 0
+            }
+        ]
+    };
+    
+    // Current test state
+    let currentTest = {
+        subject: "",
+        questions: [],
+        currentQuestion: 0,
+        answers: [],
+        timeLeft: 60 * 60, // 60 minutes in seconds
+        timer: null
+    };
+    
+    // Function to show a specific section and hide others
+    function showSection(sectionId) {
+        // Hide all content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Show the requested section
+        document.getElementById(sectionId).style.display = 'block';
+        
+        // Update active nav link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+        
+        // Initialize charts if showing progress
+        if (sectionId === 'progress') {
+            initProgressChart();
+        }
+    }
+    
+    // Function to handle subject selection
+    function selectSubject(subject) {
+        currentTest.subject = subject;
+        
+        // Update UI to show selected subject
+        document.querySelectorAll('.subject-option').forEach(option => {
+            option.style.background = '#f8f9fa';
+        });
+        
+        // Highlight selected subject
+        event.currentTarget.style.background = '#e8f4fc';
+    }
+    
+    // Function to start the test
+    function startTest() {
+        if (!currentTest.subject) {
+            alert('Please select a subject first!');
+            return;
+        }
+        
+        // Reset test data
+        currentTest.questions = [...subjects[currentTest.subject]];
+        currentTest.currentQuestion = 0;
+        currentTest.answers = Array(currentTest.questions.length).fill(null);
+        currentTest.timeLeft = 60 * 60;
+        
+        // Show test taking section
+        showSection('test-taking');
+        
+        // Set test title
+        document.getElementById('test-subject').textContent = currentTest.subject + ' Test';
+        
+        // Load first question
+        loadQuestion(currentTest.currentQuestion);
+        
+        // Start timer
+        startTimer();
+    }
+    
+    // Function to load a question
+    function loadQuestion(index) {
+        const question = currentTest.questions[index];
+        document.getElementById('question-text').textContent = question.question;
+        
+        // Clear previous options
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        
+        // Add new options
+        question.options.forEach((option, i) => {
+            const optionElement = document.createElement('label');
+            optionElement.className = 'option';
+            
+            if (currentTest.answers[index] === i) {
+                optionElement.classList.add('selected');
+            }
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'answer';
+            input.value = i;
+            
+            input.addEventListener('change', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to current option
+                optionElement.classList.add('selected');
+                
+                // Save answer
+                currentTest.answers[index] = i;
+            });
+            
+            optionElement.appendChild(input);
+            optionElement.appendChild(document.createTextNode(option));
+            
+            optionsContainer.appendChild(optionElement);
+        });
+    }
+    
+    // Function to go to next question
+    function nextQuestion() {
+        if (currentTest.currentQuestion < currentTest.questions.length - 1) {
+            currentTest.currentQuestion++;
+            loadQuestion(currentTest.currentQuestion);
+        }
+    }
+    
+    // Function to go to previous question
+    function prevQuestion() {
+        if (currentTest.currentQuestion > 0) {
+            currentTest.currentQuestion--;
+            loadQuestion(currentTest.currentQuestion);
+        }
+    }
+    
+    // Function to submit test
+    function submitTest() {
+        // Stop timer
+        clearInterval(currentTest.timer);
+        
+        // Calculate score
+        let correctCount = 0;
+        currentTest.questions.forEach((question, index) => {
+            if (currentTest.answers[index] === question.answer) {
+                correctCount++;
+            }
+        });
+        
+        const percentage = Math.round((correctCount / currentTest.questions.length) * 100);
+        const timeTaken = Math.floor((60 * 60 - currentTest.timeLeft) / 60);
+        
+        // Update overall progress
+        document.getElementById('overall-progress').textContent = percentage + '%';
+        
+        // Update results display
+        document.getElementById('result-score').textContent = percentage + '%';
+        document.getElementById('overall-score').textContent = percentage + '%';
+        document.getElementById('correct-answers').textContent = correctCount + '/' + currentTest.questions.length;
+        document.getElementById('time-taken').textContent = timeTaken + 'm';
+        
+        // Show results section
+        showSection('results');
+    }
+    
+    // Function to start the timer
+    function startTimer() {
+        // Clear any existing timer
+        if (currentTest.timer) {
+            clearInterval(currentTest.timer);
+        }
+        
+        // Update timer immediately
+        updateTimer();
+        
+        // Set interval to update timer every second
+        currentTest.timer = setInterval(function() {
+            currentTest.timeLeft--;
+            updateTimer();
+            
+            // End test if time runs out
+            if (currentTest.timeLeft <= 0) {
+                clearInterval(currentTest.timer);
+                submitTest();
+            }
+        }, 1000);
+    }
+    
+    // Function to update timer display
+    function updateTimer() {
+        const minutes = Math.floor(currentTest.timeLeft / 60);
+        const seconds = currentTest.timeLeft % 60;
+        document.getElementById('timer').textContent = 
+            minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+    }
+    
+    // Function to initialize progress chart
+    function initProgressChart() {
+        const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Daily Score (%)',
+                    data: [72, 65, 82, 78, 90, 85, 70],
+                    backgroundColor: '#3498db',
+                    borderColor: '#2980b9',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // Initialize the dashboard as the default view
+    document.addEventListener('DOMContentLoaded', function() {
+        showSection('dashboard');
+        initProgressChart();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Security Scanner | CyberShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --gray-color: #6b7280;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            background-color: #e5e7eb;
+        }
+
+        nav a.active {
+            color: white;
+            background-color: var(--primary-color);
+        }
+
+        .user-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        #user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 10px 0;
+            width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+        }
+
+        .user-menu:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main Content Styles */
+        main.scanner-container {
+            padding: 30px 0 50px;
+        }
+
+        main.scanner-container h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        main.scanner-container p {
+            color: var(--gray-color);
+            margin-bottom: 30px;
+        }
+
+        /* Scanner Form Styles */
+        .scanner-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .input-group button {
+            padding: 0 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .input-group button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .scan-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .scan-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #f3f4f6;
+            transition: all 0.2s;
+        }
+
+        .scan-options label:hover {
+            background-color: #e5e7eb;
+        }
+
+        .scan-options input {
+            cursor: pointer;
+        }
+
+        /* Scan Progress Styles */
+        .scan-progress {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background-color: var(--primary-color);
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            text-align: center;
+        }
+
+        /* Results Container Styles */
+        .results-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Summary Styles */
+        .results-summary {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .results-summary h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .summary-card {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .summary-card .count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .summary-card .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-card.critical {
+            background-color: var(--danger-color);
+        }
+
+        .summary-card.high {
+            background-color: #f97316;
+        }
+
+        .summary-card.medium {
+            background-color: var(--warning-color);
+        }
+
+        .summary-card.low {
+            background-color: var(--secondary-color);
+        }
+
+        .summary-card.info {
+            background-color: var(--info-color);
+        }
+
+        /* Vulnerability Details Styles */
+        .results-details {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+        }
+
+        .results-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .vulnerability-list {
+            min-height: 300px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: var(--gray-color);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+
+        .vulnerability-item {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            background-color: #f9fafb;
+            border-left: 4px solid var(--gray-color);
+        }
+
+        .vulnerability-item.critical {
+            border-left-color: var(--danger-color);
+        }
+
+        .vulnerability-item.high {
+            border-left-color: #f97316;
+        }
+
+        .vulnerability-item.medium {
+            border-left-color: var(--warning-color);
+        }
+
+        .vulnerability-item.low {
+            border-left-color: var(--secondary-color);
+        }
+
+        .vulnerability-item.info {
+            border-left-color: var(--info-color);
+        }
+
+        .vulnerability-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .vulnerability-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .vulnerability-severity {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .severity-critical {
+            background-color: var(--danger-color);
+        }
+
+        .severity-high {
+            background-color: #f97316;
+        }
+
+        .severity-medium {
+            background-color: var(--warning-color);
+        }
+
+        .severity-low {
+            background-color: var(--secondary-color);
+        }
+
+        .severity-info {
+            background-color: var(--info-color);
+        }
+
+        .vulnerability-desc {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--gray-color);
+        }
+
+        .vulnerability-solution {
+            font-size: 0.85rem;
+            padding: 10px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .solution-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        /* Scan History Styles */
+        .scan-history {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+        }
+
+        .scan-history h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .history-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background-color: #f9fafb;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .history-item {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .history-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .history-url {
+            font-weight: 500;
+            color: var(--primary-color);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-date {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+
+        .history-status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .history-status.critical {
+            background-color: #fee2e2;
+            color: var(--danger-color);
+        }
+
+        .history-status.high {
+            background-color: #ffedd5;
+            color: #f97316;
+        }
+
+        .history-status.medium {
+            background-color: #fef3c7;
+            color: var(--warning-color);
+        }
+
+        .history-status.low {
+            background-color: #d1fae5;
+            color: var(--secondary-color);
+        }
+
+        .history-status.info {
+            background-color: #dbeafe;
+            color: var(--info-color);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--gray-color);
+            color: var(--gray-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .footer-section p {
+            color: #d1d5db;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #d1d5db;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #374151;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: #9ca3af;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: white;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .user-menu {
+                margin-top: 10px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-group input {
+                border-radius: var(--border-radius);
+                margin-bottom: 10px;
+            }
+
+            .input-group button {
+                border-radius: var(--border-radius);
+                width: 100%;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" alt="CyberShield Logo">
+                <h1>CyberShield</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="scan.html" class="active">Scanner</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                    <li><a href="mocktest.html">Mock Test</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <span id="username">John Doe</span>
+                <img src="images/user-avatar.png" alt="User Avatar" id="user-avatar">
+                <div class="dropdown-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="#">Settings</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="scanner-container">
+        <div class="container">
+            <h2>Website Security Scanner</h2>
+            <p>Enter a website URL to scan for vulnerabilities and potential cyber attacks.</p>
+            
+            <div class="scanner-form">
+                <div class="input-group">
+                    <input type="text" id="website-url" placeholder="https://example.com" required>
+                    <button id="scan-btn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Scan Now
+                    </button>
+                </div>
+                <div class="scan-options">
+                    <label><input type="checkbox" name="scan-type" value="xss" checked> XSS Vulnerabilities</label>
+                    <label><input type="checkbox" name="scan-type" value="sql" checked> SQL Injection</label>
+                    <label><input type="checkbox" name="scan-type" value="csrf" checked> CSRF Vulnerabilities</label>
+                    <label><input type="checkbox" name="scan-type" value="headers"> Security Headers</label>
+                    <label><input type="checkbox" name="scan-type" value="ssl"> SSL/TLS Configuration</label>
+                </div>
+            </div>
+
+            <div class="scan-results" id="scan-results">
+                <div class="scan-progress" id="scan-progress">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Ready to scan</div>
+                </div>
+
+                <div class="results-container">
+                    <div class="results-summary" id="results-summary">
+                        <h3>Scan Summary</h3>
+                        <div class="summary-cards">
+                            <div class="summary-card critical">
+                                <span class="count" id="critical-count">0</span>
+                                <span class="label">Critical</span>
+                            </div>
+                            <div class="summary-card high">
+                                <span class="count" id="high-count">0</span>
+                                <span class="label">High</span>
+                            </div>
+                            <div class="summary-card medium">
+                                <span class="count" id="medium-count">0</span>
+                                <span class="label">Medium</span>
+                            </div>
+                            <div class="summary-card low">
+                                <span class="count" id="low-count">0</span>
+                                <span class="label">Low</span>
+                            </div>
+                            <div class="summary-card info">
+                                <span class="count" id="info-count">0</span>
+                                <span class="label">Info</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-details" id="results-details">
+                        <h3>Vulnerability Details</h3>
+                        <div class="vulnerability-list" id="vulnerability-list">
+                            <div class="empty-state">
+                                <i class="fas fa-search"></i>
+                                <p>Scan a website to see vulnerability details</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scan-history" id="scan-history">
+                <h3>Previous Scans</h3>
+                <div class="history-list" id="history-list">
+                    <div class="history-item">
+                        <div class="history-url">https://example.com</div>
+                        <div class="history-date">Oct 15, 2023</div>
+                        <div class="history-status critical">3 Critical</div>
+                        <button class="btn btn-outline btn-sm">View Report</button>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-url">https://testsite.org</div>
+                        <div class="history-date">Oct 10, 2023</div>
+                        <div class="history-status medium">2 Medium</div>
+                        <button class="btn btn-outline btn-sm">View Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>CyberShield</h4>
+                    <p>Comprehensive website security analysis and protection platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="scan.html">Website Scanner</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="analysis.html">Security Analysis</a></li>
+                        <li><a href="mocktest.html">Mock Tests</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>support@cybershield.com</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 CyberShield. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Basic scanner functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const scanBtn = document.getElementById('scan-btn');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            const vulnerabilityList = document.getElementById('vulnerability-list');
+            
+            // Sample vulnerabilities data
+            const sampleVulnerabilities = [
+                {
+                    title: "Cross-Site Scripting (XSS) Vulnerability",
+                    severity: "critical",
+                    description: "The website is vulnerable to stored XSS attacks in the comment section. Attackers can inject malicious scripts that will be executed when other users view the page.",
+                    solution: "Implement proper input sanitization and output encoding. Use Content Security Policy (CSP) headers to mitigate XSS risks."
+                },
+                {
+                    title: "Missing Secure Flag on Cookies",
+                    severity: "high",
+                    description: "Session cookies are being transmitted over unencrypted connections without the Secure flag, making them susceptible to interception.",
+                    solution: "Set the Secure flag for all cookies and ensure they are only transmitted over HTTPS connections."
+                },
+                {
+                    title: "Outdated jQuery Version (1.8.3)",
+                    severity: "medium",
+                    description: "The website is using an outdated version of jQuery which has known security vulnerabilities.",
+                    solution: "Update jQuery to the latest stable version (3.6.0 or higher) to patch known vulnerabilities."
+                },
+                {
+                    title: "Missing X-Frame-Options Header",
+                    severity: "low",
+                    description: "The website is missing the X-Frame-Options header, which could allow clickjacking attacks.",
+                    solution: "Add the X-Frame-Options header with a value of 'DENY' or 'SAMEORIGIN' to prevent framing of your site."
+                },
+                {
+                    title: "Server Version Disclosure",
+                    severity: "info",
+                    description: "The server is disclosing its version information in the HTTP headers (Apache/2.4.29).",
+                    solution: "Configure the server to suppress version information in headers to make it harder for attackers to target known vulnerabilities."
+                }
+            ];
+
+            scanBtn.addEventListener('click', function() {
+                const websiteUrl = document.getElementById('website-url').value;
+                
+                if (!websiteUrl) {
+                    alert('Please enter a website URL to scan');
+                    return;
+                }
+                
+                // Reset progress
+                progressFill.style.width = '0%';
+                progressText.textContent = 'Scanning...';
+                
+                // Simulate scanning progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 10) + 5;
+                    if (progress > 100) progress = 100;
+                    progressFill.style.width = `${progress}%`;
+                    
+                    if (progress < 30) {
+                        progressText.textContent = 'Scanning headers...';
+                    } else if (progress < 60) {
+                        progressText.textContent = 'Checking for vulnerabilities...';
+                    } else if (progress < 90) {
+                        progressText.textContent = 'Analyzing results...';
+                    } else {
+                        progressText.textContent = 'Finalizing report...';
+                    }
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        progressText.textContent = 'Scan completed!';
+                        showScanResults();
+                    }
+                }, 500);
+            });
+            
+            function showScanResults() {
+                // Update summary counts
+                document.getElementById('critical-count').textContent = '1';
+                document.getElementById('high-count').textContent = '1';
+                document.getElementById('medium-count').textContent = '1';
+                document.getElementById('low-count').textContent = '1';
+                document.getElementById('info-count').textContent = '1';
+                
+                // Display vulnerabilities
+                vulnerabilityList.innerHTML = '';
+                
+                sampleVulnerabilities.forEach(vuln => {
+                    const severityClass = `severity-${vuln.severity}`;
+                    
+                    const vulnItem = document.createElement('div');
+                    vulnItem.className = `vulnerability-item ${vuln.severity}`;
+                    vulnItem.innerHTML = `
+                        <div class="vulnerability-header">
+                            <div class="vulnerability-title">${vuln.title}</div>
+                            <div class="vulnerability-severity ${severityClass}">${vuln.severity}</div>
+                        </div>
+                        <div class="vulnerability-desc">${vuln.description}</div>
+                        <div class="vulnerability-solution">
+                            <div class="solution-title">Solution:</div>
+                            <div>${vuln.solution}</div>
+                        </div>
+                    `;
+                    
+                    vulnerabilityList.appendChild(vulnItem);
+                });
+                
+                // Add to scan history
+                const historyList = document.getElementById('history-list');
+                const newHistoryItem = document.createElement('div');
+                newHistoryItem.className = 'history-item';
+                newHistoryItem.innerHTML = `
+                    <div class="history-url">${document.getElementById('website-url').value}</div>
+                    <div class="history-date">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                    <div class="history-status critical">1 Critical</div>
+                    <button class="btn btn-outline btn-sm">View Report</button>
+                `;
+                historyList.insertBefore(newHistoryItem, historyList.firstChild);
+            }
+            
+            // User dropdown functionality
+            const userMenu = document.querySelector('.user-menu');
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.querySelector('.dropdown-menu').classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking elsewhere
+            document.addEventListener('click', function() {
+                document.querySelector('.dropdown-menu').classList.remove('show');
+            });
+            
+            // Logout functionality
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Add logout logic here
+                alert('You have been logged out');
+            });
+        });
+    </script>
+</body>
+</html>

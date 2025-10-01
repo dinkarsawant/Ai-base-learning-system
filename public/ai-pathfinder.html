@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Path Finder - Navigate Home</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+        
+        .back-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+        
+        .back-btn span {
+            margin-right: 8px;
+        }
+        
+        /* Game Container */
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .game-container {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        
+        .grid-background {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cell {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .ai-character {
+            font-size: 28px;
+            animation: float 3s ease-in-out infinite;
+            z-index: 10;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .home-base {
+            font-size: 28px;
+            animation: pulse 2s infinite;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .wall {
+            background-color: #795548;
+            border: 2px solid #5D4037;
+        }
+        
+        .water {
+            background-color: #2196F3;
+            opacity: 0.7;
+            animation: wave 3s infinite linear;
+        }
+        
+        @keyframes wave {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+        
+        .fire {
+            background-color: #FF5722;
+            animation: flicker 0.5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        .path {
+            background-color: rgba(76, 175, 80, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-move {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-reset {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-hint {
+            background-color: #FFC107;
+            color: black;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            width: 250px;
+            height: 250px;
+        }
+        
+        .mobile-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mobile-btn:active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-btn-up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        
+        .mobile-btn-left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .mobile-btn-right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        
+        .mobile-btn-down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 650px) {
+            .game-container {
+                width: 100%;
+                height: 90vw;
+            }
+            
+            .mobile-controls {
+                display: grid;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+        
+        /* Instructions */
+        .instructions {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .instructions h2 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #4CAF50;
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        /* Level Complete Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+            animation: modalFade 0.3s;
+        }
+        
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .modal-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .modal-stat {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            min-width: 120px;
+        }
+        
+        .modal-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFC107;
+        }
+        
+        .modal-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span>🤖</span>
+                AI Path Finder
+            </div>
+            <a href="index.html" class="back-btn">
+                <span>←</span> Back to Home
+            </a>
+        </header>
+        
+        <div class="game-wrapper">
+            <div class="game-header">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div>Level</div>
+                        <div class="stat-value" id="level-display">1</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Moves</div>
+                        <div class="stat-value" id="moves-display">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>Time</div>
+                        <div class="stat-value" id="time-display">00:00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-container" id="game-container">
+                <!-- Grid will be generated by JavaScript -->
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-move" id="btn-hint">
+                    <span>💡</span> Hint
+                </button>
+                <button class="btn btn-reset" id="btn-reset">
+                    <span>🔄</span> Reset
+                </button>
+            </div>
+            
+            <div class="mobile-controls">
+                <button class="mobile-btn mobile-btn-up" id="btn-up">↑</button>
+                <button class="mobile-btn mobile-btn-left" id="btn-left">←</button>
+                <button class="mobile-btn mobile-btn-right" id="btn-right">→</button>
+                <button class="mobile-btn mobile-btn-down" id="btn-down">↓</button>
+            </div>
+            
+            <div class="instructions">
+                <h2>How to Play</h2>
+                <ul>
+                    <li>Guide the AI (🤖) to its home (🏠) using the arrow keys or on-screen buttons</li>
+                    <li>Avoid obstacles or plan your path carefully</li>
+                    <li>Walls (🧱) block your path completely</li>
+                    <li>Water (💧) slows you down (costs +1 move)</li>
+                    <li>Fire (🔥) damages you (costs +1 move)</li>
+                    <li>Complete each level as quickly as possible with the fewest moves</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Level Complete Modal -->
+    <div class="modal" id="level-complete-modal">
+        <div class="modal-content">
+            <h2>Level Complete!</h2>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div>Moves</div>
+                    <div class="modal-stat-value" id="modal-moves">0</div>
+                </div>
+                <div class="modal-stat">
+                    <div>Time</div>
+                    <div class="modal-stat-value" id="modal-time">00:00</div>
+                </div>
+            </div>
+            <p>Well done! Ready for the next challenge?</p>
+            <button class="modal-btn" id="next-level-btn">Next Level</button>
+        </div>
+    </div>
+    
+    <script>
+        class AIPathFinder {
+            constructor() {
+                this.level = 1;
+                this.moves = 0;
+                this.time = 0;
+                this.timer = null;
+                this.gridSize = 10;
+                this.aiPosition = {x: 0, y: 0};
+                this.homePosition = {x: 9, y: 9};
+                this.obstacles = [];
+                this.path = [];
+                this.showingHint = false;
+                this.gameActive = true;
+                
+                // DOM Elements
+                this.gameContainer = document.getElementById('game-container');
+                this.levelDisplay = document.getElementById('level-display');
+                this.movesDisplay = document.getElementById('moves-display');
+                this.timeDisplay = document.getElementById('time-display');
+                this.modal = document.getElementById('level-complete-modal');
+                this.modalMoves = document.getElementById('modal-moves');
+                this.modalTime = document.getElementById('modal-time');
+                
+                this.initGame();
+                this.setupEventListeners();
+            }
+            
+            initGame() {
+                this.gameContainer.innerHTML = '';
+                this.generateObstacles();
+                this.createGrid();
+                this.startTimer();
+                this.updateDisplays();
+                this.gameActive = true;
+            }
+            
+            createGrid() {
+                // Create 10x10 grid
+                for (let y = 0; y < this.gridSize; y++) {
+                    for (let x = 0; x < this.gridSize; x++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.x = x;
+                        cell.dataset.y = y;
+                        
+                        // Add AI character
+                        if (x === this.aiPosition.x && y === this.aiPosition.y) {
+                            const ai = document.createElement('div');
+                            ai.className = 'ai-character';
+                            ai.textContent = '🤖';
+                            cell.appendChild(ai);
+                        }
+                        
+                        // Add home base
+                        if (x === this.homePosition.x && y === this.homePosition.y) {
+                            const home = document.createElement('div');
+                            home.className = 'home-base';
+                            home.textContent = '🏠';
+                            cell.appendChild(home);
+                        }
+                        
+                        // Add obstacles
+                        const obstacle = this.obstacles.find(obs => obs.x === x && obs.y === y);
+                        if (obstacle) {
+                            cell.classList.add(obstacle.type);
+                            
+                            // Add obstacle emoji
+                            const emoji = document.createElement('div');
+                            emoji.style.position = 'absolute';
+                            emoji.style.fontSize = '20px';
+                            
+                            switch(obstacle.type) {
+                                case 'wall': emoji.textContent = '🧱'; break;
+                                case 'water': emoji.textContent = '💧'; break;
+                                case 'fire': emoji.textContent = '🔥'; break;
+                            }
+                            
+                            cell.appendChild(emoji);
+                        }
+                        
+                        this.gameContainer.appendChild(cell);
+                    }
+                }
+            }
+            
+            generateObstacles() {
+                this.obstacles = [];
+                const obstacleCount = Math.min(5 + this.level * 2, 30);
+                
+                for (let i = 0; i < obstacleCount; i++) {
+                    let x, y;
+                    do {
+                        x = Math.floor(Math.random() * this.gridSize);
+                        y = Math.floor(Math.random() * this.gridSize);
+                    } while (
+                        (x === this.aiPosition.x && y === this.aiPosition.y) ||
+                        (x === this.homePosition.x && y === this.homePosition.y) ||
+                        this.obstacles.some(obs => obs.x === x && obs.y === y)
+                    );
+                    
+                    const types = ['wall', 'water', 'fire'];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    this.obstacles.push({x, y, type});
+                }
+            }
+            
+            moveAI(direction) {
+                if (!this.gameActive) return false;
+                
+                // Calculate new position
+                let newX = this.aiPosition.x;
+                let newY = this.aiPosition.y;
+                
+                switch(direction) {
+                    case 'up': newY--; break;
+                    case 'down': newY++; break;
+                    case 'left': newX--; break;
+                    case 'right': newX++; break;
+                }
+                
+                // Check boundaries
+                if (newX < 0 || newX >= this.gridSize || newY < 0 || newY >= this.gridSize) {
+                    return false;
+                }
+                
+                // Check obstacles
+                const obstacle = this.obstacles.find(obs => obs.x === newX && obs.y === newY);
+                if (obstacle && obstacle.type === 'wall') {
+                    return false;
+                }
+                
+                // Update position
+                this.aiPosition = {x: newX, y: newY};
+                this.moves++;
+                
+                // Extra move cost for water/fire
+                if (obstacle && (obstacle.type === 'water' || obstacle.type === 'fire')) {
+                    this.moves++;
+                }
+                
+                this.updateDisplays();
+                this.renderMove();
+                
+                // Check win condition
+                if (newX === this.homePosition.x && newY === this.homePosition.y) {
+                    this.levelComplete();
+                }
+                
+                return true;
+            }
+            
+            renderMove() {
+                // Clear previous AI position
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    const aiElement = cell.querySelector('.ai-character');
+                    if (aiElement) {
+                        aiElement.remove();
+                    }
+                });
+                
+                // Add AI to new position
+                const newCell = document.querySelector(`.cell[data-x="${this.aiPosition.x}"][data-y="${this.aiPosition.y}"]`);
+                if (newCell) {
+                    const ai = document.createElement('div');
+                    ai.className = 'ai-character';
+                    ai.textContent = '🤖';
+                    newCell.appendChild(ai);
+                }
+            }
+            
+            levelComplete() {
+                this.gameActive = false;
+                clearInterval(this.timer);
+                
+                // Show modal
+                this.modalMoves.textContent = this.moves;
+                this.modalTime.textContent = this.formatTime(this.time);
+                this.modal.style.display = 'flex';
+            }
+            
+            nextLevel() {
+                this.level++;
+                this.moves = 0;
+                this.time = 0;
+                this.aiPosition = {x: 0, y: 0};
+                this.modal.style.display = 'none';
+                this.initGame();
+            }
+            
+            resetLevel() {
+                this.moves = 0;
+                this.time = 0;
+                this.aiPosition = {x: 0, y: 0};
+                clearInterval(this.timer);
+                this.initGame();
+            }
+            
+            startTimer() {
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.time++;
+                    this.updateDisplays();
+                }, 1000);
+            }
+            
+            updateDisplays() {
+                this.levelDisplay.textContent = this.level;
+                this.movesDisplay.textContent = this.moves;
+                this.timeDisplay.textContent = this.formatTime(this.time);
+            }
+            
+            formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            showHint() {
+                if (this.showingHint) {
+                    this.clearHint();
+                    this.showingHint = false;
+                    return;
+                }
+                
+                this.clearHint();
+                this.showingHint = true;
+                
+                // Simple pathfinding (right then down)
+                let currentX = this.aiPosition.x;
+                let currentY = this.aiPosition.y;
+                
+                // Move right until we reach home column or hit a wall
+                while (currentX < this.homePosition.x) {
+                    currentX++;
+                    
+                    // Check if this cell has a wall
+                    const hasWall = this.obstacles.some(obs => 
+                        obs.x === currentX && 
+                        obs.y === currentY && 
+                        obs.type === 'wall'
+                    );
+                    
+                    if (hasWall) {
+                        currentX--; // Back up one
+                        break;
+                    }
+                    
+                    const cell = document.querySelector(`.cell[data-x="${currentX}"][data-y="${currentY}"]`);
+                    if (cell) {
+                        cell.classList.add('path');
+                    }
+                }
+                
+                // Move down until we reach home row
+                while (currentY < this.homePosition.y) {
+                    currentY++;
+                    
+                    const cell = document.querySelector(`.cell[data-x="${currentX}"][data-y="${currentY}"]`);
+                    if (cell) {
+                        cell.classList.add('path');
+                    }
+                }
+            }
+            
+            clearHint() {
+                document.querySelectorAll('.path').forEach(cell => {
+                    cell.classList.remove('path');
+                });
+            }
+            
+            setupEventListeners() {
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp': this.moveAI('up'); break;
+                        case 'ArrowRight': this.moveAI('right'); break;
+                        case 'ArrowDown': this.moveAI('down'); break;
+                        case 'ArrowLeft': this.moveAI('left'); break;
+                    }
+                });
+                
+                // Button controls
+                document.getElementById('btn-up').addEventListener('click', () => this.moveAI('up'));
+                document.getElementById('btn-down').addEventListener('click', () => this.moveAI('down'));
+                document.getElementById('btn-left').addEventListener('click', () => this.moveAI('left'));
+                document.getElementById('btn-right').addEventListener('click', () => this.moveAI('right'));
+                
+                // Other buttons
+                document.getElementById('btn-hint').addEventListener('click', () => this.showHint());
+                document.getElementById('btn-reset').addEventListener('click', () => this.resetLevel());
+                document.getElementById('next-level-btn').addEventListener('click', () => this.nextLevel());
+            }
+        }
+        
+        // Initialize the game when page loads
+        window.onload = () => {
+            const game = new AIPathFinder();
+        };
+    </script>
+</body>
+</html>

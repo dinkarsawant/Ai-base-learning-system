@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biology Courses | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e1e5eb;
+            --dark-gray: #6c757d;
+            --black: #212529;
+            --biology-primary: #4caf50;
+            --biology-primary-light: #80e27e;
+            --biology-primary-dark: #087f23;
+            --biology-secondary: #e8f5e9;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--black);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        h1, h2, h3, h4 {
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--biology-primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--biology-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--biology-primary);
+            color: var(--biology-primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--biology-primary);
+            color: var(--white);
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--biology-primary);
+        }
+        
+        .logo span {
+            color: var(--black);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--biology-primary);
+        }
+        
+        /* Subject Hero Section */
+        .subject-hero {
+            padding: 5rem 0;
+            color: var(--white);
+        }
+        
+        .biology-hero {
+            background: linear-gradient(135deg, var(--biology-primary) 0%, var(--biology-primary-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .biology-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,0 L100,0 L100,100 Q50,80 0,100 Z"></path></svg>');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+        
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .biology-icon {
+            background-color: var(--biology-primary-light);
+            color: var(--biology-primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .hero-stats {
+            display: flex;
+            margin: 2rem 0;
+        }
+        
+        .stat-item {
+            margin-right: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .hero-image {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            width: 40%;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .breadcrumb {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--white);
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .breadcrumb a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            opacity: 0.6;
+        }
+        
+        /* Subject Overview */
+        .subject-overview {
+            padding: 4rem 0;
+            background-color: var(--white);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            background-color: var(--biology-secondary);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--biology-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-item h3 {
+            color: var(--biology-primary-dark);
+        }
+        
+        /* Course Categories */
+        .subject-categories {
+            padding: 4rem 0;
+            background-color: var(--light-gray);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .category-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-left: 4px solid var(--biology-primary);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .category-card h3 {
+            color: var(--biology-primary-dark);
+        }
+        
+        .course-count {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            background-color: var(--biology-secondary);
+            color: var(--biology-primary-dark);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Featured Courses with Videos */
+        .featured-courses {
+            padding: 4rem 0;
+            background-color: var(--white);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .course-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .course-video-container {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .course-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .course-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.7) 0%, rgba(8, 127, 35, 0.7) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .course-card:hover .course-video-overlay {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.4) 0%, rgba(8, 127, 35, 0.4) 100%);
+        }
+        
+        .play-icon {
+            color: var(--white);
+            font-size: 3rem;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .course-card:hover .play-icon {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        
+        .course-level {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--white);
+            color: var(--biology-primary-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .course-content {
+            padding: 1.5rem;
+        }
+        
+        .course-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--biology-primary-dark);
+        }
+        
+        .course-instructor {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .course-rating {
+            color: #ffc107;
+        }
+        
+        /* Virtual Lab Section */
+        .virtual-lab {
+            padding: 4rem 0;
+            background-color: var(--biology-secondary);
+        }
+        
+        .lab-simulation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .lab-equipment {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(135deg, var(--biology-primary) 0%, var(--biology-primary-dark) 100%);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lab-equipment::before {
+            content: "";
+            width: 200px;
+            height: 200px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="white" stroke-width="2"/><line x1="50" y1="10" x2="50" y2="90" stroke="white" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="white" stroke-width="2" stroke-dasharray="5,5"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        
+        .lab-instructions {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+        }
+        
+        .lab-instructions ol {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .lab-instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Biology Video Resources */
+        .video-resources {
+            padding: 4rem 0;
+            background-color: var(--light-gray);
+        }
+        
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .video-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 1.5rem;
+        }
+        
+        .video-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--biology-primary-dark);
+        }
+        
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            padding: 4rem 0;
+            background-color: var(--biology-primary);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .newsletter-form {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            display: flex;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .newsletter-form button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--biology-primary-dark);
+            color: var(--white);
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .newsletter-form button:hover {
+            background-color: var(--black);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links h3 {
+            color: var(--biology-primary-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--biology-primary-light);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--biology-primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+        
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .modal-video {
+            width: 100%;
+            border-radius: var(--border-radius);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .hero-image {
+                display: none;
+            }
+            
+            .biology-hero::before {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .subject-icon {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .lab-simulation {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input {
+                border-radius: var(--border-radius);
+                margin-bottom: 0.5rem;
+            }
+            
+            .newsletter-form button {
+                border-radius: var(--border-radius);
+            }
+        }
+    </style>
+</head>
+<body class="biology-theme">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Deep<span>Learn</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="about.html">Contact</a></li>
+                <li><a href="auth.html" class="btn btn-primary">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Subject Hero Section -->
+    <section class="subject-hero biology-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> / <a href="categories.html">Categories</a> / <span>Biology</span>
+            </div>
+            <div class="hero-content">
+                <div class="subject-icon biology-icon floating">
+                    <i class="fas fa-dna"></i>
+                </div>
+                <h1>Discover Life Sciences</h1>
+                <p>Explore the wonders of life from microscopic cells to complex ecosystems with our interactive courses. Gain hands-on experience through virtual labs and 3D simulations.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">45K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                </div>
+                <a href="#featured-courses" class="btn btn-primary" style="margin-top: 1rem;">Explore Courses</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn-icons-png.flaticon.com/512/2011/2011407.png" alt="Biology Visualizations">
+            </div>
+        </div>
+    </section>
+
+    <!-- Subject Overview -->
+    <section class="subject-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2>Interactive Biology Learning</h2>
+                <p>Our platform combines cutting-edge technology with expert instruction to create an immersive learning experience. Our 3D models and virtual labs allow you to explore biological concepts in ways never before possible.</p>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="microscope-icon">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3>Virtual Microscopy</h3>
+                        <p>Examine cellular structures in stunning detail with our high-resolution virtual microscope</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-dna"></i>
+                        <h3>DNA Explorer</h3>
+                        <p>Visualize genetic processes in 3D with our interactive molecular models</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-frog"></i>
+                        <h3>Dissection Simulations</h3>
+                        <p>Learn anatomy through our ethical, realistic virtual dissection labs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Categories -->
+    <section class="subject-categories">
+        <div class="container">
+            <h2>Biology Categories</h2>
+            <p>Explore our comprehensive biology curriculum organized by specialty areas</p>
+            <div class="categories-grid">
+                <a href="cell-biology.html" class="category-card">
+                    <h3>Cell Biology</h3>
+                    <p>Structure and function of cells, organelles, and cellular processes</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                <a href="genetics.html" class="category-card">
+                    <h3>Genetics</h3>
+                    <p>DNA, inheritance, gene expression, and evolutionary biology</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                <a href="microbiology.html" class="category-card">
+                    <h3>Microbiology</h3>
+                    <p>Bacteria, viruses, fungi, and their roles in health and disease</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+                <a href="anatomy.html" class="category-card">
+                    <h3>Human Anatomy</h3>
+                    <p>Structure of the human body and physiological systems</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+                <a href="ecology.html" class="category-card">
+                    <h3>Ecology</h3>
+                    <p>Ecosystems, biodiversity, and environmental science</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+                <a href="biochemistry.html" class="category-card">
+                    <h3>Biochemistry</h3>
+                    <p>Chemical processes and molecular interactions in living organisms</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Courses with Videos -->
+    <section class="featured-courses" id="featured-courses">
+        <div class="container">
+            <h2>Featured Biology Courses</h2>
+            <p>Our most popular courses taught by leading biology educators</p>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-video-container">
+                        <video class="course-video" muted loop poster="https://via.placeholder.com/400x225/4caf50/ffffff?text=Molecular+Biology">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-scientist-looking-through-a-microscope-1182-large.mp4" type="video/mp4">
+                        </video>
+                        <div class="course-video-overlay">
+                            <i class="fas fa-play play-icon"></i>
+                        </div>
+                        <span class="course-level">Beginner</span>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Introduction to Molecular Biology</h3>
+                        <p class="course-instructor">Dr. Sarah Chen</p>
+                        <p>Explore the fundamentals of DNA, RNA, and protein synthesis in this comprehensive introductory course.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 8 Weeks</span>
+                            <span class="course-rating"><i class="fas fa-star"></i> 4.8</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-video-container">
+                        <video class="course-video" muted loop poster="https://via.placeholder.com/400x225/4caf50/ffffff?text=Human+Anatomy">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-human-heart-1184-large.mp4" type="video/mp4">
+                        </video>
+                        <div class="course-video-overlay">
+                            <i class="fas fa-play play-icon"></i>
+                        </div>
+                        <span class="course-level">Intermediate</span>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Human Anatomy & Physiology</h3>
+                        <p class="course-instructor">Prof. James Wilson</p>
+                        <p>Detailed study of human body systems with interactive 3D models and virtual dissections.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 12 Weeks</span>
+                            <span class="course-rating"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-video-container">
+                        <video class="course-video" muted loop poster="https://via.placeholder.com/400x225/4caf50/ffffff?text=CRISPR">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-scientist-working-in-a-laboratory-1183-large.mp4" type="video/mp4">
+                        </video>
+                        <div class="course-video-overlay">
+                            <i class="fas fa-play play-icon"></i>
+                        </div>
+                        <span class="course-level">Advanced</span>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">CRISPR Gene Editing</h3>
+                        <p class="course-instructor">Dr. Elena Rodriguez</p>
+                        <p>Learn the principles and applications of CRISPR-Cas9 genome editing technology.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 6 Weeks</span>
+                            <span class="course-rating"><i class="fas fa-star"></i> 4.7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biology Video Resources -->
+    <section class="video-resources">
+        <div class="container">
+            <h2>Biology Video Resources</h2>
+            <p>Explore our collection of high-quality biology tutorials and lectures</p>
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/HQ3Z4y8vq1I?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Introduction to Cell Biology</h3>
+                        <p>Learn about cell structure, organelles, and their functions in this comprehensive overview.</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-eye"></i> 24.5K views</span>
+                            <span>12 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/8kK2zwjRV0M?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">DNA Replication Explained</h3>
+                        <p>Step-by-step guide to understanding how DNA replicates itself.</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-eye"></i> 18.2K views</span>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/5h_ZGS1cRxs?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Human Circulatory System</h3>
+                        <p>Explore the structure and function of the heart and blood vessels.</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-eye"></i> 32.7K views</span>
+                            <span>18 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#" class="btn btn-outline">View All Videos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Lab Section -->
+    <section class="virtual-lab">
+        <div class="container">
+            <div class="lab-content">
+                <h2>Try Our Virtual Lab</h2>
+                <p>Experience our interactive biology simulations with this free demo of our DNA extraction experiment. Perfect for students and educators alike.</p>
+                <div class="lab-simulation">
+                    <div class="lab-equipment">
+                        <!-- Lab equipment visualization would go here -->
+                    </div>
+                    <div class="lab-instructions">
+                        <h3>DNA Extraction Demo</h3>
+                        <p>Follow these steps to extract DNA from a strawberry sample in our virtual lab environment:</p>
+                        <ol>
+                            <li>Add strawberry sample to the beaker</li>
+                            <li>Pour in extraction buffer and mix gently</li>
+                            <li>Filter the mixture through cheesecloth</li>
+                            <li>Precipitate the DNA with cold alcohol</li>
+                            <li>Observe and collect the DNA strands</li>
+                        </ol>
+                        <button class="btn btn-primary">Start Simulation</button>
+                        <p class="small" style="margin-top: 1rem; font-size: 0.9rem;"><i class="fas fa-info-circle"></i> No installation required - runs directly in your browser</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Stay Updated on New Biology Courses</h2>
+            <p>Subscribe to our newsletter for the latest course releases, biology news, and special offers</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">DeepLearn</div>
+                    <p>Empowering the next generation of biologists through innovative online education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">All Courses</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Biology Resources</h3>
+                    <ul>
+                        <li><a href="#">Biology Blog</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Career Guide</a></li>
+                        <li><a href="#">Lab Protocols</a></li>
+                        <li><a href="#">Student Forum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">System Requirements</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Devloped by Anish sawant | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <video class="modal-video" controls id="modalVideo">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation for the virtual lab button
+        document.querySelector('.lab-simulation button').addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        document.querySelector('.lab-simulation button').addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Newsletter form submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            alert(`Thank you for subscribing with ${email}! You'll receive our next biology newsletter.`);
+            this.querySelector('input').value = '';
+        });
+        
+        // Video Play Functionality
+        document.querySelectorAll('.course-card').forEach(card => {
+            const video = card.querySelector('.course-video');
+            const overlay = card.querySelector('.course-video-overlay');
+            
+            // Play video preview on hover
+            card.addEventListener('mouseenter', () => {
+                video.play();
+            });
+            
+            // Pause video preview when not hovering
+            card.addEventListener('mouseleave', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            
+            // Open modal when clicked
+            overlay.addEventListener('click', () => {
+                const modal = document.getElementById('videoModal');
+                const modalVideo = document.getElementById('modalVideo');
+                const courseVideoSrc = video.querySelector('source').src;
+                
+                modalVideo.innerHTML = `<source src="${courseVideoSrc}" type="video/mp4">`;
+                modal.style.display = 'flex';
+                modalVideo.play();
+            });
+        });
+
+        // Close modal functionality
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            const modal = document.getElementById('videoModal');
+            const modalVideo = document.getElementById('modalVideo');
+            
+            modalVideo.pause();
+            modal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('videoModal');
+            if (e.target === modal) {
+                const modalVideo = document.getElementById('modalVideo');
+                modalVideo.pause();
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

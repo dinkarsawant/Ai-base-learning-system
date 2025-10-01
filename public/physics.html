@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Courses | DeepLearn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-text: #2d3748;
+            --secondary-text: #4a5568;
+            --light-text: #f8fafc;
+            --background: #ffffff;
+            --gray-light: #f7fafc;
+            --gray-medium: #e2e8f0;
+            --gray-dark: #cbd5e0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-text);
+            background-color: var(--background);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Physics Specific Styles */
+        :root {
+            --physics-primary: #e91e63;
+            --physics-primary-light: #ff6090;
+            --physics-primary-dark: #b0003a;
+            --physics-gradient: linear-gradient(135deg, var(--physics-primary) 0%, var(--physics-primary-dark) 100%);
+        }
+        
+        .physics-theme {
+            --primary: var(--physics-primary);
+            --primary-light: var(--physics-primary-light);
+            --primary-dark: var(--physics-primary-dark);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        /* Subject Hero Section */
+        .subject-hero {
+            padding: 4rem 0;
+            color: var(--light-text);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .physics-hero {
+            background: var(--physics-gradient);
+        }
+        
+        .breadcrumb {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .breadcrumb a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .physics-icon {
+            background-color: var(--physics-primary-light);
+            color: white;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-item {
+            background-color: rgba(255,255,255,0.15);
+            padding: 1rem;
+            border-radius: 8px;
+            min-width: 100px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 40%;
+            max-width: 500px;
+            z-index: 1;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+        
+        /* Subject Overview */
+        .subject-overview {
+            padding: 4rem 0;
+            background-color: var(--gray-light);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-item h3 {
+            color: var(--primary);
+        }
+        
+        /* Course Categories */
+        .subject-categories {
+            padding: 4rem 0;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary-dark);
+        }
+        
+        .category-card h3 {
+            color: var(--primary);
+            padding: 0 1.5rem;
+        }
+        
+        .category-card p {
+            padding: 0 1.5rem;
+        }
+        
+        .course-count {
+            display: inline-block;
+            margin: 0.5rem 1.5rem 1.5rem;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--primary-light);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .category-video {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .category-video iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        /* Popular Courses */
+        .popular-courses {
+            padding: 4rem 0;
+            background-color: var(--gray-light);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .course-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .course-image {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .course-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .course-card:hover .course-image img {
+            transform: scale(1.05);
+        }
+        
+        .physics-card .course-image {
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .course-content {
+            padding: 1.5rem;
+        }
+        
+        .course-content h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .instructor {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .rating {
+            margin-bottom: 1rem;
+        }
+        
+        .stars {
+            color: #fbbf24;
+        }
+        
+        .review-count {
+            color: var(--secondary-text);
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .course-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .level {
+            padding: 0.25rem 0.75rem;
+            background-color: var(--gray-medium);
+            border-radius: 4px;
+        }
+        
+        .duration {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--secondary-text);
+        }
+        
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-medium);
+        }
+        
+        .price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Interactive Demo */
+        .interactive-demo {
+            margin: 3rem 0;
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        
+        .demo-container {
+            width: 100%;
+            height: 300px;
+            background-color: #f0f4f8;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .demo-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .demo-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Physics Animation */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--primary-text);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-content {
+                text-align: center;
+            }
+            
+            .hero-image {
+                position: relative;
+                width: 100%;
+                margin-top: 2rem;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .features-grid, .categories-grid, .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="physics-theme">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="index.html" class="logo">DeepLearn AI</a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="categories.html">Categories</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="auth.html" class="btn btn-outline">Login</a>
+                    <a href="auth.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Subject Hero Section -->
+    <section class="subject-hero physics-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> / <a href="categories.html">Categories</a> / <span>Physics</span>
+            </div>
+            <div class="hero-content">
+                <div class="subject-icon physics-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h1>Explore Physics</h1>
+                <p>From classical mechanics to quantum theory, visualize and understand the laws of the universe through our interactive simulations and expert-led courses.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">18</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">240+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">62K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                </div>
+                <a href="#featured-courses" class="btn btn-primary">Explore Courses</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn-icons-png.flaticon.com/512/3271/3271480.png" alt="Physics Visualizations">
+            </div>
+        </div>
+    </section>
+
+    <!-- Subject Overview -->
+    <section class="subject-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2>Interactive Physics Learning</h2>
+                <p>Our simulations and 3D models bring physics concepts to life, making abstract theories tangible and understandable. Experience physics like never before with our cutting-edge learning platform.</p>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-sliders-h"></i>
+                        <h3>Interactive Simulations</h3>
+                        <p>Manipulate variables and see real-time results in our physics sandbox environment</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-vr-cardboard"></i>
+                        <h3>3D Visualizations</h3>
+                        <p>Explore concepts in virtual environments with immersive experiences</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-flask"></i>
+                        <h3>Virtual Labs</h3>
+                        <p>Conduct experiments without physical equipment using our realistic simulations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section class="interactive-demo">
+        <div class="container">
+            <h2>Try Our Physics Simulator</h2>
+            <p>Experience how our interactive tools make learning physics engaging and intuitive.</p>
+            <div class="demo-container" id="physics-demo">
+                <!-- Particles will be generated here by JavaScript -->
+            </div>
+            <div class="demo-controls">
+                <button class="demo-btn" id="gravity-btn">Toggle Gravity</button>
+                <button class="demo-btn" id="particle-btn">Add Particles</button>
+                <button class="demo-btn" id="reset-btn">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Categories -->
+    <section class="subject-categories">
+        <div class="container">
+            <h2>Physics Categories</h2>
+            <p>Explore our comprehensive physics curriculum organized by specialization.</p>
+            <div class="categories-grid">
+                <!-- Classical Mechanics -->
+                <a href="classical-mechanics.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/ouW9ZWii0qo?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Classical Mechanics</h3>
+                    <p>Newton's laws, motion, and energy</p>
+                    <span class="course-count">4 Courses</span>
+                </a>
+
+                <!-- Electromagnetism -->
+                <a href="electromagnetism.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/OoUVSHDbAeM?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Electromagnetism</h3>
+                    <p>Electricity, magnetism, and circuits</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+
+                <!-- Thermodynamics -->
+                <a href="thermodynamics.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/8N1jeqYCc9Y?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Thermodynamics</h3>
+                    <p>Heat, energy, and entropy</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+
+                <!-- Quantum Physics -->
+                <a href="quantum-physics.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/Usu9xZfabPM?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Quantum Physics</h3>
+                    <p>Wave functions and particles</p>
+                    <span class="course-count">3 Courses</span>
+                </a>
+
+                <!-- Relativity -->
+                <a href="relativity.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/ttZCKAMpcAo?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Relativity</h3>
+                    <p>Special and general relativity</p>
+                    <span class="course-count">2 Courses</span>
+                </a>
+
+                <!-- Astrophysics -->
+                <a href="astrophysics.html" class="category-card">
+                    <div class="category-video">
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/6Et1CQpJt7A?autoplay=0&mute=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h3>Astrophysics</h3>
+                    <p>Cosmology and celestial mechanics</p>
+                    <span class="course-count">4 Courses</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses -->
+    <section class="popular-courses" id="featured-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Physics Courses</h2>
+                <p>Most popular among our students</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card physics-card">
+                    <div class="course-badge">NEW</div>
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Quantum Physics">
+                    </div>
+                    <div class="course-content">
+                        <h3>Quantum Physics Fundamentals</h3>
+                        <p class="instructor">Prof. Dinkar sawant</p>
+                        <div class="rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="review-count">(892 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Advanced</span>
+                            <span class="duration"><i class="far fa-clock"></i> 18 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$5</span>
+                        <a href="quantum-fundamentals.html" class="btn btn-primary">View Course</a>
+                    </div>
+                </div>
+                
+                <div class="course-card physics-card">
+                    <div class="course-badge">BESTSELLER</div>
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Classical Mechanics">
+                    </div>
+                    <div class="course-content">
+                        <h3>Classical Mechanics Mastery</h3>
+                        <p class="instructor">Dr.anish sawant</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="review-count">(1,245 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Intermediate</span>
+                            <span class="duration"><i class="far fa-clock"></i> 24 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">🆓 </span>
+                        <a href="classical-mechanics-mastery.html" class="btn btn-primary">View Course</a>
+                    </div>
+                </div>
+                
+                <div class="course-card physics-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Electromagnetism">
+                    </div>
+                    <div class="course-content">
+                        <h3>Electromagnetism Essentials</h3>
+                        <p class="instructor">Prof. Michael Johnson</p>
+                        <div class="rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="review-count">(756 reviews)</span>
+                        </div>
+                        <div class="course-meta">
+                            <span class="level">Intermediate</span>
+                            <span class="duration"><i class="far fa-clock"></i> 16 hours</span>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$0</span>
+                        <a href="electromagnetism-essentials.html" class="btn btn-primary">View Course</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Stay Updated on New Physics Courses</h2>
+                <p>Subscribe to our newsletter for the latest course releases and learning resources.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">DeepLearn AI</a>
+                    <p>Transforming education through interactive learning.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Categories</h3>
+                        <ul>
+                            <li><a href="physics.html">Physics</a></li>
+                            <li><a href="mathematics.html">Mathematics</a></li>
+                            <li><a href="computer-science.html">Computer Science</a></li>
+                            <li><a href="biology.html">Biology</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Company</h3>
+                        <ul>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="careers.html">Careers</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                            <li><a href="terms.html">Terms of Service</a></li>
+                            <li><a href="cookies.html">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Devloped by Anish sawant</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Physics Demo Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoContainer = document.getElementById('physics-demo');
+            let gravityEnabled = false;
+            let particles = [];
+            let animationId;
+            
+            // Create initial particles
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                const x = Math.random() * (demoContainer.offsetWidth - 20);
+                const y = Math.random() * (demoContainer.offsetHeight / 2);
+                
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                // Random size
+                const size = 5 + Math.random() * 10;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random color variation
+                const hue = 330 + Math.random() * 30; // Pinkish-red variations
+                particle.style.backgroundColor = `hsl(${hue}, 90%, 60%)`;
+                
+                // Physics properties
+                particle.velocityY = 0;
+                particle.velocityX = (Math.random() - 0.5) * 2;
+                
+                demoContainer.appendChild(particle);
+                particles.push(particle);
+            }
+            
+            // Animation loop
+            function animate() {
+                particles.forEach(particle => {
+                    let top = parseFloat(particle.style.top);
+                    let left = parseFloat(particle.style.left);
+                    
+                    if (gravityEnabled) {
+                        particle.velocityY += 0.1; // Gravity
+                    }
+                    
+                    top += particle.velocityY;
+                    left += particle.velocityX;
+                    
+                    // Boundary collision
+                    if (top + 10 > demoContainer.offsetHeight) {
+                        top = demoContainer.offsetHeight - 10;
+                        particle.velocityY *= -0.8; // Bounce with energy loss
+                    }
+                    
+                    if (left + 10 > demoContainer.offsetWidth || left < 0) {
+                        particle.velocityX *= -1; // Reverse horizontal direction
+                    }
+                    
+                    particle.style.top = `${top}px`;
+                    particle.style.left = `${left}px`;
+                });
+                
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            // Initialize with 5 particles
+            for (let i = 0; i < 5; i++) {
+                createParticle();
+            }
+            animate();
+            
+            // Button controls
+            document.getElementById('gravity-btn').addEventListener('click', function() {
+                gravityEnabled = !gravityEnabled;
+                this.textContent = gravityEnabled ? 'Disable Gravity' : 'Enable Gravity';
+            });
+            
+            document.getElementById('particle-btn').addEventListener('click', function() {
+                for (let i = 0; i < 3; i++) {
+                    createParticle();
+                }
+            });
+            
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                // Remove all particles
+                particles.forEach(particle => {
+                    demoContainer.removeChild(particle);
+                });
+                particles = [];
+                
+                // Create new particles
+                for (let i = 0; i < 5; i++) {
+                    createParticle();
+                }
+                
+                // Reset gravity
+                gravityEnabled = false;
+                document.getElementById('gravity-btn').textContent = 'Enable Gravity';
+            });
+            
+            // Stop animation when tab is not visible
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    cancelAnimationFrame(animationId);
+                } else {
+                    animate();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

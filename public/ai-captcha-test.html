@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CAPTCHA Test - Prove You're Human</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d2ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+        
+        .back-btn {
+            background: #2c5364;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background: #3a7a8c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn span {
+            margin-right: 8px;
+        }
+        
+        /* Main Content */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+        
+        /* CAPTCHA Container */
+        .captcha-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .captcha-header {
+            margin-bottom: 25px;
+        }
+        
+        .captcha-header h2 {
+            color: #00d2ff;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .captcha-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* CAPTCHA Challenge */
+        .captcha-challenge {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Different Challenge Types */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .image-option {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            aspect-ratio: 1;
+            position: relative;
+        }
+        
+        .image-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        }
+        
+        .image-option.selected {
+            border: 3px solid #00d2ff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        
+        .image-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .text-challenge {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .text-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #00d2ff;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            text-align: center;
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+        
+        .text-input:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        .puzzle-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .puzzle-piece {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            position: absolute;
+            cursor: move;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .puzzle-piece:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .puzzle-target {
+            width: 100%;
+            height: 100px;
+            background: rgba(0, 210, 255, 0.1);
+            border: 2px dashed #00d2ff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-verify {
+            background-color: #00d2ff;
+            color: #000;
+        }
+        
+        .btn-refresh {
+            background-color: #ff6b6b;
+            color: #000;
+        }
+        
+        .btn-next {
+            background-color: #00ff88;
+            color: #000;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Progress */
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .progress-text {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #00ff88);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        /* Message Display */
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: rgba(0, 255, 136, 0.2);
+            border-left: 4px solid #00ff88;
+            display: block;
+        }
+        
+        .message.error {
+            background: rgba(255, 107, 107, 0.2);
+            border-left: 4px solid #ff6b6b;
+            display: block;
+        }
+        
+        /* Verification Complete */
+        .verification-complete {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .verification-complete h2 {
+            color: #00ff88;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .verification-complete p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .complete-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            color: #00ff88;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        /* Instructions */
+        .instructions {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions h2 {
+            color: #00d2ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #00d2ff;
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .captcha-container {
+                padding: 20px;
+            }
+            
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .text-challenge {
+                font-size: 20px;
+            }
+            
+            .text-input {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span>🤖</span>
+                AI CAPTCHA Test
+            </div>
+            <a href="index.html" class="back-btn">
+                <span>←</span> Back to Home
+            </a>
+        </header>
+        
+        <div class="content">
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Verification Progress</span>
+                    <span id="progress-text">1/5</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+                </div>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="captcha-container" id="captcha-container">
+                <div class="captcha-header">
+                    <h2 id="challenge-title">Select all images with</h2>
+                    <p id="challenge-description">Complete the challenge to verify you're human</p>
+                </div>
+                
+                <div class="captcha-challenge" id="captcha-challenge">
+                    <!-- Challenge will be loaded here -->
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-verify" id="btn-verify" disabled>
+                        <span>✓</span> Verify
+                    </button>
+                    <button class="btn btn-refresh" id="btn-refresh">
+                        <span>🔄</span> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="verification-complete" id="verification-complete">
+                <div class="complete-icon">✅</div>
+                <h2>Verification Complete!</h2>
+                <p>You have successfully proven you're human.</p>
+                <button class="btn btn-next" id="btn-next">
+                    <span>🏠</span> Return to Home
+                </button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2><span>ℹ️</span> How This Works</h2>
+            <ul>
+                <li>Complete 5 challenges to verify you're human</li>
+                <li>Different types of challenges will be presented</li>
+                <li>Image recognition: Select all images matching the description</li>
+                <li>Text verification: Type the distorted text you see</li>
+                <li>Puzzle solving: Drag pieces to complete the puzzle</li>
+                <li>Pattern recognition: Identify the correct pattern</li>
+                <li>This helps prevent automated bots from accessing services</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        class AICaptchaTest {
+            constructor() {
+                this.challengesCompleted = 0;
+                this.totalChallenges = 5;
+                this.currentChallenge = null;
+                this.selectedOptions = [];
+                this.userAnswer = '';
+                this.puzzlePieces = [];
+                this.puzzleSolution = null;
+                
+                // DOM Elements
+                this.captchaContainer = document.getElementById('captcha-container');
+                this.challengeContainer = document.getElementById('captcha-challenge');
+                this.challengeTitle = document.getElementById('challenge-title');
+                this.challengeDesc = document.getElementById('challenge-description');
+                this.progressText = document.getElementById('progress-text');
+                this.progressFill = document.getElementById('progress-fill');
+                this.messageElement = document.getElementById('message');
+                this.verifyBtn = document.getElementById('btn-verify');
+                this.refreshBtn = document.getElementById('btn-refresh');
+                this.verificationComplete = document.getElementById('verification-complete');
+                
+                // Image options for image recognition challenges
+                this.imageCategories = {
+                    'traffic lights': ['🚦', '🚥', '🔴', '🟡', '🟢'],
+                    'cars': ['🚗', '🚕', '🚙', '🚌', '🚎'],
+                    'trees': ['🌲', '🌳', '🌴', '🌵', '🎄'],
+                    'animals': ['🐶', '🐱', '🐭', '🐹', '🐰'],
+                    'food': ['🍎', '🍕', '🍔', '🍟', '🍦']
+                };
+                
+                this.init();
+                this.setupEventListeners();
+            }
+            
+            init() {
+                this.challengesCompleted = 0;
+                this.updateProgress();
+                this.generateChallenge();
+            }
+            
+            generateChallenge() {
+                this.selectedOptions = [];
+                this.userAnswer = '';
+                this.puzzlePieces = [];
+                this.verifyBtn.disabled = true;
+                this.challengeContainer.innerHTML = '';
+                
+                // Randomly select a challenge type based on progress
+                const challengeTypes = [
+                    'image-recognition',
+                    'text-verification',
+                    'puzzle-solving',
+                    'pattern-recognition'
+                ];
+                
+                // Make first challenge always image recognition
+                const challengeType = this.challengesCompleted === 0 ? 'image-recognition' : 
+                    challengeTypes[Math.floor(Math.random() * challengeTypes.length)];
+                
+                this.currentChallenge = challengeType;
+                
+                switch(challengeType) {
+                    case 'image-recognition':
+                        this.generateImageChallenge();
+                        break;
+                    case 'text-verification':
+                        this.generateTextChallenge();
+                        break;
+                    case 'puzzle-solving':
+                        this.generatePuzzleChallenge();
+                        break;
+                    case 'pattern-recognition':
+                        this.generatePatternChallenge();
+                        break;
+                }
+            }
+            
+            generateImageChallenge() {
+                // Select a random category
+                const categories = Object.keys(this.imageCategories);
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const items = this.imageCategories[category];
+                
+                this.challengeTitle.textContent = `Select all ${category}`;
+                this.challengeDesc.textContent = "Click on all matching images";
+                
+                // Create image grid
+                const grid = document.createElement('div');
+                grid.className = 'image-grid';
+                
+                // Determine correct answers (2-4 items)
+                const correctCount = 2 + Math.floor(Math.random() * 3);
+                const correctItems = [];
+                
+                while (correctItems.length < correctCount) {
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
+                    if (!correctItems.includes(randomItem)) {
+                        correctItems.push(randomItem);
+                    }
+                }
+                
+                // Add all items in random order
+                const allItems = [...items];
+                this.shuffleArray(allItems);
+                
+                allItems.forEach((item, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'image-option';
+                    option.dataset.index = index;
+                    option.dataset.correct = correctItems.includes(item) ? 'true' : 'false';
+                    
+                    // Using emoji for simplicity - in a real app you'd use actual images
+                    option.innerHTML = `<div style="font-size: 40px; display: flex; justify-content: center; align-items: center; height: 100%;">${item}</div>`;
+                    
+                    option.addEventListener('click', () => {
+                        option.classList.toggle('selected');
+                        this.updateSelectedOptions();
+                    });
+                    
+                    grid.appendChild(option);
+                });
+                
+                this.challengeContainer.appendChild(grid);
+                this.currentChallenge.solution = correctItems.length;
+            }
+            
+            generateTextChallenge() {
+                // Generate distorted text (simplified)
+                const texts = ['CLOUD9', 'PYTHON', 'CAPTCHA', 'VERIFY', 'HUMAN'];
+                const text = texts[Math.floor(Math.random() * texts.length)];
+                
+                this.challengeTitle.textContent = `Type the text you see below`;
+                this.challengeDesc.textContent = "The text may be distorted or partially obscured";
+                
+                // Create distorted text display
+                const textDisplay = document.createElement('div');
+                textDisplay.className = 'text-challenge';
+                
+                // Apply some visual distortion
+                let distortedText = '';
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    if (Math.random() > 0.3) {
+                        distortedText += `<span style="
+                            display: inline-block;
+                            transform: rotate(${(Math.random() - 0.5) * 30}deg) 
+                                       skewX(${(Math.random() - 0.5) * 20}deg);
+                            color: ${Math.random() > 0.5 ? '#00d2ff' : '#00ff88'};
+                            opacity: ${0.7 + Math.random() * 0.3};
+                        ">${char}</span>`;
+                    } else {
+                        distortedText += `<span style="opacity: 0.3;">?</span>`;
+                    }
+                }
+                
+                textDisplay.innerHTML = distortedText;
+                this.challengeContainer.appendChild(textDisplay);
+                
+                // Create input field
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'text-input';
+                input.placeholder = 'Enter the text...';
+                input.addEventListener('input', () => {
+                    this.userAnswer = input.value.toUpperCase();
+                    this.verifyBtn.disabled = this.userAnswer.length < 3;
+                });
+                
+                this.challengeContainer.appendChild(input);
+                this.currentChallenge.solution = text;
+            }
+            
+            generatePuzzleChallenge() {
+                this.challengeTitle.textContent = `Complete the puzzle`;
+                this.challengeDesc.textContent = "Drag the pieces to their correct positions";
+                
+                // Create puzzle target area
+                const target = document.createElement('div');
+                target.className = 'puzzle-target';
+                target.textContent = 'Drag puzzle pieces here';
+                target.id = 'puzzle-target';
+                this.challengeContainer.appendChild(target);
+                
+                // Create puzzle pieces
+                const puzzleContainer = document.createElement('div');
+                puzzleContainer.className = 'puzzle-container';
+                puzzleContainer.style.height = '200px';
+                
+                const puzzlePieces = ['1', '2', '3', '4'];
+                this.shuffleArray(puzzlePieces);
+                
+                // Create draggable pieces
+                puzzlePieces.forEach((piece, index) => {
+                    const puzzlePiece = document.createElement('div');
+                    puzzlePiece.className = 'puzzle-piece';
+                    puzzlePiece.textContent = piece;
+                    puzzlePiece.id = `piece-${piece}`;
+                    puzzlePiece.draggable = true;
+                    
+                    // Position pieces randomly in container
+                    puzzlePiece.style.left = `${20 + Math.random() * 60}%`;
+                    puzzlePiece.style.top = `${20 + Math.random() * 60}%`;
+                    
+                    // Add drag events
+                    puzzlePiece.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', piece);
+                    });
+                    
+                    puzzleContainer.appendChild(puzzlePiece);
+                    this.puzzlePieces.push(piece);
+                });
+                
+                // Set up drop target
+                target.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+                
+                target.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const piece = e.dataTransfer.getData('text/plain');
+                    const pieceElement = document.getElementById(`piece-${piece}`);
+                    
+                    // Check if piece is already in target
+                    if (pieceElement.parentNode === target) return;
+                    
+                    // Move piece to target
+                    target.appendChild(pieceElement);
+                    pieceElement.style.position = 'static';
+                    pieceElement.style.margin = '5px';
+                    
+                    // Check solution
+                    this.checkPuzzleSolution();
+                });
+                
+                this.challengeContainer.appendChild(puzzleContainer);
+                this.currentChallenge.solution = ['1', '2', '3', '4'].join('');
+            }
+            
+            generatePatternChallenge() {
+                this.challengeTitle.textContent = `Complete the pattern`;
+                this.challengeDesc.textContent = "Select the option that completes the sequence";
+                
+                // Generate a simple pattern sequence
+                const patterns = [
+                    { sequence: ['▲', '▲▲', '▲▲▲', '?'], solution: '▲▲▲▲' },
+                    { sequence: ['⬢', '⬡', '⬢', '?'], solution: '⬡' },
+                    { sequence: ['1', '4', '9', '?'], solution: '16' },
+                    { sequence: ['A', 'B', 'C', '?'], solution: 'D' }
+                ];
+                
+                const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+                
+                // Display pattern
+                const patternDisplay = document.createElement('div');
+                patternDisplay.className = 'text-challenge';
+                patternDisplay.style.fontSize = '28px';
+                patternDisplay.style.letterSpacing = '10px';
+                patternDisplay.textContent = pattern.sequence.join(' → ');
+                this.challengeContainer.appendChild(patternDisplay);
+                
+                // Generate options
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'image-grid';
+                optionsContainer.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                optionsContainer.style.marginTop = '20px';
+                
+                // Create correct option and some distractors
+                const options = [pattern.solution];
+                while (options.length < 4) {
+                    let distractor;
+                    if (typeof pattern.solution === 'string') {
+                        if (pattern.solution.match(/^[A-Z]$/)) {
+                            // Letter sequence
+                            distractor = String.fromCharCode(
+                                pattern.solution.charCodeAt(0) + (Math.random() > 0.5 ? 1 : -1)
+                            );
+                        } else if (pattern.solution.match(/^\d+$/)) {
+                            // Number sequence
+                            const num = parseInt(pattern.solution);
+                            distractor = (num + (Math.random() > 0.5 ? 1 : -1) * 
+                                (1 + Math.floor(Math.random() * 3))).toString();
+                        } else {
+                            // Shape sequence
+                            const shapes = ['▲', '▼', '◆', '●', '⬢', '⬡'];
+                            distractor = shapes[Math.floor(Math.random() * shapes.length)];
+                        }
+                    }
+                    
+                    if (!options.includes(distractor)) {
+                        options.push(distractor);
+                    }
+                }
+                
+                this.shuffleArray(options);
+                
+                // Create option buttons
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'image-option';
+                    optionElement.style.aspectRatio = 'unset';
+                    optionElement.style.height = '80px';
+                    optionElement.style.display = 'flex';
+                    optionElement.style.justifyContent = 'center';
+                    optionElement.style.alignItems = 'center';
+                    optionElement.style.fontSize = '24px';
+                    optionElement.textContent = option;
+                    
+                    optionElement.addEventListener('click', () => {
+                        // Clear previous selection
+                        document.querySelectorAll('.image-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        optionElement.classList.add('selected');
+                        this.userAnswer = option;
+                        this.verifyBtn.disabled = false;
+                    });
+                    
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                this.challengeContainer.appendChild(optionsContainer);
+                this.currentChallenge.solution = pattern.solution;
+            }
+            
+            updateSelectedOptions() {
+                const selected = document.querySelectorAll('.image-option.selected');
+                this.selectedOptions = Array.from(selected).map(opt => 
+                    opt.dataset.correct === 'true'
+                );
+                this.verifyBtn.disabled = this.selectedOptions.length === 0;
+            }
+            
+            checkPuzzleSolution() {
+                const target = document.getElementById('puzzle-target');
+                const piecesInTarget = Array.from(target.children);
+                
+                if (piecesInTarget.length === this.puzzlePieces.length) {
+                    const solution = piecesInTarget.map(p => p.textContent).join('');
+                    if (solution === this.currentChallenge.solution) {
+                        this.verifyBtn.disabled = false;
+                    }
+                }
+            }
+            
+            verifyChallenge() {
+                let isCorrect = false;
+                
+                switch(this.currentChallenge) {
+                    case 'image-recognition':
+                        // Check if all selected options are correct and none are missing
+                        const allCorrect = this.selectedOptions.every(opt => opt);
+                        const allSelected = this.selectedOptions.length === this.currentChallenge.solution;
+                        isCorrect = allCorrect && allSelected;
+                        break;
+                        
+                    case 'text-verification':
+                        isCorrect = this.userAnswer === this.currentChallenge.solution;
+                        break;
+                        
+                    case 'puzzle-solving':
+                        isCorrect = true; // Already verified when puzzle completed
+                        break;
+                        
+                    case 'pattern-recognition':
+                        isCorrect = this.userAnswer === this.currentChallenge.solution;
+                        break;
+                }
+                
+                if (isCorrect) {
+                    this.showMessage("Challenge completed successfully!", 'success');
+                    this.challengesCompleted++;
+                    this.updateProgress();
+                    
+                    if (this.challengesCompleted < this.totalChallenges) {
+                        setTimeout(() => {
+                            this.generateChallenge();
+                        }, 1500);
+                    } else {
+                        this.completeVerification();
+                    }
+                } else {
+                    this.showMessage("Verification failed. Try again!", 'error');
+                    this.generateChallenge(); // Refresh challenge
+                }
+            }
+            
+            completeVerification() {
+                this.captchaContainer.style.display = 'none';
+                this.verificationComplete.style.display = 'block';
+            }
+            
+            updateProgress() {
+                const percent = (this.challengesCompleted / this.totalChallenges) * 100;
+                this.progressFill.style.width = `${percent}%`;
+                this.progressText.textContent = `${this.challengesCompleted}/${this.totalChallenges}`;
+            }
+            
+            showMessage(text, type) {
+                this.messageElement.textContent = text;
+                this.messageElement.className = `message ${type}`;
+                
+                setTimeout(() => {
+                    this.messageElement.style.display = 'none';
+                }, 3000);
+            }
+            
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            setupEventListeners() {
+                this.verifyBtn.addEventListener('click', () => this.verifyChallenge());
+                this.refreshBtn.addEventListener('click', () => this.generateChallenge());
+                document.getElementById('btn-next').addEventListener('click', () => {
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+        
+        // Initialize the CAPTCHA test when page loads
+        window.onload = () => {
+            const captchaTest = new AICaptchaTest();
+        };
+    </script>
+</body>
+</html>
