@@ -1,0 +1,4 @@
+[build]
+  # Static site: the HTML in public/ is served as-is, no build step needed.
+  command = "echo 'No build step required'"
+  publish = "public"
